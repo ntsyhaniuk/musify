@@ -1,0 +1,37 @@
+h1 {    
+    padding: 35px 0;
+}
+.albums-list {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    div {
+        .details {
+            position: relative;
+            text-align: center;
+            background: rgb(56,56,56);
+            h3 {
+                color: papayawhip;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -webkit-transition: .3s ease-in-out ease-in;
+                transition: .3s ease-in-out;
+                visibility: hidden;
+                z-index: 3;
+            }
+            img {
+                opacity: 1;
+                -webkit-transition: .3s ease-in-out ease-in;
+                transition: .3s ease-in-out;
+            }
+            &:hover h3 {
+                visibility: visible;
+            }
+            &:hover img {
+                opacity: .4;
+            }
+        }
+    }
+}

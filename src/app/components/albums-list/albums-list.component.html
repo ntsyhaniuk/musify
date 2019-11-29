@@ -1,0 +1,11 @@
+<div>
+    <h1>Albums</h1>
+    <section class="albums-list">
+        <div *ngFor="let album of albums">
+            <div class="details">
+                <h3>{{album.name}}</h3>
+                <img [src]="album.images[1].url" />
+            </div>
+        </div>
+    </section>
+</div>
