@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SpotifyService } from '../../../services/spotify.service';
 
@@ -7,11 +7,11 @@ import { SpotifyService } from '../../../services/spotify.service';
   templateUrl: './albums-list.component.html',
   styleUrls: ['./albums-list.component.scss']
 })
-export class AlbumsListComponent implements OnInit {
+export class AlbumsListComponent implements OnInit, OnDestroy {
   albums: any[] = [];
-  subscription: Subscription;
+  subscription$: Subscription;
 
-  constructor(private _spotifyService: SpotifyService) {
+  constructor(private spotifyService: SpotifyService) {
   }
 
   ngOnInit() {
@@ -20,10 +20,9 @@ export class AlbumsListComponent implements OnInit {
   }
 
   getAlbums() {
-    this._spotifyService.getAlbums()
+    this.spotifyService.getAlbums()
       .subscribe(
-        (response: any) => {
-          const { albums } = response;
+        ({albums}: any) => {
           const { items } = albums;
           this.albums = items;
         },
@@ -31,15 +30,13 @@ export class AlbumsListComponent implements OnInit {
   }
 
   updateList() {
-    this.subscription = this._spotifyService.getMusic()
-      .subscribe((response: any) => {
-        const { albums } = response;
-        const { items } = albums;
+    this.subscription$ = this.spotifyService.dataList$
+      .subscribe(({items}: any) => {
         this.albums = items;
-      })
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription$.unsubscribe();
   }
 }
