@@ -15,7 +15,7 @@ import { AlbumsListComponent } from './components/albums-list/albums-list.compon
     AppComponent,
     SearchComponent,
     NavbarComponent,
-    AlbumsListComponent
+    AlbumsListComponent,
   ],
   imports: [
     BrowserModule,
