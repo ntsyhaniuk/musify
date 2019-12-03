@@ -12,33 +12,32 @@ export enum HttpMethods {
   DELETE = 'DELETE'
 }
 
+export const createQueryString = (params = {}) => {
+  if (!params) {
+    return '';
+  }
+  const keys = Object.keys(params);
+  if (!keys.length) {
+    return '';
+  }
+
+  return keys.map(param => `${param}=${params[param]}`).join('&');
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
   constructor(private $http: HttpClient) { }
 
-  request(params): Observable<any> {
-    const { httpMethod, endpoint, body } = params;
-    const queryParams = this.createQueryString(params.queryParams);
+  request({ httpMethod, endpoint, body = {},  queryParams}): Observable<any> {
+    const params = createQueryString(queryParams);
 
     switch (httpMethod) {
       case HttpMethods.GET:
-        return this.$http.get(`${BASE_URL}/${endpoint}?${queryParams}`);
+        return this.$http.get(`${BASE_URL}/${endpoint}?${params}`);
       case HttpMethods.POST:
         return this.$http.post(`${BASE_URL}/${endpoint}`, body);
     }
-  }
-
-  createQueryString(params = {}) {
-    if (!params) {
-      return '';
-    }
-    const keys = Object.keys(params);
-    if (!keys.length) {
-      return '';
-    }
-
-    return keys.map(param => `${param}=${params[param]}`).join('&');
   }
 }
