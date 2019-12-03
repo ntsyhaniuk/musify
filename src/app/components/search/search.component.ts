@@ -15,6 +15,6 @@ export class SearchComponent {
     this.searchString$.pipe(
       debounceTime(250),
       distinctUntilChanged()
-      ).subscribe((searchStr: string) => this.spotifyService.searchMusic(searchStr));
+    ).subscribe((searchStr: string) => this.spotifyService.searchMusic(searchStr));
   }
 }
