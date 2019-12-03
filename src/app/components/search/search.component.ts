@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {Subject} from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SpotifyService } from '../../../services/spotify.service';
+
+import { SpotifyApiService } from '../../services/spotify.service';
 
 @Component({
   selector: 'app-search',
@@ -11,7 +12,7 @@ import { SpotifyService } from '../../../services/spotify.service';
 export class SearchComponent {
   private searchString$ = new Subject<string>();
 
-  constructor(private spotifyService: SpotifyService) {
+  constructor(private spotifyService: SpotifyApiService) {
     this.searchString$.pipe(
       debounceTime(250),
       distinctUntilChanged()

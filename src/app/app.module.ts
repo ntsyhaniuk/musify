@@ -1,13 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // modules
 import { AppRoutingModule } from './app-routing.module';
 
 // services
-import { SpotifyService } from '../services/spotify.service';
+import { SpotifyApiService } from './services/spotify.service';
+import { AuthService } from './services/auth.service';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 // components
 import { AppComponent } from './app.component';
@@ -29,7 +31,9 @@ import { AlbumsListComponent } from './components/albums-list/albums-list.compon
     FormsModule
   ],
   providers: [
-    SpotifyService
+    SpotifyApiService,
+    AuthService,
+    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

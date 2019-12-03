@@ -4,7 +4,12 @@
 
 export const environment = {
   production: false,
-  token: 'BQC52ytize83jDRlibIqS7ReZGCT4TkmRXXuzjoWKccKmon0tf9m7yx_oXPgYaH4ZIMZ8yGT_BikI5k8v1vuW2qjDVuDzxaLshUTf37LfXON2fI2o1T7Zve9wKv2C_b3tS4DQxbH4vMWt_r56Eo3SGGt6RE7yQqQ3JR135tiWF1ucu8SpwY',
+  token: 'BQC4cFLh4MDnzGLV3-IfSwl0EK2hxqILRMK4ig8Nio0o6jTn3tn7v23NyN-sjV1BSMOyXWQlChQswzLltJypkmc_WHBCfF7ICrXGP8QkS4LxP2G7CLBJKJeHJZYi4GH42iW7lALScCdvBFjcneOblzTG7pBVi7u_hRHLu9NHKjnrsT_IKI6hIkFqQ4ne35jJ',
+  CLIENT_ID: '', // here should be your client id from registered application
+  CLIENT_SECRET: '', // here should be your client secret from registered application
+  BASE_URL: 'https://api.spotify.com/v1',
+  STORAGE_KEY: 'auth_token',
+  AUTH_URL: 'https://accounts.spotify.com/api/token'
 };
 
 /*
