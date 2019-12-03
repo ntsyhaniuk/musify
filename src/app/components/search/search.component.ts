@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import {Subject} from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SpotifyService } from '../../../services/spotify.service';
 
 @Component({
@@ -6,16 +8,13 @@ import { SpotifyService } from '../../../services/spotify.service';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
-  searchInput: string;
+export class SearchComponent {
+  private searchString$ = new Subject<string>();
 
-  constructor(private _spotifyService: SpotifyService) { }
-
-  ngOnInit() { }
-
-  searchMusic(): void {
-    if (!this.searchInput) return;
-    this._spotifyService.searchMusic(this.searchInput).subscribe()
+  constructor(private spotifyService: SpotifyService) {
+    this.searchString$.pipe(
+      debounceTime(250),
+      distinctUntilChanged()
+      ).subscribe((searchStr: string) => this.spotifyService.searchMusic(searchStr));
   }
-
 }

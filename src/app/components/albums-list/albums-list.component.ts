@@ -9,9 +9,9 @@ import { SpotifyService } from '../../../services/spotify.service';
 })
 export class AlbumsListComponent implements OnInit {
   albums: any[] = [];
-  subscription: Subscription;
+  subscription$: Subscription;
 
-  constructor(private _spotifyService: SpotifyService) {
+  constructor(private spotifyService: SpotifyService) {
     this.updateList();
   }
 
@@ -20,10 +20,9 @@ export class AlbumsListComponent implements OnInit {
   }
 
   getAlbums() {
-    this._spotifyService.getAlbums()
+    this.spotifyService.getAlbums()
       .subscribe(
-        (response: any) => {
-          const { albums } = response;
+        ({albums} : any) => {
           const { items } = albums;
           this.albums = items;
         },
@@ -31,15 +30,14 @@ export class AlbumsListComponent implements OnInit {
   }
 
   updateList() {
-    this.subscription = this._spotifyService.getMusic()
-      .subscribe((response: any) => {
-        const { items } = response;
+    this.subscription$ = this.spotifyService.dataList$
+      .subscribe(({ items }: any) => {
         this.albums = items;
       })
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription$.unsubscribe();
   }
 
   getCoverImage(album: any) {
