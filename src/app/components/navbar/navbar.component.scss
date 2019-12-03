@@ -1,3 +1,11 @@
 $lightFontColor: blanchedalmond;
 $darkBackgroundColor: rgb(56, 56, 56);
 
+@media screen and (max-width: 415px) {
+    nav {
+        justify-content: center !important;
+        h1 {
+            font-size: 28px;
+        }
+    }
+}
