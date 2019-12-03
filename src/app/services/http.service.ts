@@ -5,12 +5,12 @@ import {Observable} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { createQueryString } from '../utils/utils';
 
-const BASE_URL = environment.BASE_URL;
+const { BASE_URL } = environment;
 
 export enum HttpMethods {
-  POST = 'POST',
-  PUT = 'PUT',
   GET = 'GET',
+  PUT = 'PUT',
+  POST = 'POST',
   DELETE = 'DELETE'
 }
 
@@ -18,7 +18,7 @@ export enum HttpMethods {
 export class HttpService {
   constructor(private $http: HttpClient) { }
 
-  request({ httpMethod = 'GET', endpoint, body = {},  queryParams}): Observable<any> {
+  request({ httpMethod = HttpMethods.GET, endpoint, body = {},  queryParams}): Observable<any> {
     const params = createQueryString(queryParams);
 
     switch (httpMethod) {

@@ -17,18 +17,23 @@ export class AuthService {
 
     const hashUrl = window.location.hash.replace('#', '');
     const {access_token}: Ihash = parseHash(hashUrl);
+
     if (access_token) {
       this.setSessionKey(access_token);
       this.router.navigate(['']);
     } else {
-      const queryParams = {
-        response_type: 'token',
-        client_id: CLIENT_ID,
-        redirect_uri: REDIRECT_URI
-      };
-      const paramsStr = createQueryString(queryParams);
-      window.location.href = `${AUTH_URL}?${paramsStr}`;
+      this.redirectToSpotify();
     }
+  }
+
+  redirectToSpotify(): void {
+    const queryParams = {
+      response_type: 'token',
+      client_id: CLIENT_ID,
+      redirect_uri: REDIRECT_URI
+    };
+    const paramsStr = createQueryString(queryParams);
+    window.location.href = `${AUTH_URL}?${paramsStr}`;
   }
 
   isAuthorized(): boolean {
@@ -43,7 +48,7 @@ export class AuthService {
     return localStorage.getItem(STORAGE_KEY);
   }
 
-  clearSessionKey() {
+  clearSessionKey(): void {
     localStorage.removeItem(STORAGE_KEY);
   }
 }
