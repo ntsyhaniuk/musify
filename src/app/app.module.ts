@@ -16,15 +16,13 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './components/search/search.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AlbumsListComponent } from './components/albums-list/albums-list.component';
-import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     NavbarComponent,
-    AlbumsListComponent,
-    LoginComponent
+    AlbumsListComponent
   ],
   imports: [
     BrowserModule,

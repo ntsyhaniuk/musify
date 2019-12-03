@@ -1,47 +1,45 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { createQueryString } from './http.service';
+import { createQueryString, parseHash } from '../utils/utils';
 import { environment } from '../../environments/environment';
+import { Ihash } from '../types/interfaces';
 
-const { STORAGE_KEY, CLIENT_ID, CLIENT_SECRET, AUTH_URL, token } = environment;
+const { STORAGE_KEY, CLIENT_ID, AUTH_URL, REDIRECT_URI } = environment;
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient, private router: Router) {
-  }
+  constructor(private router: Router) {}
 
-  encodeClientData(id, secret) {
-    return btoa(`${id}:${secret}`);
-  }
+  authorize(): void {
+    if (this.isAuthorized()) return;
 
-  authorize() {
-    console.log('authorize');
-    if (this.isAuthorized()) {
-      this.router.navigate(['/app']);
+    const hashUrl = window.location.hash.replace('#', '');
+    const {access_token}: Ihash = parseHash(hashUrl);
+    if (access_token) {
+      this.setSessionKey(access_token);
+      this.router.navigate(['']);
     } else {
       const queryParams = {
-        client_id: CLIENT_ID,
         response_type: 'token',
-        redirect_uri: 'http://localhost:4300/authorize/'
+        client_id: CLIENT_ID,
+        redirect_uri: REDIRECT_URI
       };
       const paramsStr = createQueryString(queryParams);
       window.location.href = `${AUTH_URL}?${paramsStr}`;
     }
   }
 
-  setSessionKey(authToken) {
+  setSessionKey(authToken: string): void {
     localStorage.setItem(STORAGE_KEY, authToken);
   }
 
-  isAuthorized() {
+  isAuthorized(): boolean {
     return !!this.getSessionKey();
   }
 
-  getSessionKey() {
-    // storing access token in local storage isn't implemented yet
+  getSessionKey(): string {
     return localStorage.getItem(STORAGE_KEY);
   }
 }

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import {Observable} from 'rxjs';
+
+import { environment } from '../../environments/environment';
+import { createQueryString } from '../utils/utils';
 
 const BASE_URL = environment.BASE_URL;
 
@@ -11,18 +13,6 @@ export enum HttpMethods {
   GET = 'GET',
   DELETE = 'DELETE'
 }
-
-export const createQueryString = (params = {}) => {
-  if (!params) {
-    return '';
-  }
-  const keys = Object.keys(params);
-  if (!keys.length) {
-    return '';
-  }
-
-  return keys.map(param => `${param}=${params[param]}`).join('&');
-};
 
 @Injectable({
   providedIn: 'root'

@@ -8,6 +8,6 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   constructor(private auth: AuthService) {
-    // this.auth.authorize();
+    this.auth.authorize();
   }
 }

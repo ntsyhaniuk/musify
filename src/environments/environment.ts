@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  token: 'BQC4cFLh4MDnzGLV3-IfSwl0EK2hxqILRMK4ig8Nio0o6jTn3tn7v23NyN-sjV1BSMOyXWQlChQswzLltJypkmc_WHBCfF7ICrXGP8QkS4LxP2G7CLBJKJeHJZYi4GH42iW7lALScCdvBFjcneOblzTG7pBVi7u_hRHLu9NHKjnrsT_IKI6hIkFqQ4ne35jJ',
-  CLIENT_ID: '888e55d52e304069a26956e3e328d2c6', // here should be your client id from registered application
-  CLIENT_SECRET: '', // here should be your client secret from registered application
+  CLIENT_ID: '', // here should be your client id from registered application
+  REDIRECT_URI: 'http://localhost:4300/',
   BASE_URL: 'https://api.spotify.com/v1',
   STORAGE_KEY: 'auth_token',
   AUTH_URL: 'https://accounts.spotify.com/authorize'
