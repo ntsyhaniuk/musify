@@ -14,9 +14,7 @@ export enum HttpMethods {
   DELETE = 'DELETE'
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class HttpService {
   constructor(private $http: HttpClient) { }
 

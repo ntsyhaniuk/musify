@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 // services
 import { SpotifyApiService } from './services/spotify.service';
 import { AuthService } from './services/auth.service';
+import { HttpService } from './services/http.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 
 // components
@@ -33,6 +34,7 @@ import { AlbumsListComponent } from './components/albums-list/albums-list.compon
   providers: [
     SpotifyApiService,
     AuthService,
+    HttpService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
