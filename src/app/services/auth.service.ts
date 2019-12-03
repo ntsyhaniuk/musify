@@ -31,15 +31,19 @@ export class AuthService {
     }
   }
 
-  setSessionKey(authToken: string): void {
-    localStorage.setItem(STORAGE_KEY, authToken);
-  }
-
   isAuthorized(): boolean {
     return !!this.getSessionKey();
   }
 
+  setSessionKey(authToken: string): void {
+    localStorage.setItem(STORAGE_KEY, authToken);
+  }
+
   getSessionKey(): string {
     return localStorage.getItem(STORAGE_KEY);
+  }
+
+  clearSessionKey() {
+    localStorage.removeItem(STORAGE_KEY);
   }
 }

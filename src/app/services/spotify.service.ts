@@ -11,7 +11,6 @@ export class SpotifyApiService {
 
   getAlbums() {
     const params = {
-      httpMethod: 'GET',
       endpoint: 'browse/new-releases',
       queryParams: {
         limit: 25,
@@ -23,14 +22,11 @@ export class SpotifyApiService {
 
   searchMusic(str: string) {
     const params = {
-      httpMethod: 'GET',
       endpoint: 'search',
       queryParams: {
         q: str,
         type: 'album',
-        offset: 0,
-        limit: 25,
-        market: 'US'
+        limit: 25
       }
     };
     this.$http.request(params).subscribe(({albums}: any) => {

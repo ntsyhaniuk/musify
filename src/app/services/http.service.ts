@@ -18,7 +18,7 @@ export enum HttpMethods {
 export class HttpService {
   constructor(private $http: HttpClient) { }
 
-  request({ httpMethod, endpoint, body = {},  queryParams}): Observable<any> {
+  request({ httpMethod = 'GET', endpoint, body = {},  queryParams}): Observable<any> {
     const params = createQueryString(queryParams);
 
     switch (httpMethod) {
