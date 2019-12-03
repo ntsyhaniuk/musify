@@ -12,11 +12,11 @@ export class AlbumsListComponent implements OnInit {
   subscription: Subscription;
 
   constructor(private _spotifyService: SpotifyService) {
+    this.updateList();
   }
 
   ngOnInit() {
     this.getAlbums();
-    this.updateList();
   }
 
   getAlbums() {
@@ -33,13 +33,16 @@ export class AlbumsListComponent implements OnInit {
   updateList() {
     this.subscription = this._spotifyService.getMusic()
       .subscribe((response: any) => {
-        const { albums } = response;
-        const { items } = albums;
+        const { items } = response;
         this.albums = items;
       })
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  getCoverImage(album: any) {
+    return album && album.images.length ? album.images[1].url : '../assets/no-cover.jpg';
   }
 }

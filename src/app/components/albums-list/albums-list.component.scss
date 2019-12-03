@@ -1,17 +1,24 @@
 h1 {    
-    padding: 35px 0;
+    padding: 35px;
+    @media screen and (max-width: 415px){
+        font-size: 24px;
+    }
 }
 .albums-list {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, 320px);
     justify-content: center;
+    align-items: center;
+    @media screen and (max-width: 415px){
+        grid-template-columns: repeat(auto-fill, 100px);
+    }
     div {
         .details {
             position: relative;
             text-align: center;
-            background: rgb(56,56,56);
             h3 {
-                color: papayawhip;
+                color: rgb(56,56,56);
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -20,8 +27,18 @@ h1 {
                 transition: .3s ease-in-out;
                 visibility: hidden;
                 z-index: 3;
+                @media screen and (max-width: 415px){
+                    font-size: 14px;
+                }
             }
             img {
+                object-fit: cover;
+                max-height: 320px;
+                max-width: 320px;
+                @media screen and (max-width: 415px){
+                    max-height: 100px;
+                    max-width: 100px;
+                }
                 opacity: 1;
                 -webkit-transition: .3s ease-in-out ease-in;
                 transition: .3s ease-in-out;
