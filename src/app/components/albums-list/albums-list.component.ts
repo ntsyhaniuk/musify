@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SpotifyService } from '../../../services/spotify.service';
+import { SpotifyApiService } from '../../services/spotify.service';
 
 @Component({
   selector: 'app-albums-list',
@@ -11,12 +11,12 @@ export class AlbumsListComponent implements OnInit, OnDestroy {
   albums: any[] = [];
   subscription$: Subscription;
 
-  constructor(private spotifyService: SpotifyService) {
-    this.updateList();
+  constructor(private spotifyService: SpotifyApiService) {
   }
 
   ngOnInit() {
     this.getAlbums();
+    this.updateList();
   }
 
   getAlbums() {
