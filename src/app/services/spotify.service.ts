@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -16,6 +16,12 @@ export class SpotifyService {
 
   getAlbums() {
     return this.http.get('https://api.spotify.com/v1/browse/new-releases?limit=24&country=GB', {
+      headers: this.headers
+    });
+  }
+
+  getAlbum(id: string) {
+    return this.http.get(`https://api.spotify.com/v1/albums/${id}`, {
       headers: this.headers
     });
   }

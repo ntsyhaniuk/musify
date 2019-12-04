@@ -1,5 +1,7 @@
-h1 {    
+h1 {
     padding: 35px;
+    width: 90%;
+    margin: 0 auto;
     @media screen and (max-width: 415px){
         font-size: 24px;
     }
@@ -10,6 +12,9 @@ h1 {
     grid-template-columns: repeat(auto-fill, 320px);
     justify-content: center;
     align-items: center;
+    @media screen and (max-width: 978px){
+        grid-template-columns: repeat(auto-fill, 200px);
+    }
     @media screen and (max-width: 415px){
         grid-template-columns: repeat(auto-fill, 100px);
     }
@@ -27,6 +32,9 @@ h1 {
                 transition: .3s ease-in-out;
                 visibility: hidden;
                 z-index: 3;
+                @media screen and (max-width: 978px){
+                    font-size: 20px;
+                }
                 @media screen and (max-width: 415px){
                     font-size: 14px;
                 }
@@ -35,6 +43,10 @@ h1 {
                 object-fit: cover;
                 max-height: 320px;
                 max-width: 320px;
+                @media screen and (max-width: 978px){
+                    max-height: 200px;
+                    max-width: 200px;
+                }
                 @media screen and (max-width: 415px){
                     max-height: 100px;
                     max-width: 100px;

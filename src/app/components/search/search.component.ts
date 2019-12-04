@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SpotifyService } from '../../../services/spotify.service';
+import { SpotifyService } from '../../services/spotify.service';
 
 @Component({
   selector: 'app-search',

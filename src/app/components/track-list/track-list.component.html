@@ -1,0 +1,18 @@
+<!-- <section [ngStyle]="{'background-image': 'url(' + coverImage + ')'}"> -->
+<section>
+    <div class="track-list">
+        <h2>Tracks</h2>
+        <div *ngFor="let track of tracks" (click)="playTrack(track.id)">
+            <audio #player [id]="track.id" [src]="track.preview_url"></audio>
+            <div class="track">
+                <img src="../../../assets/play.png" />
+                <p>{{track.name}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- <h5>{{track.name}}</h5>
+            <audio id="player" controls>
+                <source [src]="track.preview_url" type="audio/mp3">
+            </audio> -->

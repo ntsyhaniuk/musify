@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SpotifyService } from '../../../services/spotify.service';
+import { SpotifyService } from '../../services/spotify.service';
 
 @Component({
   selector: 'app-albums-list',
