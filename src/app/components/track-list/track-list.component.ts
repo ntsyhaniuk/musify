@@ -8,9 +8,10 @@ import { SpotifyApiService } from '../../services/spotify.service';
   styleUrls: ['./track-list.component.scss']
 })
 export class TrackListComponent implements OnInit {
-  private tracks: any[] = [];
+  public tracks: any[] = [];
   private albumId: string;
-  private albumName: string;
+  public albumName: string;
+  public toggle: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,5 +55,9 @@ export class TrackListComponent implements OnInit {
   pauseTrack(id) {
     const audio = <HTMLAudioElement>document.getElementById(id);
     audio.pause();
+  }
+
+  toggleTracklist() {
+    this.toggle = !this.toggle;
   }
 }

@@ -3,6 +3,11 @@ h2, h5, h6, p {
     color: white;
 }
 
+.toggle-icon {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .track-list {
     position: absolute;
     right: 0;
@@ -11,13 +16,23 @@ h2, h5, h6, p {
     background: rgba($color: rgb(59,59,59), $alpha: 0.6);
     display: flex;
     flex-direction: column;
-    padding: 35px;
-    h2 {
-        padding-bottom: 25px;
-        align-self: center;
-    }
-    div {
-        padding-bottom: 20px;
+    padding: 25px;
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 35px;
+        img {
+            height: 32px;
+            filter: invert(100%);
+        }
+        h2 {
+            width: 100%;
+            justify-content: center;
+            display: flex;
+        }
+    }    
+    .tracks-container {
         #player {
             width: 100%;
         }
@@ -25,6 +40,7 @@ h2, h5, h6, p {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 20px;
             img {
                 margin: 0 5px;
                 width: 32px;
