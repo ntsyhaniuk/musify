@@ -1,12 +1,12 @@
-<section [ngStyle]="{'background-image': getCoverUrl()}" class="backgroundImg">
+<section>
     <div class="track-list">
-        <h2>Tracks</h2>
-        <div *ngFor="let track of tracks">
+        <h2>{{albumName}}</h2>
+        <div *ngFor="let track of tracks; let idx = index">
             <audio *ngIf="track.preview_url" [id]="track.id" [src]="track.preview_url"></audio>
             <div *ngIf="track.preview_url" class="track">
-                <img src="../../../assets/play.png" (click)="playTrack(track.id)" />
-                <img src="../../../assets/pause.png" (click)="pauseTrack(track.id)" />
-                <p>{{track.name}}</p>
+                <img [id]="idx" src="../../../assets/play.png" (click)="listenTrack(idx, track.id)" />
+                <h6>{{track.name}}</h6>
+                <p>{{msToMinSec(track.duration_ms)}}</p>
             </div>
         </div>
     </div>

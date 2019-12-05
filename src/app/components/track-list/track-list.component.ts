@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify.service';
 
@@ -10,7 +10,7 @@ import { SpotifyApiService } from '../../services/spotify.service';
 export class TrackListComponent implements OnInit {
   private tracks: any[] = [];
   private albumId: string;
-  private coverImage: string;
+  private albumName: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,17 +20,30 @@ export class TrackListComponent implements OnInit {
   ngOnInit() {
     this.albumId = this.route.snapshot.paramMap.get('id');
     this.spotifyService.getAlbum(this.albumId)
-      .subscribe(({ images, tracks }: any) => {
+      .subscribe(({ name, tracks }: any) => {
         const { items } = tracks;
         this.tracks = items;
-        this.coverImage = images[0].url;
+        this.albumName = name;
       },
         (error: any) => console.log(error)
       );
   }
 
-  getCoverUrl() {
-    return 'url(' + this.coverImage + ')';
+  msToMinSec(ms: number) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (+seconds < 10 ? '0' : '') + seconds;
+  }
+
+  listenTrack(idx: number, trackId: number) {
+    const image = <HTMLImageElement>document.getElementById(`${idx}`);
+    if (image.src.includes("play")) {
+      this.playTrack(trackId);
+      image.src = "../../../assets/pause.png";
+    } else {
+      this.pauseTrack(trackId);
+      image.src = "../../../assets/play.png";
+    }
   }
 
   playTrack(id) {

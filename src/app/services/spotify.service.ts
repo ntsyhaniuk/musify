@@ -31,17 +31,6 @@ export class SpotifyApiService {
     return this.$http.request(params);
   }
 
-  getAlbumTracks(id: string) {
-    const params = {
-      endpoint: `albums/${id}/tracks`,
-      queryParams: {
-        limit: 25,
-        country: 'US'
-      }
-    };
-    return this.$http.request(params);
-  }
-
   searchMusic(str: string) {
     const params = {
       endpoint: 'search',
