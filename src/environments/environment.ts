@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  token: 'BQBBkrbdSMk8MiXsMGCr34QlQOWmkbCmyFQZZGlMZ0lOIm27fFQYNGluIk4Pg9EFJ3WDbTlOOqxP-uABz_D0BhcV-PGA62jbNoV-lk5_7lHseZ33mfD_oE7w9YyS0T_m8IQdCYL4LUEVL6jtlVUs3rB3vHHaQSlaRxD2-G0GfSGGYLGSjGs',
+  CLIENT_ID: '7419229e221547db8d7d795ff0988bf7', // here should be your client id from registered application
+  REDIRECT_URI: 'http://localhost:4200/',
+  BASE_URL: 'https://api.spotify.com/v1',
+  STORAGE_KEY: 'auth_token',
+  AUTH_URL: 'https://accounts.spotify.com/authorize'
 };
 
 /*

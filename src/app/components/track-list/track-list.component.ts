@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SpotifyService } from '../../services/spotify.service';
+import { SpotifyApiService } from '../../services/spotify.service';
 
 @Component({
   selector: 'app-track-list',
@@ -8,38 +8,38 @@ import { SpotifyService } from '../../services/spotify.service';
   styleUrls: ['./track-list.component.scss']
 })
 export class TrackListComponent implements OnInit {
-  tracks: any[] = [];
-  private coverImage;
+  private tracks: any[] = [];
   private albumId: string;
+  private coverImage: string;
 
   constructor(
     private route: ActivatedRoute,
-    private spotifyService: SpotifyService
+    private spotifyService: SpotifyApiService
   ) { }
 
   ngOnInit() {
     this.albumId = this.route.snapshot.paramMap.get('id');
-    this.spotifyService.getAlbumTracks(this.albumId)
-      .subscribe(({ items }: any) => {
-        this.tracks.push(...items);
-      },
-        (error: any) => console.log(error));
-    this.getUrl();
-  }
-
-  getUrl() {
     this.spotifyService.getAlbum(this.albumId)
-      .subscribe(({ images }: any) => {
+      .subscribe(({ images, tracks }: any) => {
+        const { items } = tracks;
+        this.tracks = items;
         this.coverImage = images[0].url;
       },
-        (error: any) => console.log(error))
+        (error: any) => console.log(error)
+      );
   }
 
-  @ViewChild('player', {static: false}) audioPlayerRef: ElementRef;
+  getCoverUrl() {
+    return 'url(' + this.coverImage + ')';
+  }
 
   playTrack(id) {
-    this.audioPlayerRef.nativeElement.play();
-    const audio = document.getElementById(id);
-    console.log('clicked on', audio)
+    const audio = <HTMLAudioElement>document.getElementById(id);
+    audio.play();
+  }
+
+  pauseTrack(id) {
+    const audio = <HTMLAudioElement>document.getElementById(id);
+    audio.pause();
   }
 }

@@ -1,47 +1,57 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { HttpService } from './http.service';
 
 @Injectable()
-export class SpotifyService {
+export class SpotifyApiService {
   public dataList$ = new Subject<any>();
 
-  constructor(private http: HttpClient) { }
-
-  get headers() {
-    return new HttpHeaders({ 'Content-Type': 'application/json', Authorization: `Bearer ${environment.token}` });
-  }
+  constructor(private $http: HttpService, private http: HttpClient) { }
 
   getAlbums() {
-    return this.http.get('https://api.spotify.com/v1/browse/new-releases?limit=24&country=GB', {
-      headers: this.headers
-    });
+    const params = {
+      endpoint: 'browse/new-releases',
+      queryParams: {
+        limit: 25,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
   }
 
   getAlbum(id: string) {
-    return this.http.get(`https://api.spotify.com/v1/albums/${id}`, {
-      headers: this.headers
-    });
+    const params = {
+      endpoint: `albums/${id}`,
+      queryParams: {
+        limit: 25,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
   }
 
   getAlbumTracks(id: string) {
-    return this.http.get(`https://api.spotify.com/v1/albums/${id}/tracks`, {
-      headers: this.headers
-    });
+    const params = {
+      endpoint: `albums/${id}/tracks`,
+      queryParams: {
+        limit: 25,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
   }
 
   searchMusic(str: string) {
-    if (!str) {
-      return this.getAlbums().subscribe(({albums}: any) => {
-        this.dataList$.next(albums);
-      });
-    }
-    const searchUrl = `https://api.spotify.com/v1/search?q=${str}&type=album&offset=0&limit=25&market=US`;
-    this.http.get(searchUrl, {
-      headers: this.headers
-    }).subscribe(({albums}: any) => {
+    const params = {
+      endpoint: 'search',
+      queryParams: {
+        q: str,
+        type: 'album',
+        limit: 25
+      }
+    };
+    this.$http.request(params).subscribe(({albums}: any) => {
       this.dataList$.next(albums);
     });
   }
