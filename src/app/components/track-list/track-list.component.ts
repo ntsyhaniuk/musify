@@ -67,27 +67,32 @@ export class TrackListComponent implements OnInit {
   listenTrack(idx: number, trackId: string) {
     const image = <HTMLImageElement>document.getElementById(`${idx}`);
     if (image.src.includes("play")) {
-      this.playTrack(trackId);
-      image.src = this.pauseIcon;
+      this.playTrack(trackId, image);
     } else {
       this.pauseTrack(trackId, image);
     }
   }
 
-  playTrack(id: string) {
+  playTrack(id: string, imageElement?: HTMLImageElement) {
+    let image;
+    const audio = <HTMLAudioElement>document.getElementById(id);
     for (const track of this.tracks) {
       const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
-      if (!prevTrack.paused) {
-        const image = <HTMLImageElement>document.getElementById(`${track.track_number}`);
-        this.pauseTrack(track.id, image);
+      if (!prevTrack.paused || prevTrack.ended) {
+        const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
+        this.pauseTrack(track.id, prevTrackImage);
+      }
+      if (track.id === id) {
+        this.currentTrack = this.tracks[track.track_number];
+        image = <HTMLImageElement>document.getElementById(`${track.track_number}`);
       }
     }
 
-    const audio = <HTMLAudioElement>document.getElementById(id);
+    imageElement ? imageElement.src = this.pauseIcon : image.src = this.pauseIcon;
     audio.play();
   }
 
-  pauseTrack(id: string, imageElement: any) {
+  pauseTrack(id: string, imageElement: HTMLImageElement) {
     const audio = <HTMLAudioElement>document.getElementById(id);
     audio.pause();
     imageElement.src = this.playIcon;
@@ -97,8 +102,12 @@ export class TrackListComponent implements OnInit {
     this.playlistState = this.playlistState === 'out' ? 'in' : 'out';
   }
 
-  initProgressBar() {
+  initProgressBar(): any {
     const audio = <HTMLAudioElement>document.getElementById(this.currentTrack.id);
     this.currentTime$.next(audio.currentTime / audio.duration * 100);
+  }
+
+  playNextTrack(trackNumber: number) {
+    this.playTrack(this.tracks[trackNumber].id);
   }
 }

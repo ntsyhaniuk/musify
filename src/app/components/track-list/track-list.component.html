@@ -9,7 +9,7 @@
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
             <div *ngIf="track.preview_url" class="track">
-                <audio [id]="track.id" [src]="track.preview_url" (timeupdate)="initProgressBar()"></audio>
+                <audio [id]="track.id" [src]="track.preview_url" (timeupdate)="initProgressBar()" (ended)="playNextTrack(track.track_number)"></audio>
                 <img [id]="track.track_number" [src]="playIcon" (click)="listenTrack(track.track_number, track.id); currentTrack = track" />
                 <h6>{{track.name}}</h6>
                 <p>{{displayMillisecInMinSec(track.duration_ms)}}</p>
