@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify.service';
-import { state, style, transition, animate, trigger } from "@angular/animations";
-import { ITrack } from '../../types/interfaces'
+import { state, style, transition, animate, trigger } from '@angular/animations';
+import { ITrack } from '../../types/interfaces';
 
-//icons
+// icons
 import '../../../assets/close.png';
 import '../../../assets/menu_open.png';
 import '../../../assets/play.png';
@@ -35,9 +35,8 @@ export class TrackListComponent implements OnInit {
   public playIcon = require('../../../assets/play.png');
   public pauseIcon = require('../../../assets/pause.png');
   public tracks: ITrack[] = [];
-  private albumId: string;
   public albumName: string;
-  public playlistState: string = 'out';
+  public isPlaylistClosed = true;
   public currentTime$ = new Subject();
   public currentTrack: ITrack;
 
@@ -47,8 +46,8 @@ export class TrackListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.albumId = this.route.snapshot.paramMap.get('id');
-    this.spotifyService.getAlbum(this.albumId)
+    const albumId = this.route.snapshot.paramMap.get('id');
+    this.spotifyService.getAlbum(albumId)
       .subscribe(({ name, tracks }: any) => {
         const { items } = tracks;
         this.tracks = items;
@@ -59,9 +58,8 @@ export class TrackListComponent implements OnInit {
   }
 
   displayMillisecInMinSec(ms: number) {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (+seconds < 10 ? '0' : '') + seconds;
+    const d = new Date(1000 * Math.round(ms / 1000));
+    return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
   listenTrack(idx: number, trackId: string) {
@@ -90,8 +88,8 @@ export class TrackListComponent implements OnInit {
     imageElement.src = this.playIcon;
   }
 
-  toggleTracklist() {
-    this.playlistState = this.playlistState === 'out' ? 'in' : 'out';
+  togglePlaylist() {
+    this.isPlaylistClosed = !this.isPlaylistClosed;
   }
 
   initProgressBar(): any {

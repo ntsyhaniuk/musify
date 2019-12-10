@@ -1,10 +1,10 @@
-<div class="toggle-icon" *ngIf="playlistState==='out'" (click)="toggleTracklist()">
+<div class="toggle-icon" *ngIf="isPlaylistClosed" (click)="togglePlaylist()">
     <img [src]="menuOpen" />
 </div>
 <section>
-    <div class="track-list" [@slideInOut]="playlistState">
+    <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
-            <img [src]="closeIcon" (click)="toggleTracklist()" />
+            <img [src]="closeIcon" (click)="togglePlaylist()" />
             <h2>{{albumName}}</h2>
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
