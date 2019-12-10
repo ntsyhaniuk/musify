@@ -66,15 +66,11 @@ export class TrackListComponent implements OnInit {
 
   listenTrack(idx: number, trackId: string) {
     const image = <HTMLImageElement>document.getElementById(`${idx}`);
-    if (image.src.includes("play")) {
-      this.playTrack(trackId, image);
-    } else {
-      this.pauseTrack(trackId, image);
-    }
+    image.src.includes("play") ?
+      this.playTrack(trackId, image) : this.pauseTrack(trackId, image);
   }
 
-  playTrack(id: string, imageElement?: HTMLImageElement) {
-    let image;
+  playTrack(id: string, imageElement: HTMLImageElement) {
     const audio = <HTMLAudioElement>document.getElementById(id);
     for (const track of this.tracks) {
       const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
@@ -82,13 +78,9 @@ export class TrackListComponent implements OnInit {
         const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
         this.pauseTrack(track.id, prevTrackImage);
       }
-      if (track.id === id) {
-        this.currentTrack = this.tracks[track.track_number];
-        image = <HTMLImageElement>document.getElementById(`${track.track_number}`);
-      }
     }
 
-    imageElement ? imageElement.src = this.pauseIcon : image.src = this.pauseIcon;
+    imageElement.src = this.pauseIcon;
     audio.play();
   }
 
@@ -108,6 +100,8 @@ export class TrackListComponent implements OnInit {
   }
 
   playNextTrack(trackNumber: number) {
-    this.playTrack(this.tracks[trackNumber].id);
+    this.currentTrack = this.tracks[trackNumber];
+    const image = <HTMLImageElement>document.getElementById(`${trackNumber + 1}`);
+    this.playTrack(this.tracks[trackNumber].id, image);
   }
 }
