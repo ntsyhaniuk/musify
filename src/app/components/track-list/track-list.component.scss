@@ -10,6 +10,9 @@ p {
   display: flex;
 }
 
+.mat-divider {
+  border-top-color: rgba($color: #ffffff, $alpha: 0.5);
+}
 .track-list {
   position: absolute;
   right: 0;

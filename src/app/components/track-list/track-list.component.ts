@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify.service';
+import { AudioService } from '../../services/audio.service';
 import { state, style, transition, animate, trigger } from "@angular/animations";
-import { ITrack } from '../../types/interfaces'
+import { ITrack, StreamState } from '../../types/interfaces';
 
 //icons
 import '../../../assets/close.png';
@@ -35,20 +36,25 @@ export class TrackListComponent implements OnInit {
   public playIcon = require('../../../assets/play.png');
   public pauseIcon = require('../../../assets/pause.png');
   public tracks: ITrack[] = [];
-  private albumId: string;
   public albumName: string;
-  public playlistState: string = 'out';
+  public isPlaylistClosed: boolean = true;
   public currentTime$ = new Subject();
-  public currentTrack: ITrack;
+  public currentTrack: any;
+  public state: StreamState;
 
   constructor(
     private route: ActivatedRoute,
-    private spotifyService: SpotifyApiService
-  ) { }
+    private spotifyService: SpotifyApiService,
+    private audioService: AudioService
+  ) {
+    this.audioService.getState().subscribe(state => {
+      this.state = state;
+    })
+  }
 
   ngOnInit() {
-    this.albumId = this.route.snapshot.paramMap.get('id');
-    this.spotifyService.getAlbum(this.albumId)
+    const albumId = this.route.snapshot.paramMap.get('id');
+    this.spotifyService.getAlbum(albumId)
       .subscribe(({ name, tracks }: any) => {
         const { items } = tracks;
         this.tracks = items;
@@ -58,50 +64,79 @@ export class TrackListComponent implements OnInit {
       );
   }
 
+  playStream(track: string) {
+    this.audioService.playStream(track).subscribe();
+  }
+
+  listenTrack(track: ITrack, index: number) {
+    this.currentTrack = { index, track };
+    this.playStream(track.preview_url);
+    this.getImage(index).src = this.pauseIcon;
+  }
+
+  pause() {
+    this.audioService.pause();
+  }
+
+  play() {
+    this.audioService.play();
+  }
+
+  stop() {
+    this.audioService.stop();
+  }
+
+  onSliderTimeChanged(change) {
+    this.audioService.rewindTo(change.value);
+  }
+
+  togglePlaylist() {
+    this.isPlaylistClosed = !this.isPlaylistClosed;
+  }
+
   displayMillisecInMinSec(ms: number) {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (+seconds < 10 ? '0' : '') + seconds;
+    const d = new Date(1000 * Math.round(ms / 1000));
+    return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  listenTrack(idx: number, trackId: string) {
-    const image = <HTMLImageElement>document.getElementById(`${idx}`);
-    image.src.includes("play") ?
-      this.playTrack(trackId, image) : this.pauseTrack(trackId, image);
+  getImage(idx: number) {
+    return <HTMLImageElement>document.getElementById(`${idx}`);
   }
 
-  playTrack(id: string, imageElement: HTMLImageElement) {
-    const audio = <HTMLAudioElement>document.getElementById(id);
-    for (const track of this.tracks) {
-      const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
-      if (!prevTrack.paused || prevTrack.ended) {
-        const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
-        this.pauseTrack(track.id, prevTrackImage);
-      }
-    }
+  // initProgressBar(): any {
+  //   const audio = <HTMLAudioElement>document.getElementById(this.currentTrack.track.track_number);
+  //   this.currentTime$.next(audio.currentTime / audio.duration * 100);
+  // }
 
-    imageElement.src = this.pauseIcon;
-    audio.play();
-  }
+  // listenTrack(idx: number, trackId: string) {
+  //   const image = <HTMLImageElement>document.getElementById(`${idx}`);
+  //   image.src.includes("play") ?
+  //     this.playTrack(trackId, image) : this.pauseTrack(trackId, image);
+  // }
 
-  pauseTrack(id: string, imageElement: HTMLImageElement) {
-    const audio = <HTMLAudioElement>document.getElementById(id);
-    audio.pause();
-    imageElement.src = this.playIcon;
-  }
+  // playTrack(id: string, imageElement: HTMLImageElement) {
+  //   const audio = <HTMLAudioElement>document.getElementById(id);
+  //   for (const track of this.tracks) {
+  //     const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
+  //     if (!prevTrack.paused || prevTrack.ended) {
+  //       const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
+  //       this.pauseTrack(track.id, prevTrackImage);
+  //     }
+  //   }
 
-  toggleTracklist() {
-    this.playlistState = this.playlistState === 'out' ? 'in' : 'out';
-  }
+  //   imageElement.src = this.pauseIcon;
+  //   audio.play();
+  // }
 
-  initProgressBar(): any {
-    const audio = <HTMLAudioElement>document.getElementById(this.currentTrack.id);
-    this.currentTime$.next(audio.currentTime / audio.duration * 100);
-  }
+  // pauseTrack(id: string, imageElement: HTMLImageElement) {
+  //   const audio = <HTMLAudioElement>document.getElementById(id);
+  //   audio.pause();
+  //   imageElement.src = this.playIcon;
+  // }
 
-  playNextTrack(trackNumber: number) {
-    this.currentTrack = this.tracks[trackNumber];
-    const image = <HTMLImageElement>document.getElementById(`${trackNumber + 1}`);
-    this.playTrack(this.tracks[trackNumber].id, image);
-  }
+  // playNextTrack(trackNumber: number) {
+  //   this.currentTrack = this.tracks[trackNumber];
+  //   const image = <HTMLImageElement>document.getElementById(`${trackNumber + 1}`);
+  //   this.playTrack(this.tracks[trackNumber].id, image);
+  // }
 }

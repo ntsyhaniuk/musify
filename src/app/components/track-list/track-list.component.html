@@ -1,24 +1,25 @@
-<div class="toggle-icon" *ngIf="playlistState==='out'" (click)="toggleTracklist()">
+<div class="toggle-icon" *ngIf="isPlaylistClosed" (click)="togglePlaylist()">
     <img [src]="menuOpen" />
 </div>
 <section>
-    <div class="track-list" [@slideInOut]="playlistState">
+    <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
-            <img [src]="closeIcon" (click)="toggleTracklist()" />
+            <img [src]="closeIcon" (click)="togglePlaylist()" />
             <h2>{{albumName}}</h2>
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
-            <div *ngIf="track.preview_url" class="track">
-                <audio [id]="track.id" [src]="track.preview_url" (timeupdate)="initProgressBar()" (ended)="playNextTrack(track.track_number)"></audio>
-                <img [id]="track.track_number" [src]="playIcon" (click)="listenTrack(track.track_number, track.id); currentTrack = track" />
+            <div *ngIf="track.preview_url" class="track"
+                (click)="listenTrack(track, track.track_number); currentTrack = track">
+                <audio [id]="track.id" [src]="track.preview_url"></audio>
+                <img [id]="track.track_number" *ngIf="!state?.playImage" [src]="playIcon" />
                 <h6>{{track.name}}</h6>
                 <p>{{displayMillisecInMinSec(track.duration_ms)}}</p>
             </div>
-            <div *ngIf="track.preview_url" class="progress" [ngStyle]="{'height' : '5px' }">
-                <div *ngIf="currentTrack && currentTrack.id === track.id" class="progress-bar bg-success" role="progressbar"
-                    [ngStyle]="{'width': (currentTime$ | async) + '%'}" [attr.aria-valuenow]="(currentTime$ | async)"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+            <mat-slider *ngIf="track.preview_url" color="primary" class="time-slider" min="0" [max]="state?.duration"
+                step="1" [value]="state?.currentTime" [ngStyle]="{'width': '100%'}"
+                (input)="onSliderTimeChanged($event)">
+            </mat-slider>
+            <mat-divider></mat-divider>
         </div>
     </div>
 </section>
