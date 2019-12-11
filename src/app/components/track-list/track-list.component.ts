@@ -57,21 +57,28 @@ export class TrackListComponent implements OnInit {
     this.spotifyService.getAlbum(albumId)
       .subscribe(({ name, tracks }: any) => {
         const { items } = tracks;
-        this.tracks = items;
         this.albumName = name;
+        this.tracks = items;
+        this.tracks.map(track => {
+          track['isPlaying'] = false;
+          if(this.audioService.getAudioID() === track.id) {
+            track['isPlaying'] = true;
+          }
+        })
       },
         (error: any) => console.log(error)
       );
   }
 
-  playStream(track: string) {
-    this.audioService.playStream(track).subscribe();
+  playStream(track: string, id: string) {
+    this.audioService.playStream(track, id).subscribe();
   }
 
   listenTrack(track: ITrack, index: number) {
+    this.changeIcons();
+    track.isPlaying = true;
     this.currentTrack = { index, track };
-    this.playStream(track.preview_url);
-    this.getImage(index).src = this.pauseIcon;
+    this.playStream(track.preview_url, track.id);
   }
 
   pause() {
@@ -99,44 +106,11 @@ export class TrackListComponent implements OnInit {
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  getImage(idx: number) {
-    return <HTMLImageElement>document.getElementById(`${idx}`);
+  changeIcons() {
+    this.tracks.map(track => {
+      if(track.isPlaying) {
+        track.isPlaying = false;
+      }
+    })
   }
-
-  // initProgressBar(): any {
-  //   const audio = <HTMLAudioElement>document.getElementById(this.currentTrack.track.track_number);
-  //   this.currentTime$.next(audio.currentTime / audio.duration * 100);
-  // }
-
-  // listenTrack(idx: number, trackId: string) {
-  //   const image = <HTMLImageElement>document.getElementById(`${idx}`);
-  //   image.src.includes("play") ?
-  //     this.playTrack(trackId, image) : this.pauseTrack(trackId, image);
-  // }
-
-  // playTrack(id: string, imageElement: HTMLImageElement) {
-  //   const audio = <HTMLAudioElement>document.getElementById(id);
-  //   for (const track of this.tracks) {
-  //     const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
-  //     if (!prevTrack.paused || prevTrack.ended) {
-  //       const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
-  //       this.pauseTrack(track.id, prevTrackImage);
-  //     }
-  //   }
-
-  //   imageElement.src = this.pauseIcon;
-  //   audio.play();
-  // }
-
-  // pauseTrack(id: string, imageElement: HTMLImageElement) {
-  //   const audio = <HTMLAudioElement>document.getElementById(id);
-  //   audio.pause();
-  //   imageElement.src = this.playIcon;
-  // }
-
-  // playNextTrack(trackNumber: number) {
-  //   this.currentTrack = this.tracks[trackNumber];
-  //   const image = <HTMLImageElement>document.getElementById(`${trackNumber + 1}`);
-  //   this.playTrack(this.tracks[trackNumber].id, image);
-  // }
 }

@@ -13,6 +13,7 @@ export interface ITrack {
   external_urls: object;
   href: string;
   id: string;
+  isPlaying: boolean;
   is_local: boolean;
   name: string;
   popularity: number;

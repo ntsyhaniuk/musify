@@ -11,14 +11,11 @@
             <div *ngIf="track.preview_url" class="track"
                 (click)="listenTrack(track, track.track_number); currentTrack = track">
                 <audio [id]="track.id" [src]="track.preview_url"></audio>
-                <img [id]="track.track_number" *ngIf="!state?.playImage" [src]="playIcon" />
+                <img [id]="track.track_number" *ngIf="!track.isPlaying" [src]="playIcon" />
+                <img [id]="track.track_number" *ngIf="track.isPlaying" [src]="pauseIcon" />
                 <h6>{{track.name}}</h6>
                 <p>{{displayMillisecInMinSec(track.duration_ms)}}</p>
             </div>
-            <mat-slider *ngIf="track.preview_url" color="primary" class="time-slider" min="0" [max]="state?.duration"
-                step="1" [value]="state?.currentTime" [ngStyle]="{'width': '100%'}"
-                (input)="onSliderTimeChanged($event)">
-            </mat-slider>
             <mat-divider></mat-divider>
         </div>
     </div>

@@ -10,6 +10,7 @@ import { StreamState } from '../types/interfaces';
 export class AudioService {
     private stop$ = new Subject();
     private audioObj = new Audio();
+    private audioID: string;
     audioEvents = [
         "ended",
         "error",
@@ -98,7 +99,8 @@ export class AudioService {
         });
     }
 
-    playStream(url: string) {
+    playStream(url: string, id: string) {
+        this.audioID = id;
         return this.streamObservable(url).pipe(takeUntil(this.stop$));
     }
 
@@ -137,5 +139,9 @@ export class AudioService {
 
     getState(): Observable<StreamState> {
         return this.stateChange.asObservable();
+    }
+
+    getAudioID() {
+        return this.audioID;
     }
 }
