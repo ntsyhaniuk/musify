@@ -1,5 +1,7 @@
-<button class="transparent_button toggle-menu_button" (click)="togglePlaylist()">
-  <i class="material-icons" *ngIf="isPlaylistClosed">menu_open</i>
+<button class="transparent_button toggle-menu_button"
+        *ngIf="isPlaylistClosed"
+        (click)="togglePlaylist()">
+  <i class="material-icons">menu_open</i>
 </button>
 <section>
     <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
@@ -9,14 +11,13 @@
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
             <div *ngIf="track.preview_url" class="track">
-                <audio [id]="track.id" [src]="track.preview_url"></audio>
-
                 <button class="transparent_button" (click)="playPause(track)">
                   <i class="material-icons" [style.color]="'#00d949'" *ngIf="track.isPlaying">pause_circle_outline</i>
                   <i class="material-icons" [style.color]="'#ffffff'" *ngIf="!track.isPlaying">play_circle_outline</i>
                 </button>
                 <h6 [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">{{track.name}}</h6>
-                <p [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">{{displayMillisecInMinSec(track.duration_ms)}}
+                <p [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">
+                  {{displayMillisecInMinSec(track.duration_ms)}}
                 </p>
             </div>
             <mat-divider></mat-divider>
