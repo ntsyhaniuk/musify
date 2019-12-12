@@ -7,10 +7,7 @@ import { state, style, transition, animate, trigger } from "@angular/animations"
 import { ITrack, StreamState } from '../../types/interfaces';
 
 //icons
-import '../../../assets/close.png';
 import '../../../assets/menu_open.png';
-import '../../../assets/play.png';
-import '../../../assets/pause.png';
 declare function require(path: string);
 
 @Component({
@@ -31,15 +28,11 @@ declare function require(path: string);
   ]
 })
 export class TrackListComponent implements OnInit {
-  public closeIcon = require('../../../assets/close.png');
   public menuOpen = require('../../../assets/menu_open.png');
-  public playIcon = require('../../../assets/play.png');
-  public pauseIcon = require('../../../assets/pause.png');
   public tracks: ITrack[] = [];
   public albumName: string;
   public isPlaylistClosed: boolean = true;
   public currentTime$ = new Subject();
-  public currentTrack: any;
   public state: StreamState;
 
   constructor(
@@ -60,9 +53,9 @@ export class TrackListComponent implements OnInit {
         this.albumName = name;
         this.tracks = items;
         this.tracks.map(track => {
-          track['isPlaying'] = false;
-          if(this.audioService.getAudioID() === track.id) {
-            track['isPlaying'] = true;
+          track.isPlaying = false;
+          if (this.audioService.getAudioID() === track.id) {
+            track.isPlaying = true;
           }
         })
       },
@@ -77,12 +70,14 @@ export class TrackListComponent implements OnInit {
   listenTrack(track: ITrack, index: number) {
     this.changeIcons();
     track.isPlaying = true;
-    this.currentTrack = { index, track };
     this.playStream(track.preview_url, track.id);
   }
 
   pause() {
     this.audioService.pause();
+    for (const track of this.tracks) {
+      if (track.isPlaying) track.isPlaying = false;
+    }
   }
 
   play() {
@@ -108,7 +103,7 @@ export class TrackListComponent implements OnInit {
 
   changeIcons() {
     this.tracks.map(track => {
-      if(track.isPlaying) {
+      if (track.isPlaying) {
         track.isPlaying = false;
       }
     })

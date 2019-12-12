@@ -4,17 +4,19 @@
 <section>
     <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
-            <img [src]="closeIcon" (click)="togglePlaylist()" />
+            <i class="material-icons" [style.color]="'#ffffff'" (click)="togglePlaylist()">close</i>
             <h2>{{albumName}}</h2>
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
-            <div *ngIf="track.preview_url" class="track"
-                (click)="listenTrack(track, track.track_number); currentTrack = track">
+            <div *ngIf="track.preview_url" class="track">
                 <audio [id]="track.id" [src]="track.preview_url"></audio>
-                <img [id]="track.track_number" *ngIf="!track.isPlaying" [src]="playIcon" />
-                <img [id]="track.track_number" *ngIf="track.isPlaying" [src]="pauseIcon" />
-                <h6>{{track.name}}</h6>
-                <p>{{displayMillisecInMinSec(track.duration_ms)}}</p>
+                <i class="material-icons" [style.color]="'#ffffff'" *ngIf="!track.isPlaying"
+                    (click)="listenTrack(track, track.track_number)">play_circle_outline</i>
+                <i class="material-icons" [style.color]="'green'" *ngIf="track.isPlaying"
+                    (click)="pause()">pause_circle_outline</i>
+                <h6 [style.color]="track.isPlaying ? 'green' : '#ffffff'">{{track.name}}</h6>
+                <p [style.color]="track.isPlaying ? 'green' : '#ffffff'">{{displayMillisecInMinSec(track.duration_ms)}}
+                </p>
             </div>
             <mat-divider></mat-divider>
         </div>
