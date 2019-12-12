@@ -107,12 +107,4 @@ export class TrackListComponent implements OnInit {
     const d = new Date(1000 * Math.round(ms / 1000));
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
-
-  changeIcons() {
-    this.tracks.map(track => {
-      if (track.isPlaying) {
-        track.isPlaying = false;
-      }
-    });
-  }
 }
