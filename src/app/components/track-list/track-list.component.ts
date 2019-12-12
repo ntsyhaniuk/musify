@@ -6,10 +6,6 @@ import { AudioService } from '../../services/audio.service';
 import { state, style, transition, animate, trigger } from "@angular/animations";
 import { ITrack, StreamState } from '../../types/interfaces';
 
-//icons
-import '../../../assets/menu_open.png';
-declare function require(path: string);
-
 @Component({
   selector: 'app-track-list',
   templateUrl: './track-list.component.html',
@@ -28,12 +24,12 @@ declare function require(path: string);
   ]
 })
 export class TrackListComponent implements OnInit {
-  public menuOpen = require('../../../assets/menu_open.png');
   public tracks: ITrack[] = [];
   public albumName: string;
   public isPlaylistClosed: boolean = true;
   public currentTime$ = new Subject();
   public state: StreamState;
+  public isPlaying: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,10 +48,11 @@ export class TrackListComponent implements OnInit {
         const { items } = tracks;
         this.albumName = name;
         this.tracks = items;
+
         this.tracks.map(track => {
-          track.isPlaying = false;
+          track.isPlaying = !this.isPlaying;
           if (this.audioService.getAudioID() === track.id) {
-            track.isPlaying = true;
+            track.isPlaying = this.isPlaying;
           }
         })
       },
@@ -63,21 +60,25 @@ export class TrackListComponent implements OnInit {
       );
   }
 
-  playStream(track: string, id: string) {
-    this.audioService.playStream(track, id).subscribe();
+  playStream({ preview_url: track, id }) {
+    this.audioService.playStream(track, id, this.tracks).subscribe((event: Event) => {
+      if (event.type === 'ended') {
+        // setting track list when switching between albums
+        this.tracks = this.audioService.getTrackList();
+        this.playNextTrack();
+      }
+    });
   }
 
-  listenTrack(track: ITrack, index: number) {
-    this.changeIcons();
-    track.isPlaying = true;
-    this.playStream(track.preview_url, track.id);
+  listenTrack(track: ITrack) {
+    this.pauseOtherTracks();
+    track.isPlaying = this.isPlaying;
+    this.playStream(track);
   }
 
-  pause() {
+  pause(trackNumber: number) {
     this.audioService.pause();
-    for (const track of this.tracks) {
-      if (track.isPlaying) track.isPlaying = false;
-    }
+    this.tracks[trackNumber - 1].isPlaying = !this.isPlaying;
   }
 
   play() {
@@ -101,11 +102,21 @@ export class TrackListComponent implements OnInit {
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  changeIcons() {
-    this.tracks.map(track => {
-      if (track.isPlaying) {
-        track.isPlaying = false;
-      }
-    })
+  pauseOtherTracks() {
+    for (const track of this.tracks) {
+      if (track.isPlaying) track.isPlaying = !this.isPlaying;
+    }
+  }
+
+  playNextTrack() {
+    const currentTrack = this.audioService.getAudioID();
+    const nextTrack = this.tracks.find(track => track.id === currentTrack);
+    const isTrackListEnd = this.tracks.length === nextTrack.track_number;
+    this.stop();
+    if (isTrackListEnd) {
+      this.tracks[nextTrack.track_number - 1].isPlaying = !this.isPlaying;
+      return;
+    }
+    this.listenTrack(this.tracks[nextTrack.track_number]);
   }
 }

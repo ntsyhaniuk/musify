@@ -1,24 +1,35 @@
 <div class="toggle-icon" *ngIf="isPlaylistClosed" (click)="togglePlaylist()">
-    <img [src]="menuOpen" />
+    <button mat-button>
+        <i class="material-icons" [ngStyle]="{'font-size' : '42px'}">menu_open</i>
+    </button>
 </div>
 <section>
     <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
-            <i class="material-icons" [style.color]="'#ffffff'" (click)="togglePlaylist()">close</i>
+            <button mat-button>
+                <i class="material-icons" [style.color]="'#ffffff'" (click)="togglePlaylist()">close</i>
+            </button>
             <h2>{{albumName}}</h2>
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
             <div *ngIf="track.preview_url" class="track">
                 <audio [id]="track.id" [src]="track.preview_url"></audio>
-                <i class="material-icons" [style.color]="'#ffffff'" *ngIf="!track.isPlaying"
-                    (click)="listenTrack(track, track.track_number)">play_circle_outline</i>
-                <i class="material-icons" [style.color]="'green'" *ngIf="track.isPlaying"
-                    (click)="pause()">pause_circle_outline</i>
+                <button mat-button *ngIf="!track.isPlaying">
+                    <i class="material-icons" [style.color]="'#ffffff'"
+                        (click)="listenTrack(track)">play_circle_outline</i>
+                </button>
+                <button mat-button *ngIf="track.isPlaying">
+                    <i class="material-icons" [style.color]="'green'"
+                        (click)="pause(track.track_number)">pause_circle_outline</i>
+                </button>
                 <h6 [style.color]="track.isPlaying ? 'green' : '#ffffff'">{{track.name}}</h6>
                 <p [style.color]="track.isPlaying ? 'green' : '#ffffff'">{{displayMillisecInMinSec(track.duration_ms)}}
                 </p>
             </div>
-            <mat-divider></mat-divider>
+            <mat-slider *ngIf="track.isPlaying" class="time-slider" min="0" [max]="state?.duration" step="1"
+                [value]="state?.currentTime" [ngStyle]="{'width': '100%'}" (input)="onSliderTimeChanged($event)">
+            </mat-slider>
+            <mat-divider *ngIf="track.preview_url"></mat-divider>
         </div>
     </div>
 </section>

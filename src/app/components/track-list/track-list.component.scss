@@ -5,14 +5,29 @@ p {
   margin: 0;
   color: white;
 }
-i {
-  cursor: pointer;
-}
-
 .toggle-icon {
   display: flex;
 }
-
+::ng-deep .mat-accent .mat-slider-thumb {
+  background-color: green;
+}
+::ng-deep .mat-accent .mat-slider-thumb-label {
+  background-color: green;
+}
+::ng-deep .mat-accent .mat-slider-track-fill {
+  background-color: green;
+}
+::ng-deep .mat-button-focus-overlay {
+  background-color: transparent;
+}
+.mat-button {
+  line-height: inherit;
+  min-width: 0px;
+  padding: 0px;
+  &:focus {
+    outline: none;
+  }
+}
 .mat-divider {
   border-top-color: rgba($color: #ffffff, $alpha: 0.5);
 }
@@ -36,7 +51,7 @@ i {
     padding-bottom: 35px;
     @media screen and (max-width: 415px) {
       flex-wrap: wrap;
-      i:first-child {
+      button:first-child {
         margin-bottom: 15px;
       }
     }
@@ -49,9 +64,6 @@ i {
     }
   }
   .tracks-container {
-    #player {
-      width: 100%;
-    }
     .track {
       display: flex;
       justify-content: space-between;
