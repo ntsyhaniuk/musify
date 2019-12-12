@@ -6,8 +6,20 @@ p {
   color: white;
 }
 
-.toggle-icon {
+.transparent_button {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+}
+
+.toggle-menu_button {
+  i {
+    font-size: 36px;
+  }
 }
 
 .mat-divider {
@@ -19,7 +31,7 @@ p {
   height: 89vh;
   width: 550px;
   overflow-y: scroll;
-  background: rgba($color: rgb(59, 59, 59), $alpha: 0.6);
+  background: rgb(59, 59, 59);
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -61,11 +73,6 @@ p {
       justify-content: space-between;
       align-items: center;
       padding: 13px 0;
-      img {
-        margin: 0 5px;
-        width: 32px;
-        filter: invert(100%);
-      }
       h6 {
         margin: 0 15px;
         text-align: center;

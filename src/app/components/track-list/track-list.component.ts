@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { state, style, transition, animate, trigger } from '@angular/animations';
+import { Subject } from 'rxjs';
+
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
-import { state, style, transition, animate, trigger } from "@angular/animations";
 import { ITrack, StreamState } from '../../types/interfaces';
-
-//icons
-import '../../../assets/close.png';
-import '../../../assets/menu_open.png';
-import '../../../assets/play.png';
-import '../../../assets/pause.png';
-declare function require(path: string);
 
 @Component({
   selector: 'app-track-list',
@@ -31,55 +25,70 @@ declare function require(path: string);
   ]
 })
 export class TrackListComponent implements OnInit {
-  public closeIcon = require('../../../assets/close.png');
-  public menuOpen = require('../../../assets/menu_open.png');
-  public playIcon = require('../../../assets/play.png');
-  public pauseIcon = require('../../../assets/pause.png');
   public tracks: ITrack[] = [];
   public albumName: string;
-  public isPlaylistClosed: boolean = true;
+  public isPlaylistClosed = true;
   public currentTime$ = new Subject();
-  public currentTrack: any;
   public state: StreamState;
+  public previousTrack: ITrack;
 
   constructor(
     private route: ActivatedRoute,
     private spotifyService: SpotifyApiService,
     private audioService: AudioService
   ) {
-    this.audioService.getState().subscribe(state => {
-      this.state = state;
-    })
+    this.audioService.getState().subscribe(newState => {
+      this.state = newState;
+    });
   }
 
   ngOnInit() {
     const albumId = this.route.snapshot.paramMap.get('id');
     this.spotifyService.getAlbum(albumId)
       .subscribe(({ name, tracks }: any) => {
-        const { items } = tracks;
-        this.tracks = items;
+        const audioID = this.audioService.getAudioID();
         this.albumName = name;
+        this.tracks = tracks.items.map(track => {
+          if (audioID === track.id) {
+            this.previousTrack = track;
+            track.isPlaying = true;
+          }
+          return track;
+        });
       },
         (error: any) => console.log(error)
       );
   }
 
-  playStream(track: string) {
+  playStream(track: ITrack) {
+    this.previousTrack = track;
     this.audioService.playStream(track).subscribe();
   }
 
-  listenTrack(track: ITrack, index: number) {
-    this.currentTrack = { index, track };
-    this.playStream(track.preview_url);
-    this.getImage(index).src = this.pauseIcon;
+  playPause(track: ITrack) {
+    if (track.isPlaying) {
+      this.pause(track);
+    } else {
+      this.play(track);
+    }
   }
 
-  pause() {
+  pause(track: ITrack) {
+    track.isPlaying = false;
     this.audioService.pause();
   }
 
-  play() {
-    this.audioService.play();
+  play(track: ITrack) {
+    const id = this.audioService.getAudioID();
+    track.isPlaying = true;
+    if (id === track.id) {
+      this.audioService.play();
+    } else {
+      if (this.previousTrack) {
+        this.previousTrack.isPlaying = false;
+      }
+      this.playStream(track);
+    }
   }
 
   stop() {
@@ -99,44 +108,11 @@ export class TrackListComponent implements OnInit {
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  getImage(idx: number) {
-    return <HTMLImageElement>document.getElementById(`${idx}`);
+  changeIcons() {
+    this.tracks.map(track => {
+      if (track.isPlaying) {
+        track.isPlaying = false;
+      }
+    });
   }
-
-  // initProgressBar(): any {
-  //   const audio = <HTMLAudioElement>document.getElementById(this.currentTrack.track.track_number);
-  //   this.currentTime$.next(audio.currentTime / audio.duration * 100);
-  // }
-
-  // listenTrack(idx: number, trackId: string) {
-  //   const image = <HTMLImageElement>document.getElementById(`${idx}`);
-  //   image.src.includes("play") ?
-  //     this.playTrack(trackId, image) : this.pauseTrack(trackId, image);
-  // }
-
-  // playTrack(id: string, imageElement: HTMLImageElement) {
-  //   const audio = <HTMLAudioElement>document.getElementById(id);
-  //   for (const track of this.tracks) {
-  //     const prevTrack = <HTMLAudioElement>document.getElementById(track.id);
-  //     if (!prevTrack.paused || prevTrack.ended) {
-  //       const prevTrackImage = <HTMLImageElement>document.getElementById(`${track.track_number}`);
-  //       this.pauseTrack(track.id, prevTrackImage);
-  //     }
-  //   }
-
-  //   imageElement.src = this.pauseIcon;
-  //   audio.play();
-  // }
-
-  // pauseTrack(id: string, imageElement: HTMLImageElement) {
-  //   const audio = <HTMLAudioElement>document.getElementById(id);
-  //   audio.pause();
-  //   imageElement.src = this.playIcon;
-  // }
-
-  // playNextTrack(trackNumber: number) {
-  //   this.currentTrack = this.tracks[trackNumber];
-  //   const image = <HTMLImageElement>document.getElementById(`${trackNumber + 1}`);
-  //   this.playTrack(this.tracks[trackNumber].id, image);
-  // }
 }

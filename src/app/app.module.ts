@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatSliderModule,
   MatDividerModule
-} from "@angular/material";
+} from '@angular/material';
 
 // modules
 import { AppRoutingModule } from './app-routing.module';
@@ -40,7 +40,7 @@ import { TrackListComponent } from './components/track-list/track-list.component
     AppRoutingModule,
     HttpClientModule,
     MatSliderModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   providers: [
     AuthService,
