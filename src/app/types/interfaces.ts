@@ -18,7 +18,6 @@ export interface ITrack {
   name: string;
   popularity: number;
   preview_url: string;
-  isPlaying: boolean;
   track_number: number;
   type: string;
   uri: string;

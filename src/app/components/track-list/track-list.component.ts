@@ -30,7 +30,7 @@ export class TrackListComponent implements OnInit {
   public isPlaylistClosed = true;
   public currentTime$ = new Subject();
   public state: StreamState;
-  public previousTrack: ITrack;
+  public currentTrack: ITrack;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,7 +50,7 @@ export class TrackListComponent implements OnInit {
         this.albumName = name;
         this.tracks = tracks.items.map(track => {
           if (audioID === track.id) {
-            this.previousTrack = track;
+            this.currentTrack = track;
             track.isPlaying = true;
           }
           return track;
@@ -61,7 +61,7 @@ export class TrackListComponent implements OnInit {
   }
 
   playStream(track: ITrack) {
-    this.previousTrack = track;
+    this.currentTrack = track;
     this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
       if (event.type === 'ended') {
         // setting track list when switching between albums
@@ -90,14 +90,15 @@ export class TrackListComponent implements OnInit {
     if (id === track.id) {
       this.audioService.play();
     } else {
-      if (this.previousTrack) {
-        this.previousTrack.isPlaying = false;
+      if (this.currentTrack) {
+        this.currentTrack.isPlaying = false;
       }
       this.playStream(track);
     }
   }
 
   stop() {
+    this.currentTrack.isPlaying = false;
     this.audioService.stop();
   }
 
@@ -114,21 +115,12 @@ export class TrackListComponent implements OnInit {
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  pauseOtherTracks() {
-    for (const track of this.tracks) {
-      if (track.isPlaying) track.isPlaying = !this.isPlaying;
-    }
-  }
-
   playNextTrack() {
-    const currentTrack = this.audioService.getAudioID();
-    const nextTrack = this.tracks.find(track => track.id === currentTrack);
-    const isTrackListEnd = this.tracks.length === nextTrack.track_number;
+    const currentTrackNumber = this.currentTrack.track_number;
+    const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
+    const isTrackListEnd = this.tracks.length === currentTrackNumber;
     this.stop();
-    if (isTrackListEnd) {
-      this.tracks[nextTrack.track_number - 1].isPlaying = !this.isPlaying;
-      return;
-    }
-    this.play(this.tracks[nextTrack.track_number]);
+    if (isTrackListEnd) return;
+    this.play(nextTrack);
   }
 }
