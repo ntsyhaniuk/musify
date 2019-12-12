@@ -21,7 +21,26 @@ p {
     font-size: 36px;
   }
 }
-
+::ng-deep .mat-accent .mat-slider-thumb {
+  background-color: green;
+}
+::ng-deep .mat-accent .mat-slider-thumb-label {
+  background-color: green;
+}
+::ng-deep .mat-accent .mat-slider-track-fill {
+  background-color: green;
+}
+::ng-deep .mat-button-focus-overlay {
+  background-color: transparent;
+}
+.mat-button {
+  line-height: inherit;
+  min-width: 0px;
+  padding: 0px;
+  &:focus {
+    outline: none;
+  }
+}
 .mat-divider {
   border-top-color: rgba($color: #ffffff, $alpha: 0.5);
 }
@@ -41,33 +60,23 @@ p {
   .title {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     padding-bottom: 35px;
     @media screen and (max-width: 415px) {
       flex-wrap: wrap;
-    }
-    img {
-      height: 32px;
-      margin: 0 10px;
-      filter: invert(100%);
-      @media screen and (max-width: 415px) {
-        font-size: 18px;
-        margin: 5px 10px;
+      button:first-child {
+        margin-bottom: 15px;
       }
     }
     h2 {
       width: 100%;
-      justify-content: center;
-      display: flex;
+      text-align: center;
       @media screen and (max-width: 415px) {
-        text-align: center;
+        font-size: 24px;
       }
     }
   }
   .tracks-container {
-    #player {
-      width: 100%;
-    }
     .track {
       display: flex;
       justify-content: space-between;

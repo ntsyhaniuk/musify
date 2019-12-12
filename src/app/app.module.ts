@@ -5,7 +5,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatSliderModule,
-  MatDividerModule
+  MatDividerModule,
+  MatButtonModule
 } from '@angular/material';
 
 // modules
@@ -41,6 +42,7 @@ import { TrackListComponent } from './components/track-list/track-list.component
     HttpClientModule,
     MatSliderModule,
     MatDividerModule,
+    MatButtonModule
   ],
   providers: [
     AuthService,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
-import {ITrack, StreamState} from '../types/interfaces';
+import { ITrack, StreamState } from '../types/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +11,7 @@ export class AudioService {
     private stop$ = new Subject();
     private audioObj = new Audio();
     private audioID: string;
+    private trackList: ITrack[] = [];
     audioEvents = [
         'ended',
         'error',
@@ -99,8 +100,9 @@ export class AudioService {
         });
     }
 
-    playStream({preview_url, id}: ITrack) {
+    playStream({preview_url, id}: ITrack, trackList: ITrack[]) {
         this.audioID = id;
+        this.trackList = trackList;
         return this.streamObservable(preview_url).pipe(takeUntil(this.stop$));
     }
 
@@ -143,5 +145,9 @@ export class AudioService {
 
     getAudioID() {
         return this.audioID;
+    }
+
+    getTrackList() {
+        return this.trackList;
     }
 }

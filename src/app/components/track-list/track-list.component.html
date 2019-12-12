@@ -1,12 +1,14 @@
-<button class="transparent_button toggle-menu_button"
-        *ngIf="isPlaylistClosed"
-        (click)="togglePlaylist()">
-  <i class="material-icons">menu_open</i>
-</button>
+<div class="toggle-icon" *ngIf="isPlaylistClosed">
+    <button mat-button (click)="togglePlaylist()">
+        <i class="material-icons" [ngStyle]="{'font-size' : '42px'}">menu_open</i>
+    </button>
+</div>
 <section>
     <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
-            <i class="material-icons" [style.color]="'#ffffff'" (click)="togglePlaylist()">close</i>
+            <button mat-button (click)="togglePlaylist()">
+                <i class="material-icons" [style.color]="'#ffffff'">close</i>
+            </button>
             <h2>{{albumName}}</h2>
         </div>
         <div *ngFor="let track of tracks" class="tracks-container">
@@ -20,7 +22,10 @@
                   {{displayMillisecInMinSec(track.duration_ms)}}
                 </p>
             </div>
-            <mat-divider></mat-divider>
+            <mat-slider *ngIf="track.isPlaying" class="time-slider" min="0" [max]="state?.duration" step="1"
+                [value]="state?.currentTime" [ngStyle]="{'width': '100%'}" (input)="onSliderTimeChanged($event)">
+            </mat-slider>
+            <mat-divider *ngIf="track.preview_url"></mat-divider>
         </div>
     </div>
 </section>

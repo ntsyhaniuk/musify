@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, animate, trigger } from '@angular/animations';
-import { Subject } from 'rxjs';
 
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
@@ -62,7 +62,13 @@ export class TrackListComponent implements OnInit {
 
   playStream(track: ITrack) {
     this.previousTrack = track;
-    this.audioService.playStream(track).subscribe();
+    this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
+      if (event.type === 'ended') {
+        // setting track list when switching between albums
+        this.tracks = this.audioService.getTrackList();
+        this.playNextTrack();
+      }
+    });
   }
 
   playPause(track: ITrack) {
@@ -106,5 +112,23 @@ export class TrackListComponent implements OnInit {
   displayMillisecInMinSec(ms: number) {
     const d = new Date(1000 * Math.round(ms / 1000));
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
+  }
+
+  pauseOtherTracks() {
+    for (const track of this.tracks) {
+      if (track.isPlaying) track.isPlaying = !this.isPlaying;
+    }
+  }
+
+  playNextTrack() {
+    const currentTrack = this.audioService.getAudioID();
+    const nextTrack = this.tracks.find(track => track.id === currentTrack);
+    const isTrackListEnd = this.tracks.length === nextTrack.track_number;
+    this.stop();
+    if (isTrackListEnd) {
+      this.tracks[nextTrack.track_number - 1].isPlaying = !this.isPlaying;
+      return;
+    }
+    this.play(this.tracks[nextTrack.track_number]);
   }
 }
