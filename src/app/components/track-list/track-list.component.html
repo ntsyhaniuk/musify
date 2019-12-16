@@ -1,9 +1,10 @@
-<div class="toggle-icon" *ngIf="isPlaylistClosed">
-    <button mat-button (click)="togglePlaylist()" class="toggle-menu_button">
-        <i class="material-icons">menu_open</i>
-    </button>
-</div>
-<section>
+<div class="content">
+    <app-navbar></app-navbar>
+    <div class="toggle-icon" *ngIf="isPlaylistClosed">
+        <button mat-button (click)="togglePlaylist()" class="toggle-menu_button">
+            <i class="material-icons">menu_open</i>
+        </button>
+    </div>
     <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
         <div class="title">
             <button mat-button (click)="togglePlaylist()" class="toggle-close">
@@ -28,4 +29,4 @@
             <mat-divider *ngIf="track.preview_url"></mat-divider>
         </div>
     </div>
-</section>
+</div>
