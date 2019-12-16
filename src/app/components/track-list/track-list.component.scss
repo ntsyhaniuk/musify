@@ -1,37 +1,16 @@
+$lightGreen: #00d949;
+
 h2,
 h5,
 h6,
 p {
   margin: 0;
-  color: white;
+  color: #ffffff;
 }
-
-.transparent_button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border: none;
-  border-radius: 50%;
-  outline: none;
-}
-
 .toggle-menu_button {
   i {
-    font-size: 36px;
+    font-size: 38px;
   }
-}
-::ng-deep .mat-accent .mat-slider-thumb {
-  background-color: green;
-}
-::ng-deep .mat-accent .mat-slider-thumb-label {
-  background-color: green;
-}
-::ng-deep .mat-accent .mat-slider-track-fill {
-  background-color: green;
-}
-::ng-deep .mat-button-focus-overlay {
-  background-color: transparent;
 }
 .mat-button {
   line-height: inherit;
@@ -62,6 +41,11 @@ p {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 35px;
+    .toggle-close {
+      i {
+        color: #ffffff;
+      }
+    }
     @media screen and (max-width: 415px) {
       button:first-child {
         margin-bottom: 15px;
@@ -85,6 +69,24 @@ p {
         margin: 0 15px;
         text-align: center;
       }
+      .transparent_button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: none;
+        border: none;
+        border-radius: 50%;
+        outline: none;
+        #play {
+          color: $lightGreen;
+        }
+        #pause {
+          color: #ffffff;
+        }
+      }
+    }
+    .mat-slider {
+      width: 100%;
     }
   }
 }
