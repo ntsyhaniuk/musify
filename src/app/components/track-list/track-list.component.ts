@@ -129,8 +129,6 @@ export class TrackListComponent implements OnInit {
   }
 
   playNextTrack() {
-    // if (!this.currentTrack) {
-    // }
     const currentTrackNumber = this.currentTrack.track_number;
     const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
     const isTrackListEnd = this.tracks.length === currentTrackNumber;
