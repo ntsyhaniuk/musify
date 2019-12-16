@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { SpotifyApiService } from '../../services/spotify.service';
