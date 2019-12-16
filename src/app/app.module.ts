@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatIconModule,
   MatSliderModule,
   MatDividerModule,
   MatButtonModule
-} from "@angular/material";
+} from '@angular/material';
 
 // modules
 import { AppRoutingModule } from './app-routing.module';
@@ -41,7 +40,6 @@ import { TrackListComponent } from './components/track-list/track-list.component
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    MatIconModule,
     MatSliderModule,
     MatDividerModule,
     MatButtonModule

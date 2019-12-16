@@ -5,8 +5,21 @@ p {
   margin: 0;
   color: white;
 }
-.toggle-icon {
+
+.transparent_button {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+}
+
+.toggle-menu_button {
+  i {
+    font-size: 36px;
+  }
 }
 ::ng-deep .mat-accent .mat-slider-thumb {
   background-color: green;
@@ -37,7 +50,7 @@ p {
   height: 89vh;
   width: 550px;
   overflow-y: scroll;
-  background: rgba($color: rgb(59, 59, 59), $alpha: 0.6);
+  background: rgba($color: rgb(59, 59, 59), $alpha: 0.9);
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -50,7 +63,6 @@ p {
     align-items: center;
     padding-bottom: 35px;
     @media screen and (max-width: 415px) {
-      flex-wrap: wrap;
       button:first-child {
         margin-bottom: 15px;
       }

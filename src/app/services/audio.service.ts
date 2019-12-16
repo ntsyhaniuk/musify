@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import * as moment from "moment";
-import { StreamState, ITrack } from '../types/interfaces';
+import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import * as moment from 'moment';
+import { ITrack, StreamState } from '../types/interfaces';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class AudioService {
     private stop$ = new Subject();
@@ -13,13 +13,13 @@ export class AudioService {
     private audioID: string;
     private trackList: ITrack[] = [];
     audioEvents = [
-        "ended",
-        "error",
-        "play",
-        "playing",
-        "pause",
-        "timeupdate",
-        "canplay"
+        'ended',
+        'error',
+        'play',
+        'playing',
+        'pause',
+        'timeupdate',
+        'canplay'
     ];
 
     private state: StreamState = {
@@ -38,24 +38,24 @@ export class AudioService {
 
     private updateStateEvents(event: Event): void {
         switch (event.type) {
-            case "canplay":
+            case 'canplay':
                 this.state.duration = this.audioObj.duration;
                 this.state.readableDuration = this.formatTime(this.state.duration);
                 this.state.canplay = true;
                 break;
-            case "playing":
+            case 'playing':
                 this.state.playing = true;
                 break;
-            case "pause":
+            case 'pause':
                 this.state.playing = false;
                 break;
-            case "timeupdate":
+            case 'timeupdate':
                 this.state.currentTime = this.audioObj.currentTime;
                 this.state.readableCurrentTime = this.formatTime(
                     this.state.currentTime
                 );
                 break;
-            case "error":
+            case 'error':
                 this.resetState();
                 this.state.error = true;
                 break;
@@ -100,10 +100,10 @@ export class AudioService {
         });
     }
 
-    playStream(url: string, id: string, trackList: ITrack[]) {
+    playStream({preview_url, id}: ITrack, trackList: ITrack[]) {
         this.audioID = id;
         this.trackList = trackList;
-        return this.streamObservable(url).pipe(takeUntil(this.stop$));
+        return this.streamObservable(preview_url).pipe(takeUntil(this.stop$));
     }
 
     private addEvents(obj, events, handler) {
@@ -134,7 +134,7 @@ export class AudioService {
         this.audioObj.currentTime = seconds;
     }
 
-    formatTime(time: number, format: string = "mm:ss") {
+    formatTime(time: number, format: string = 'mm:ss') {
         const momentTime = time * 1000;
         return moment.utc(momentTime).format(format);
     }

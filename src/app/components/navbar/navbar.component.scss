@@ -1,5 +1,12 @@
 $lightFontColor: blanchedalmond;
 $darkBackgroundColor: rgb(56, 56, 56);
+nav {
+  margin: 0 !important;
+  .navbar-link {
+    display: flex;
+    align-items: center;
+  }
+}
 
 @media screen and (max-width: 415px) {
     nav {

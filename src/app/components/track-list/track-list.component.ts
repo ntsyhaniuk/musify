@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { state, style, transition, animate, trigger } from '@angular/animations';
+
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
-import { state, style, transition, animate, trigger } from "@angular/animations";
 import { ITrack, StreamState } from '../../types/interfaces';
 
 @Component({
@@ -26,67 +27,92 @@ import { ITrack, StreamState } from '../../types/interfaces';
 export class TrackListComponent implements OnInit {
   public tracks: ITrack[] = [];
   public albumName: string;
-  public isPlaylistClosed: boolean = true;
+  public isPlaylistClosed = true;
   public currentTime$ = new Subject();
   public state: StreamState;
-  public isPlaying: boolean = true;
+  public currentTrack: ITrack;
 
   constructor(
     private route: ActivatedRoute,
     private spotifyService: SpotifyApiService,
     private audioService: AudioService
   ) {
-    this.audioService.getState().subscribe(state => {
-      this.state = state;
-    })
+    this.audioService.getState().subscribe(newState => {
+      this.state = newState;
+    });
   }
 
   ngOnInit() {
     const albumId = this.route.snapshot.paramMap.get('id');
     this.spotifyService.getAlbum(albumId)
       .subscribe(({ name, tracks }: any) => {
-        const { items } = tracks;
+        const audioID = this.audioService.getAudioID();
         this.albumName = name;
-        this.tracks = items;
-
-        this.tracks.map(track => {
-          track.isPlaying = !this.isPlaying;
-          if (this.audioService.getAudioID() === track.id) {
-            track.isPlaying = this.isPlaying;
+        const serviceTracks: ITrack[] = this.audioService.getTrackList();
+        if (serviceTracks.length && serviceTracks[0].name === tracks.items[0].name) {
+          return this.tracks = serviceTracks;
+        }
+        this.tracks = tracks.items.map(track => {
+          if (audioID === track.id) {
+            this.currentTrack = track;
+            track.isPlaying = true;
           }
-        })
+          return track;
+        });
       },
         (error: any) => console.log(error)
       );
   }
 
-  playStream({ preview_url: track, id }) {
-    this.audioService.playStream(track, id, this.tracks).subscribe((event: Event) => {
+  playStream(track: ITrack) {
+    this.currentTrack = track;
+    this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
       if (event.type === 'ended') {
         // setting track list when switching between albums
+        const trackId = this.audioService.getAudioID();
+        this.currentTrack = this.tracks.find(track => track.id === trackId);
         this.tracks = this.audioService.getTrackList();
         this.playNextTrack();
       }
     });
   }
 
-  listenTrack(track: ITrack) {
-    this.pauseOtherTracks();
-    track.isPlaying = this.isPlaying;
-    this.playStream(track);
+  playPause(track: ITrack) {
+    if (track.isPlaying) {
+      this.pause(track);
+    } else {
+      this.play(track);
+    }
   }
 
-  pause(trackNumber: number) {
+  pause(track: ITrack) {
+    track.isPlaying = false;
     this.audioService.pause();
-    this.tracks[trackNumber - 1].isPlaying = !this.isPlaying;
   }
 
-  play() {
-    this.audioService.play();
+  play(track: ITrack) {
+    const id = this.audioService.getAudioID();
+    this.stopOtherTracks();
+    track.isPlaying = true;
+    if (id === track.id) {
+      this.audioService.play();
+    } else {
+      if (this.currentTrack) {
+        this.currentTrack.isPlaying = false;
+      }
+      this.playStream(track);
+    }
   }
 
   stop() {
+    this.currentTrack.isPlaying = false;
     this.audioService.stop();
+  }
+
+  stopOtherTracks() {
+    this.tracks.map(track => {
+      track.isPlaying = false;
+    });
   }
 
   onSliderTimeChanged(change) {
@@ -102,21 +128,12 @@ export class TrackListComponent implements OnInit {
     return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
   }
 
-  pauseOtherTracks() {
-    for (const track of this.tracks) {
-      if (track.isPlaying) track.isPlaying = !this.isPlaying;
-    }
-  }
-
   playNextTrack() {
-    const currentTrack = this.audioService.getAudioID();
-    const nextTrack = this.tracks.find(track => track.id === currentTrack);
-    const isTrackListEnd = this.tracks.length === nextTrack.track_number;
+    const currentTrackNumber = this.currentTrack.track_number;
+    const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
+    const isTrackListEnd = this.tracks.length === currentTrackNumber;
     this.stop();
-    if (isTrackListEnd) {
-      this.tracks[nextTrack.track_number - 1].isPlaying = !this.isPlaying;
-      return;
-    }
-    this.listenTrack(this.tracks[nextTrack.track_number]);
+    if (isTrackListEnd) return;
+    this.play(nextTrack);
   }
 }
