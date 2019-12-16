@@ -48,6 +48,10 @@ export class TrackListComponent implements OnInit {
       .subscribe(({ name, tracks }: any) => {
         const audioID = this.audioService.getAudioID();
         this.albumName = name;
+        const serviceTracks: ITrack[] = this.audioService.getTrackList();
+        if (serviceTracks.length && serviceTracks[0].name === tracks.items[0].name) {
+          return this.tracks = serviceTracks;
+        }
         this.tracks = tracks.items.map(track => {
           if (audioID === track.id) {
             this.currentTrack = track;
@@ -65,6 +69,8 @@ export class TrackListComponent implements OnInit {
     this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
       if (event.type === 'ended') {
         // setting track list when switching between albums
+        const trackId = this.audioService.getAudioID();
+        this.currentTrack = this.tracks.find(track => track.id === trackId);
         this.tracks = this.audioService.getTrackList();
         this.playNextTrack();
       }
@@ -86,6 +92,7 @@ export class TrackListComponent implements OnInit {
 
   play(track: ITrack) {
     const id = this.audioService.getAudioID();
+    this.stopOtherTracks();
     track.isPlaying = true;
     if (id === track.id) {
       this.audioService.play();
@@ -102,6 +109,12 @@ export class TrackListComponent implements OnInit {
     this.audioService.stop();
   }
 
+  stopOtherTracks() {
+    this.tracks.map(track => {
+      track.isPlaying = false;
+    });
+  }
+
   onSliderTimeChanged(change) {
     this.audioService.rewindTo(change.value);
   }
@@ -116,6 +129,8 @@ export class TrackListComponent implements OnInit {
   }
 
   playNextTrack() {
+    // if (!this.currentTrack) {
+    // }
     const currentTrackNumber = this.currentTrack.track_number;
     const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
     const isTrackListEnd = this.tracks.length === currentTrackNumber;
