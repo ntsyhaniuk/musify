@@ -8,7 +8,7 @@ import { BackgroundService } from './services/background.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public backgroundUrl = 'https://i.scdn.co/image/954763064a8403586552d22b31ae64fd0ecfff35';
+  public backgroundUrl: string;
   constructor(private auth: AuthService, private background: BackgroundService) {}
 
   ngOnInit(): void {

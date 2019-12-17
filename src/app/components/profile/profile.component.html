@@ -1,4 +1,4 @@
-<div class="user-container">
+<div class="user-container" *ngIf="user">
   <img [src]="user?.image" alt="profile picture">
   <span>{{user?.name}}</span>
 </div>

@@ -1,5 +1,8 @@
 <div class="app-container">
-  <div class="background"  [ngStyle]="{'background-image': 'url('+backgroundUrl+')'}"></div>
+  <div class="background"
+       *ngIf="backgroundUrl"
+       [ngStyle]="{'background-image': 'url('+backgroundUrl+')'}">
+  </div>
   <app-navbar></app-navbar>
   <router-outlet></router-outlet>
 </div>
