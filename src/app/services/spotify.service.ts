@@ -41,10 +41,6 @@ export class SpotifyApiService {
     return this.$http.request(params);
   }
 
-  getTracks(id) {
-
-  }
-
   getAlbum(id: string) {
     const params = {
       endpoint: `albums/${id}`,
