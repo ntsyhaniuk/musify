@@ -6,5 +6,6 @@
     name="search"
     placeholder="Search music..."
     aria-label="Search"
+    autocomplete="off"
     (keyup)="searchString$.next($event.target.value)"/>
 </label>

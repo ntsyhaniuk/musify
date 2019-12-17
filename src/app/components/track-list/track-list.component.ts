@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, animate, trigger } from '@angular/animations';
+import * as moment from 'moment';
 
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
@@ -127,8 +128,7 @@ export class TrackListComponent implements OnInit {
   }
 
   displayMillisecInMinSec(ms: number) {
-    const d = new Date(1000 * Math.round(ms / 1000));
-    return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
+    return moment(ms).format('m:ss');
   }
 
   playNextTrack() {
