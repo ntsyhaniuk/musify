@@ -61,11 +61,14 @@ $music-player-theme: mat-light-theme($music-player-primary, $music-player-accent
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/bootstrap.scss";
 
+$darkBackgroundColor: rgb(56, 56, 56);
+
 body,
 html {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: $darkBackgroundColor;
   @media screen and (max-width: 415px) {
     overflow-x: hidden !important;
   }

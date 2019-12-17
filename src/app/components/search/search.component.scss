@@ -1,4 +1,18 @@
 .search-container {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  i {
+    font-size: 32px;
+    color: #ffffff;
+  }
+  input {
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ffffff;
+    background: transparent;
+    color: #ffffff;
+  }
+  .form-control::placeholder {
+    color: #ffffff;
+  }
 }

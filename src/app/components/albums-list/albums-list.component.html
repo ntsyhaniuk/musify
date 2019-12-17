@@ -1,7 +1,7 @@
 <section class="album-container">
     <div class="content">
         <app-navbar></app-navbar>
-        <h1>Albums</h1>
+        <h1 class="my-4 pl-4">Albums</h1>
         <div class="albums-list">
             <div *ngFor="let album of albums">
                 <a [routerLink]="['/album', album.id]">

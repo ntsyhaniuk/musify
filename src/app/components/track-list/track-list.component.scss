@@ -7,104 +7,112 @@ p {
   margin: 0;
   color: #ffffff;
 }
-.content {
-  width: 90%;
-  margin: 0 auto;
-  .toggle-menu_button {
-    i {
-      font-size: 38px;
-    }
+.cover {
+  height: 100vh;
+  overflow: hidden;
+  background-size: cover;
+  background-position: 70% 30%;
+  background-repeat: no-repeat;
+  .content {
+    width: 90%;
+    margin: 0 auto;
   }
-  .mat-button {
-    line-height: inherit;
-    min-width: 0px;
-    padding: 0px;
-    &:focus {
-      outline: none;
-    }
+}
+.toggle-menu_button {
+  i {
+    color: #ffffff;
+    font-size: 38px;
   }
-  .mat-divider {
-    border-top-color: rgba($color: #ffffff, $alpha: 0.5);
+}
+.mat-button {
+  line-height: inherit;
+  min-width: 0px;
+  padding: 0px;
+  &:focus {
+    outline: none;
   }
-  .track-list {
-    position: absolute;
-    right: 0;
-    height: 89vh;
-    width: 550px;
-    overflow-y: scroll;
-    background: rgba($color: rgb(59, 59, 59), $alpha: 0.9);
+}
+.mat-divider {
+  border-top-color: rgba($color: #ffffff, $alpha: 0.5);
+}
+.track-list {
+  position: absolute;
+  right: 0;
+  height: 89vh;
+  width: 550px;
+  overflow-y: scroll;
+  background: rgba($color: rgb(59, 59, 59), $alpha: 0.9);
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  @media screen and (max-width: 415px) {
+    width: 100%;
+  }
+  .title {
     display: flex;
-    flex-direction: column;
-    padding: 25px;
-    @media screen and (max-width: 415px) {
-      width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 35px;
+    .toggle-close {
+      i {
+        color: #ffffff;
+      }
     }
-    .title {
+    @media screen and (max-width: 415px) {
+      button:first-child {
+        margin-bottom: 15px;
+      }
+    }
+    h2 {
+      width: 100%;
+      text-align: center;
+      @media screen and (max-width: 415px) {
+        font-size: 24px;
+      }
+    }
+  }
+  .tracks-container {
+    .track {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 35px;
-      .toggle-close {
-        i {
+      padding: 13px 0;
+      h6 {
+        margin: 0 15px;
+        text-align: center;
+      }
+      .transparent_button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: none;
+        border: none;
+        border-radius: 50%;
+        outline: none;
+        #play {
+          color: $lightGreen;
+        }
+        #pause {
           color: #ffffff;
         }
       }
-      @media screen and (max-width: 415px) {
-        button:first-child {
-          margin-bottom: 15px;
-        }
-      }
-      h2 {
-        width: 100%;
-        text-align: center;
-        @media screen and (max-width: 415px) {
-          font-size: 24px;
-        }
-      }
     }
-    .tracks-container {
-      .track {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 13px 0;
-        h6 {
-          margin: 0 15px;
-          text-align: center;
-        }
-        .transparent_button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: none;
-          border: none;
-          border-radius: 50%;
-          outline: none;
-          #play {
-            color: $lightGreen;
-          }
-          #pause {
-            color: #ffffff;
-          }
-        }
-      }
-      .mat-slider {
-        width: 100%;
-      }
+    .mat-slider {
+      width: 100%;
     }
   }
-  .track-list::-webkit-scrollbar-track {
-    border-radius: 2px;
-    background: rgba($color: rgb(59, 59, 59), $alpha: 0);
-  }
-  .track-list::-webkit-scrollbar {
-    width: 12px;
-    opacity: 0.6;
-    background: rgba($color: rgb(59, 59, 59), $alpha: 0);
-  }
-  .track-list::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #f5f5f5;
-  }
+}
+.track-list::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background: rgba($color: rgb(59, 59, 59), $alpha: 0);
+}
+.track-list::-webkit-scrollbar {
+  width: 12px;
+  opacity: 0.6;
+  background: rgba($color: rgb(59, 59, 59), $alpha: 0);
+}
+.track-list::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
 }

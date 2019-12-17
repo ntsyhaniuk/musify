@@ -1,7 +1,7 @@
 $darkBackgroundColor: rgb(56, 56, 56);
 
 h1 {
-  padding: 35px;
+  padding: 20px;
   color: #ffffff;
   @media screen and (max-width: 415px) {
     font-size: 24px;
@@ -16,7 +16,7 @@ h1 {
     .albums-list {
       display: grid;
       grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-      grid-template-columns: repeat(auto-fill, 320px);
+      grid-template-columns: repeat(auto-fill, 300px);
       justify-content: center;
       align-items: center;
       @media screen and (max-width: 978px) {
