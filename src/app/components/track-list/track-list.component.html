@@ -8,16 +8,16 @@
     <button mat-button (click)="togglePlaylist()" class="toggle-close">
       <i class="material-icons">close</i>
     </button>
-    <h2>{{albumName}}</h2>
+    <h2>{{title}}</h2>
   </div>
   <div *ngFor="let track of tracks" class="tracks-container">
     <div *ngIf="track.preview_url" class="track">
       <button class="transparent_button" (click)="playPause(track)">
-        <i class="material-icons" *ngIf="track.isPlaying">pause_circle_outline</i>
+        <i class="material-icons active" *ngIf="track.isPlaying">pause_circle_outline</i>
         <i class="material-icons" *ngIf="!track.isPlaying">play_circle_outline</i>
       </button>
-      <h6 [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">{{track.name}}</h6>
-      <p [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">
+      <h6 [ngClass]="{'active': track.isPlaying}">{{track.name}}</h6>
+      <p [ngClass]="{'active': track.isPlaying}">
         {{displayMillisecInMinSec(track.duration_ms)}}
       </p>
     </div>

@@ -20,11 +20,47 @@ export class SpotifyApiService {
     return this.$http.request(params);
   }
 
+  getCategories() {
+    const params = {
+      endpoint: 'browse/categories/',
+      queryParams: {
+        limit: 40
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getCategoryPlaylists(id: string) {
+    const params = {
+      endpoint: `browse/categories/${id}/playlists`,
+      queryParams: {
+        limit: 25,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getTracks(id) {
+
+  }
+
   getAlbum(id: string) {
     const params = {
       endpoint: `albums/${id}`,
       queryParams: {
         limit: 25,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getPlaylist(id: string) {
+    const params = {
+      endpoint: `playlists/${id}`,
+      queryParams: {
+        limit: 100,
         country: 'US'
       }
     };

@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 import * as moment from 'moment';
 
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
 import { ITrack, StreamState } from '../../types/interfaces';
-import { BackgroundService } from '../../services/background.service';
+import { isEqual } from '../../utils/utils';
 
 @Component({
   selector: 'app-track-list',
@@ -26,46 +24,37 @@ import { BackgroundService } from '../../services/background.service';
     ]),
   ]
 })
-export class TrackListComponent implements OnInit {
-  public tracks: ITrack[] = [];
-  public albumName: string;
+export class TrackListComponent implements OnInit, OnChanges {
+  @Input() tracks: ITrack[] = [];
+  @Input() title: string;
   public isPlaylistClosed = true;
-  public currentTime$ = new Subject();
   public state: StreamState;
   public currentTrack: ITrack;
 
   constructor(
-    private route: ActivatedRoute,
     private spotifyService: SpotifyApiService,
-    private audioService: AudioService,
-    private background: BackgroundService
-  ) {
-    this.audioService.getState().subscribe(newState => {
-      this.state = newState;
-    });
-  }
+    private audioService: AudioService
+  ) {}
 
   ngOnInit() {
-    const albumId = this.route.snapshot.paramMap.get('id');
-    this.spotifyService.getAlbum(albumId)
-      .subscribe(({ name, tracks, images }: any) => {
-        this.background.updateBackgroundUrl(images);
-        const audioID = this.audioService.getAudioID();
-        this.albumName = name;
-        const serviceTracks: ITrack[] = this.audioService.getTrackList();
-        if (serviceTracks.length && serviceTracks[0].name === tracks.items[0].name) {
-          return this.tracks = serviceTracks;
+    this.audioService.getState().subscribe(newState => this.state = newState);
+  }
+
+  ngOnChanges() {
+    const audioID = this.audioService.getAudioID();
+    const serviceTracks: ITrack[] = this.audioService.getTrackList();
+    if (serviceTracks.length && isEqual(this.tracks, serviceTracks)) {
+      return this.tracks = serviceTracks;
+    }
+    this.tracks = this.tracks
+      .filter(track => track)
+      .map(track => {
+        if (audioID === track.id) {
+          this.currentTrack = track;
+          track.isPlaying = true;
         }
-        this.tracks = tracks.items.map(track => {
-          if (audioID === track.id) {
-            this.currentTrack = track;
-            track.isPlaying = true;
-          }
-          return track;
-        });
-      },
-        (error: any) => console.log(error)
-      );
+        return track;
+      });
   }
 
   playStream(track: ITrack) {
@@ -74,7 +63,7 @@ export class TrackListComponent implements OnInit {
       if (event.type === 'ended') {
         // setting track list when switching between albums
         const trackId = this.audioService.getAudioID();
-        this.currentTrack = this.tracks.find(track => track.id === trackId);
+        this.currentTrack = this.tracks.find(resTrack => resTrack.id === trackId);
         this.tracks = this.audioService.getTrackList();
         this.playNextTrack();
       }

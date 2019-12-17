@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify.service';
-import { BackgroundService } from '../../services/background.service';
 import { AudioService } from '../../services/audio.service';
+import { BackgroundService } from '../../services/background.service';
 import { ITrack } from '../../types/interfaces';
 
 @Component({
-  selector: 'app-album',
-  templateUrl: './album.component.html',
-  styleUrls: ['./album.component.scss']
+  selector: 'app-playlist',
+  templateUrl: './playlist.component.html',
+  styleUrls: ['./playlist.component.scss']
 })
-export class AlbumComponent implements OnInit {
+export class PlaylistComponent implements OnInit {
   tracks: ITrack[] = [];
-  albumName: string;
+  playlistName: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,15 +22,14 @@ export class AlbumComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const albumId = this.route.snapshot.paramMap.get('id');
-    this.spotify.getAlbum(albumId)
+    const playlistId = this.route.snapshot.paramMap.get('id');
+    this.spotify.getPlaylist(playlistId)
       .subscribe(({ name, tracks, images }: any) => {
           this.background.updateBackgroundUrl(images);
-          this.albumName = name;
-          this.tracks = tracks.items;
+          this.playlistName = name;
+          this.tracks = tracks.items.map(track => track.track);
         },
         (error: any) => console.log(error)
       );
   }
-
 }
