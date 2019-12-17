@@ -2,10 +2,15 @@ $lightFontColor: #fff;
 $darkBackgroundColor: rgb(56, 56, 56);
 .navigation {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
   padding: 20px;
   height: 100px;
-  align-items: center;
-  justify-content: space-between;
   margin: 0;
   background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 100%);
   > * {
