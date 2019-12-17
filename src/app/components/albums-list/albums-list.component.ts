@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SpotifyApiService } from '../../services/spotify.service';
+import { BackgroundService } from '../../services/background.service';
 
 @Component({
   selector: 'app-albums-list',
@@ -11,7 +12,7 @@ export class AlbumsListComponent implements OnInit, OnDestroy {
   albums: any[] = [];
   subscription$: Subscription;
 
-  constructor(private spotifyService: SpotifyApiService) {
+  constructor(private spotifyService: SpotifyApiService, private background: BackgroundService) {
   }
 
   ngOnInit() {
@@ -25,6 +26,7 @@ export class AlbumsListComponent implements OnInit, OnDestroy {
         ({albums}: any) => {
           const { items } = albums;
           this.albums = items;
+          this.background.updateBackgroundUrl(items[0].images);
         },
         (error: any) => console.log(error));
   }
@@ -33,6 +35,9 @@ export class AlbumsListComponent implements OnInit, OnDestroy {
     this.subscription$ = this.spotifyService.dataList$
       .subscribe(({items}: any) => {
         this.albums = items;
+        if (items.length) {
+          this.background.updateBackgroundUrl(items[0].images);
+        }
       });
   }
 

@@ -6,6 +6,7 @@ import { state, style, transition, animate, trigger } from '@angular/animations'
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
 import { ITrack, StreamState } from '../../types/interfaces';
+import { BackgroundService } from '../../services/background.service';
 
 @Component({
   selector: 'app-track-list',
@@ -35,7 +36,8 @@ export class TrackListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private spotifyService: SpotifyApiService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private background: BackgroundService
   ) {
     this.audioService.getState().subscribe(newState => {
       this.state = newState;
@@ -45,7 +47,8 @@ export class TrackListComponent implements OnInit {
   ngOnInit() {
     const albumId = this.route.snapshot.paramMap.get('id');
     this.spotifyService.getAlbum(albumId)
-      .subscribe(({ name, tracks }: any) => {
+      .subscribe(({ name, tracks, images }: any) => {
+        this.background.updateBackgroundUrl(images);
         const audioID = this.audioService.getAudioID();
         this.albumName = name;
         const serviceTracks: ITrack[] = this.audioService.getTrackList();

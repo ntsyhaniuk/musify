@@ -1,9 +1,10 @@
-<div class="search-container">
-    <img src="../../../assets/search.png" />
-    <input
-      class="form-control mr-sm-2"
-      type="search"
-      placeholder="Search music..."
-      aria-label="Search"
-      (keyup)="searchString$.next($event.target.value)" />
-</div>
+<label for="search" class="search-container">
+  <i class="material-icons">search</i>
+  <input
+    class="search-input"
+    type="search"
+    name="search"
+    placeholder="Search music..."
+    aria-label="Search"
+    (keyup)="searchString$.next($event.target.value)"/>
+</label>
