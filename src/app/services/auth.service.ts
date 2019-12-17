@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { HttpService } from './http.service';
 import { createQueryString, parseHash } from '../utils/utils';
 import { environment } from '../../environments/environment';
 import { Ihash } from '../types/interfaces';
@@ -10,7 +11,7 @@ const { STORAGE_KEY, CLIENT_ID, AUTH_URL, REDIRECT_URI } = environment;
 @Injectable()
 export class AuthService {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpService) {}
 
   authorize(): void {
     if (this.isAuthorized()) return;
@@ -34,6 +35,13 @@ export class AuthService {
     };
     const paramsStr = createQueryString(queryParams);
     window.location.href = `${AUTH_URL}?${paramsStr}`;
+  }
+
+  getUserData() {
+    const params = {
+      endpoint: 'me'
+    };
+    return this.http.request(params);
   }
 
   isAuthorized(): boolean {

@@ -26,6 +26,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { AlbumsListComponent } from './components/albums-list/albums-list.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
 import { AlbumComponent } from './components/album/album.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { AlbumComponent } from './components/album/album.component';
     AlbumsListComponent,
     TrackListComponent,
     AlbumComponent,
+    ProfileComponent,
   ],
   imports: [
     FormsModule,
