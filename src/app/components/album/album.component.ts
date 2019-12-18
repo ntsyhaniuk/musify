@@ -4,6 +4,7 @@ import { SpotifyApiService } from '../../services/spotify.service';
 import { BackgroundService } from '../../services/background.service';
 import { AudioService } from '../../services/audio.service';
 import { ITrack } from '../../types/interfaces';
+import { Track } from '../track-list/track';
 
 @Component({
   selector: 'app-album',
@@ -27,7 +28,7 @@ export class AlbumComponent implements OnInit {
       .subscribe(({ name, tracks, images }: any) => {
           this.background.updateBackgroundUrl(images);
           this.albumName = name;
-          this.tracks = tracks.items;
+          this.tracks = tracks.items.map((track, index) => new Track({...track, trackOrder: index}));
         },
         (error: any) => console.log(error)
       );

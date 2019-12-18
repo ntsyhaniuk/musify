@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
-import { ITrack, StreamState } from '../types/interfaces';
+import { ITrack, IStreamState } from '../types/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +22,7 @@ export class AudioService {
         'canplay'
     ];
 
-    private state: StreamState = {
+    private state: IStreamState = {
         playing: false,
         readableCurrentTime: '',
         readableDuration: '',
@@ -32,7 +32,7 @@ export class AudioService {
         error: false
     };
 
-    private stateChange: BehaviorSubject<StreamState> = new BehaviorSubject(
+    private stateChange: BehaviorSubject<IStreamState> = new BehaviorSubject(
         this.state
     );
 
@@ -100,10 +100,10 @@ export class AudioService {
         });
     }
 
-    playStream({preview_url, id}: ITrack, trackList: ITrack[]) {
+    playStream({previewUrl, id}: ITrack, trackList: ITrack[]) {
         this.audioID = id;
         this.trackList = trackList;
-        return this.streamObservable(preview_url).pipe(takeUntil(this.stop$));
+        return this.streamObservable(previewUrl).pipe(takeUntil(this.stop$));
     }
 
     private addEvents(obj, events, handler) {
@@ -139,7 +139,7 @@ export class AudioService {
         return moment.utc(momentTime).format(format);
     }
 
-    getState(): Observable<StreamState> {
+    getState(): Observable<IStreamState> {
         return this.stateChange.asObservable();
     }
 

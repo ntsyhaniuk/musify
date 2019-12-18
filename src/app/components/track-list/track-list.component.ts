@@ -4,7 +4,7 @@ import * as moment from 'moment';
 
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
-import { ITrack, StreamState } from '../../types/interfaces';
+import { ITrack, IStreamState } from '../../types/interfaces';
 import { isEqual } from '../../utils/utils';
 
 @Component({
@@ -28,7 +28,7 @@ export class TrackListComponent implements OnInit, OnChanges {
   @Input() tracks: ITrack[] = [];
   @Input() title: string;
   public isPlaylistClosed = true;
-  public state: StreamState;
+  public state: IStreamState;
   public currentTrack: ITrack;
 
   constructor(
@@ -121,9 +121,9 @@ export class TrackListComponent implements OnInit, OnChanges {
   }
 
   playNextTrack() {
-    const currentTrackNumber = this.currentTrack.track_number;
-    const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
-    const isTrackListEnd = this.tracks.length === currentTrackNumber;
+    const currentTrackOrder = this.currentTrack.trackOrder;
+    const nextTrack = this.tracks.find(track => track.trackOrder - 1 === currentTrackOrder);
+    const isTrackListEnd = this.tracks.length === currentTrackOrder;
     this.stop();
     if (isTrackListEnd) return;
     this.play(nextTrack);
