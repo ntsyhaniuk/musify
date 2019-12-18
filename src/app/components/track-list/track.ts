@@ -27,5 +27,6 @@ export class Track {
       return acc;
     }, {});
     Object.assign(this, modifiedTrack);
+    this.isPlaying = false;
   }
 }

@@ -14,6 +14,7 @@ import { Track } from '../track-list/track';
 export class AlbumComponent implements OnInit {
   tracks: ITrack[] = [];
   albumName: string;
+  albumId: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,9 +26,10 @@ export class AlbumComponent implements OnInit {
   ngOnInit() {
     const albumId = this.route.snapshot.paramMap.get('id');
     this.spotify.getAlbum(albumId)
-      .subscribe(({ name, tracks, images }: any) => {
+      .subscribe(({ name, tracks, images, id }: any) => {
           this.background.updateBackgroundUrl(images);
           this.albumName = name;
+          this.albumId = id;
           this.tracks = tracks.items.map((track, index) => new Track({...track, trackOrder: index}));
         },
         (error: any) => console.log(error)

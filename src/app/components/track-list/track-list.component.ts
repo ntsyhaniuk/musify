@@ -27,6 +27,7 @@ import { isEqual } from '../../utils/utils';
 export class TrackListComponent implements OnInit, OnChanges {
   @Input() tracks: ITrack[] = [];
   @Input() title: string;
+  @Input() listId: string;
   public isPlaylistClosed = true;
   public state: IStreamState;
   public currentTrack: ITrack;
@@ -41,30 +42,26 @@ export class TrackListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    const audioID = this.audioService.getAudioID();
-    const serviceTracks: ITrack[] = this.audioService.getTrackList();
-    if (serviceTracks.length && isEqual(this.tracks, serviceTracks)) {
-      return this.tracks = serviceTracks;
-    }
-    this.tracks = this.tracks
-      .filter(track => track)
-      .map(track => {
-        if (audioID === track.id) {
-          this.currentTrack = track;
+    const previousListId = this.audioService.getListId();
+
+    this.tracks = this.tracks.filter(track => track);
+    if (previousListId === this.listId) {
+      const audioID = this.audioService.getAudioID();
+
+      this.tracks.forEach(track => {
+        if (track.id === audioID) {
           track.isPlaying = true;
+          this.currentTrack = track;
         }
-        return track;
       });
+    }
+
   }
 
   playStream(track: ITrack) {
     this.currentTrack = track;
-    this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
+    this.audioService.playStream(track, this.listId).subscribe((event: Event) => {
       if (event.type === 'ended') {
-        // setting track list when switching between albums
-        const trackId = this.audioService.getAudioID();
-        this.currentTrack = this.tracks.find(resTrack => resTrack.id === trackId);
-        this.tracks = this.audioService.getTrackList();
         this.playNextTrack();
       }
     });
@@ -85,7 +82,6 @@ export class TrackListComponent implements OnInit, OnChanges {
 
   play(track: ITrack) {
     const id = this.audioService.getAudioID();
-    this.stopOtherTracks();
     track.isPlaying = true;
     if (id === track.id) {
       this.audioService.play();
@@ -98,14 +94,14 @@ export class TrackListComponent implements OnInit, OnChanges {
   }
 
   stop() {
-    this.currentTrack.isPlaying = false;
-    this.audioService.stop();
-  }
-
-  stopOtherTracks() {
-    this.tracks.map(track => {
-      track.isPlaying = false;
+    // this.currentTrack.isPlaying = false;
+    const id = this.audioService.getAudioID();
+    this.tracks.forEach(track => {
+      if (track.id === id) {
+        track.isPlaying = false;
+      }
     });
+    this.audioService.stop();
   }
 
   onSliderTimeChanged(change) {
@@ -116,7 +112,7 @@ export class TrackListComponent implements OnInit, OnChanges {
     this.isPlaylistClosed = !this.isPlaylistClosed;
   }
 
-  displayMillisecInMinSec(ms: number) {
+  msToMinSec(ms: number) {
     return moment(ms).format('m:ss');
   }
 

@@ -17,9 +17,7 @@
         <i class="material-icons" *ngIf="!track.isPlaying">play_circle_outline</i>
       </button>
       <h6 [ngClass]="{'active': track.isPlaying}">{{track.name}}</h6>
-      <p [ngClass]="{'active': track.isPlaying}">
-        {{displayMillisecInMinSec(track.durationMs)}}
-      </p>
+      <p [ngClass]="{'active': track.isPlaying}">{{msToMinSec(track.durationMs)}}</p>
     </div>
     <mat-slider *ngIf="track.isPlaying" class="time-slider" min="0" [max]="state?.duration" step="1"
                 [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">
