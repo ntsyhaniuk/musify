@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -9,16 +8,16 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 $mat-green: (
-  50: #E8F5E9,
-  100: #C8E6C9,
-  200: #A5D6A7,
-  300: #81C784,
-  400: #66BB6A,
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
   500: #00d949,
-  600: #43A047,
-  700: #388E3C,
-  800: #2E7D32,
-  900: #1B5E20,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
   A100: #00d949,
   A200: #00d949,
   A400: #00d949,
@@ -37,7 +36,7 @@ $mat-green: (
     A100: $black-87-opacity,
     A200: white,
     A400: white,
-    A700: white,
+    A700: white
   )
 );
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -62,19 +61,24 @@ $music-player-theme: mat-light-theme($music-player-primary, $music-player-accent
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/bootstrap.scss";
 
+$darkBackgroundColor: rgb(56, 56, 56);
+
 body,
-html,
-h1 {
+html {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: $darkBackgroundColor;
   @media screen and (max-width: 415px) {
-    overflow-x: hidden!important;
+    overflow-x: hidden !important;
   }
 }
 
 @font-face {
   font-family: Proxima;
-  src: url('assets/fonts/ProximaNova-Bold.woff') format('woff');
+  src: url("assets/fonts/ProximaNova-Bold.woff") format("woff");
 }
-body { margin: 0; font-family: Proxima, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Proxima, "Helvetica Neue", sans-serif;
+}

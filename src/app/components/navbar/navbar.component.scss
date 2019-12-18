@@ -1,4 +1,3 @@
-$lightFontColor: blanchedalmond;
 $darkBackgroundColor: rgb(56, 56, 56);
 nav {
   margin: 0 !important;
@@ -6,13 +5,16 @@ nav {
     display: flex;
     align-items: center;
   }
-}
-
-@media screen and (max-width: 415px) {
-    nav {
-        justify-content: center !important;
-        h1 {
-            font-size: 28px;
-        }
+  h1 {
+    margin: 0;
+    color: #ffffff;
+  }
+  img {
+    margin-right: 10px;
+  }
+  @media screen and (max-width: 415px) {
+    h1 {
+      font-size: 28px;
     }
+  }
 }

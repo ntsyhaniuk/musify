@@ -1,13 +1,17 @@
-<div>
-    <h1>Albums</h1>
-    <section class="albums-list">
-        <div *ngFor="let album of albums">
-            <div class="details">
+<section class="album-container">
+    <div class="content">
+        <app-navbar></app-navbar>
+        <h1 class="my-4 pl-4">Albums</h1>
+        <div class="albums-list">
+            <div *ngFor="let album of albums">
                 <a [routerLink]="['/album', album.id]">
-                    <h3>{{album.name}}</h3>
-                    <img [src]="getCoverImage(album)" />
+                    <div class="details">
+                        <h3>{{album.name}}</h3>
+                        <img [src]="getCoverImage(album)" />
+                    </div>
                 </a>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+
+</section>

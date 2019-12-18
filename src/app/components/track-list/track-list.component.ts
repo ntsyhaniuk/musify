@@ -27,6 +27,7 @@ import { ITrack, StreamState } from '../../types/interfaces';
 export class TrackListComponent implements OnInit {
   public tracks: ITrack[] = [];
   public albumName: string;
+  public coverImage: string;
   public isPlaylistClosed = true;
   public currentTime$ = new Subject();
   public state: StreamState;
@@ -45,9 +46,10 @@ export class TrackListComponent implements OnInit {
   ngOnInit() {
     const albumId = this.route.snapshot.paramMap.get('id');
     this.spotifyService.getAlbum(albumId)
-      .subscribe(({ name, tracks }: any) => {
+      .subscribe(({ name, tracks, images }: any) => {
         const audioID = this.audioService.getAudioID();
         this.albumName = name;
+        this.coverImage = images[0].url;
         const serviceTracks: ITrack[] = this.audioService.getTrackList();
         if (serviceTracks.length && serviceTracks[0].name === tracks.items[0].name) {
           return this.tracks = serviceTracks;
@@ -135,5 +137,9 @@ export class TrackListComponent implements OnInit {
     this.stop();
     if (isTrackListEnd) return;
     this.play(nextTrack);
+  }
+
+  getCoverUrl() {
+    if (this.coverImage) return 'url(' + this.coverImage + ')';
   }
 }
