@@ -10,8 +10,11 @@ import { ITrack, IStreamState } from '../types/interfaces';
 export class AudioService {
   private stop$ = new Subject();
   private audioObj = new Audio();
+  private currentTrack: ITrack;
+  private tracks: ITrack[];
   private audioID: string;
   private listId: string;
+  private isRandom = false;
   audioEvents = [
     'ended',
     'error',
@@ -28,6 +31,7 @@ export class AudioService {
     readableDuration: '',
     duration: undefined,
     currentTime: undefined,
+    currentId: undefined,
     canplay: false,
     error: false
   };
@@ -45,15 +49,14 @@ export class AudioService {
         break;
       case 'playing':
         this.state.playing = true;
+        this.state.currentId = this.audioID;
         break;
       case 'pause':
         this.state.playing = false;
         break;
       case 'timeupdate':
         this.state.currentTime = this.audioObj.currentTime;
-        this.state.readableCurrentTime = this.formatTime(
-          this.state.currentTime
-        );
+        this.state.readableCurrentTime = this.formatTime(this.state.currentTime);
         break;
       case 'error':
         this.resetState();
@@ -70,6 +73,7 @@ export class AudioService {
       readableDuration: '',
       duration: undefined,
       currentTime: undefined,
+      currentId: undefined,
       canplay: false,
       error: false
     };
@@ -100,10 +104,17 @@ export class AudioService {
     });
   }
 
-  playStream({previewUrl, id}: ITrack, listId: string) {
+  playStream(track: ITrack) {
+    const { previewUrl, id } = track;
+
     this.audioID = id;
-    this.listId = listId;
-    return this.streamObservable(previewUrl).pipe(takeUntil(this.stop$));
+    this.currentTrack = track;
+    this.streamObservable(previewUrl).pipe(takeUntil(this.stop$))
+      .subscribe((event: Event) => {
+        if (event.type === 'ended') {
+          this.playNextTrack();
+        }
+      });
   }
 
   private addEvents(obj, events, handler) {
@@ -118,15 +129,41 @@ export class AudioService {
     });
   }
 
-  play() {
-    this.audioObj.play();
+  play(track: ITrack) {
+    track.isPlaying = true;
+    if (track.id === this.audioID) {
+      this.audioObj.play();
+    } else {
+      if (this.currentTrack) {
+        this.stop();
+      }
+      this.playStream(track);
+    }
   }
 
-  pause() {
+  playNextTrack() {
+    let nextTrack;
+    if (this.isRandom) {
+      nextTrack = this.tracks[Math.floor(Math.random() * this.tracks.length)];
+    } else {
+      const currentTrackOrder = this.currentTrack.trackOrder;
+      nextTrack = this.tracks.find(track => track.trackOrder - 1 === currentTrackOrder);
+      const isTrackListEnd = this.tracks.length === (currentTrackOrder + 1);
+      if (isTrackListEnd) {
+        this.pause(this.currentTrack);
+        return;
+      }
+    }
+    this.play(nextTrack);
+  }
+
+  pause(track: ITrack) {
+    track.isPlaying = false;
     this.audioObj.pause();
   }
 
   stop() {
+    this.currentTrack.isPlaying = false;
     this.stop$.next();
   }
 
@@ -143,11 +180,19 @@ export class AudioService {
     return this.stateChange.asObservable();
   }
 
-  getAudioID() {
-    return this.audioID;
+  randomize(status) {
+    this.isRandom = status;
   }
 
-  getListId() {
-    return this.listId;
+  setListData(listId: string, tracks: ITrack[]) {
+    const isTheSameList = listId && this.listId && listId === this.listId;
+    if (isTheSameList) {
+      const currentTrack = this.tracks.find(({id}) => id === this.audioID);
+      currentTrack.isPlaying = true;
+      this.currentTrack = currentTrack;
+    } else {
+      this.tracks = tracks;
+    }
+    this.listId = listId;
   }
 }
