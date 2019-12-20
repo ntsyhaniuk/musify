@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 
 import { SpotifyApiService } from '../../services/spotify.service';
@@ -22,7 +22,7 @@ import { ITrack } from '../../types/interfaces';
     ]),
   ]
 })
-export class TrackListComponent implements OnChanges {
+export class TrackListComponent implements OnInit, OnChanges {
   @Input() tracks: ITrack[] = [];
   @Input() title: string;
   @Input() listId: string;
@@ -35,6 +35,11 @@ export class TrackListComponent implements OnChanges {
     private spotifyService: SpotifyApiService,
     private audioService: AudioService
   ) {}
+
+  ngOnInit() {
+    this.isRandomize = this.audioService.getRandom();
+    this.isRepeatable = this.audioService.getRepeat();
+  }
 
   ngOnChanges() {
     this.audioService.setListData(this.listId, this.tracks);

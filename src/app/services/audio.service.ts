@@ -187,8 +187,16 @@ export class AudioService {
     this.isRandom = status;
   }
 
+  getRandom() {
+    return this.isRandom;
+  }
+
   repeat(status) {
     this.onRepeat = status;
+  }
+
+  getRepeat() {
+    return this.onRepeat;
   }
 
   setListData(listId: string, tracks: ITrack[]) {
