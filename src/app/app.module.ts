@@ -31,6 +31,7 @@ import { CategoriesComponent } from './components/categories/categories.componen
 import { CategoryComponent } from './components/category/category.component';
 import { PlaylistComponent } from './components/playlist/playlist.component';
 import { TrackComponent } from './components/track/track.component';
+import { PlayingControlComponent } from './components/playing-control/playing-control.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TrackComponent } from './components/track/track.component';
     CategoryComponent,
     PlaylistComponent,
     TrackComponent,
+    PlayingControlComponent,
   ],
   imports: [
     FormsModule,

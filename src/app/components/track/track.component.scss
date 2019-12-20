@@ -1,4 +1,4 @@
-$lightGreen: #00d949;
+@import '../../../variables.scss';
 
 h2,
 h5,
@@ -16,16 +16,6 @@ p {
   h6 {
     margin: 0 15px;
     text-align: center;
-  }
-  .transparent_button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    outline: none;
-    color: #fff;
   }
 }
 
