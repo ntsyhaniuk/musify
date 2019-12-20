@@ -15,6 +15,7 @@ export class AudioService {
   private audioID: string;
   private listId: string;
   private isRandom = false;
+  private onRepeat = false;
   audioEvents = [
     'ended',
     'error',
@@ -143,7 +144,9 @@ export class AudioService {
 
   playNextTrack() {
     let nextTrack;
-    if (this.isRandom) {
+    if (this.onRepeat) {
+      nextTrack = this.currentTrack;
+    } else if (this.isRandom) {
       nextTrack = this.tracks[Math.floor(Math.random() * this.tracks.length)];
     } else {
       const currentTrackOrder = this.currentTrack.trackOrder;
@@ -182,6 +185,10 @@ export class AudioService {
 
   randomize(status) {
     this.isRandom = status;
+  }
+
+  repeat(status) {
+    this.onRepeat = status;
   }
 
   setListData(listId: string, tracks: ITrack[]) {

@@ -29,6 +29,7 @@ export class TrackListComponent implements OnChanges {
 
   private isPlaylistClosed = true;
   private isRandomize = false;
+  private isRepeatable = false;
 
   constructor(
     private spotifyService: SpotifyApiService,
@@ -46,5 +47,18 @@ export class TrackListComponent implements OnChanges {
   toggleRandomize() {
     this.isRandomize = !this.isRandomize;
     this.audioService.randomize(this.isRandomize);
+  }
+
+  toggleRepeatable() {
+    this.isRepeatable = !this.isRepeatable;
+    this.audioService.repeat(this.isRepeatable);
+  }
+
+  getTitle(key) {
+    const props = {
+      repeat: this.isRepeatable,
+      random: this.isRandomize
+    };
+    return `Turn ${key} ${props[key] ? 'off' : 'on'}`;
   }
 }

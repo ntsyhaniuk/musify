@@ -10,9 +10,14 @@
     </button>
     <h2>{{title}}</h2>
   </div>
-  <button mat-button (click)="toggleRandomize()">
-    <i class="material-icons" [style.color]="isRandomize ? '#00d949' : '#fff'">import_export</i>
-  </button>
+  <div class="controls-container">
+    <button mat-button [title]="getTitle('random')" (click)="toggleRandomize()">
+      <i class="material-icons" [style.color]="isRandomize ? '#00d949' : '#fff'">import_export</i>
+    </button>
+    <button mat-button [title]="getTitle('repeat')" (click)="toggleRepeatable()">
+      <i class="material-icons" [style.color]="isRepeatable ? '#00d949' : '#fff'">autorenew</i>
+    </button>
+  </div>
   <div class="tracks-list">
     <app-track *ngFor="let track of tracks" [track]="track"></app-track>
   </div>
