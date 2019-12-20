@@ -63,6 +63,7 @@ p {
     }
   }
   .tracks-list {
+    box-shadow: inset -4px 18px 12px -12px rgba(0, 217, 73, 0.03);
     height: calc(100vh - 122px);
     overflow-y: scroll;
   }
