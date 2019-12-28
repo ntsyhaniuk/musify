@@ -26,8 +26,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   getSpotifyDataLists() {
     this.dataSubscription$ = forkJoin(
+      this.spotifyService.getFollowedArtists(),
+      this.spotifyService.getCategories(),
       this.spotifyService.getAlbums(),
-      this.spotifyService.getCategories()
     )
       .pipe(
         map(this.mapSpotifyResponse),

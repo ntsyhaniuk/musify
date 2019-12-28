@@ -9,6 +9,16 @@ export class SpotifyApiService {
 
   constructor(private $http: HttpService) { }
 
+  getFollowedArtists() {
+    const params = {
+      endpoint: 'me/following',
+      queryParams: {
+        type: 'artist'
+      }
+    };
+    return this.$http.request(params);
+  }
+
   getAlbums() {
     const params = {
       endpoint: 'browse/new-releases',

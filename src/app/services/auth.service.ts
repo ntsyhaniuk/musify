@@ -30,11 +30,15 @@ export class AuthService {
   redirectToSpotify(): void {
     const queryParams = {
       response_type: 'token',
+      scope: 'user-follow-read',
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI
     };
     const paramsStr = createQueryString(queryParams);
-    window.location.href = `${AUTH_URL}?${paramsStr}`;
+
+    const link = document.createElement('a');
+    link.setAttribute('href', `${AUTH_URL}?${paramsStr}`);
+    link.click();
   }
 
   getUserData() {
