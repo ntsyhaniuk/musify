@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
+import { forkJoin, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import get from 'lodash.get';
+
 import { SpotifyApiService } from '../../services/spotify.service';
 import { BackgroundService } from '../../services/background.service';
-import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -9,63 +13,61 @@ import { forkJoin, Subscription } from 'rxjs';
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
-  albums: any[] = [];
-  categories: any[] = [];
-  testItems: any[] = [];
-  subscription$: Subscription;
+  spotifyDataLists: any[] = [];
+  searchSubscription$: Subscription;
+  dataSubscription$: Subscription;
 
   constructor(private spotifyService: SpotifyApiService, private background: BackgroundService) {}
 
-  ngOnInit() {
-    this.getAlbums();
-    this.getCategories();
+  ngOnInit(): void {
+    this.getSpotifyDataLists();
     this.getSearchResult();
-    this.experimental();
   }
 
-  getCategories() {
-    this.spotifyService.getCategories()
-      .subscribe(({categories}) => {
-        const { items } = categories;
-        this.categories = items;
-      });
+  getSpotifyDataLists() {
+    this.dataSubscription$ = forkJoin(
+      this.spotifyService.getAlbums(),
+      this.spotifyService.getCategories()
+    )
+      .pipe(
+        map(this.mapSpotifyResponse),
+        map(this.prepareSpotifyData)
+      )
+      .subscribe(this.applyDataChanges.bind(this));
   }
 
-  experimental() {
-    forkJoin(
-      this.spotifyService.getCategories(),
-      this.spotifyService.getAlbums()
-    ).subscribe(data => {
-      console.log(data);
-      this.testItems = data.reduce((acc, item) => {
-        const [[title, {items}]]: any = Object.entries(item);
+  mapSpotifyResponse(response) {
+    return response.reduce((acc, dataElement) => {
+      return ({...acc, ...dataElement});
+    }, {});
+  }
+
+  prepareSpotifyData(spotifyData) {
+    return Object.entries(spotifyData)
+      .reduce((acc, [title, {items}]: any[]) => {
         acc.push({title, items});
         return acc;
       }, []);
-
-    });
   }
 
-  getAlbums() {
-    this.spotifyService.getAlbums()
-      .subscribe(({albums}: any) => {
-          const { items } = albums;
-          this.albums = items;
-          this.background.updateBackgroundUrl(items[0].images);
-        },
-        (error: any) => console.log(error));
+  applyDataChanges(preparedData) {
+    this.spotifyDataLists = preparedData;
+    this.updateBackground(preparedData);
+  }
+
+  updateBackground(parsedSpotifyData) {
+    const images = get(parsedSpotifyData, '[0].items[0].images[0]', null);
+    this.background.updateBackgroundUrl(images);
   }
 
   getSearchResult() {
-    this.subscription$ = this.spotifyService.dataList$
-      .subscribe(({items}: any) => {
-        this.albums = items;
-        this.background.updateBackgroundUrl(items.length && items[0].images);
-      });
+    this.searchSubscription$ = this.spotifyService.dataList$
+      .pipe(map(this.prepareSpotifyData))
+      .subscribe(this.applyDataChanges.bind(this));
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe();
+    this.searchSubscription$.unsubscribe();
+    this.dataSubscription$.unsubscribe();
   }
-
 }

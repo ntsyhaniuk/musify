@@ -68,12 +68,12 @@ export class SpotifyApiService {
       endpoint: 'search',
       queryParams: {
         q: str,
-        type: 'album',
-        limit: 25
+        type: 'album,playlist,artist',
+        limit: 50
       }
     };
-    this.$http.request(params).subscribe(({albums}: any) => {
-      this.dataList$.next(albums);
+    this.$http.request(params).subscribe((data: any) => {
+      this.dataList$.next(data);
     });
   }
 }

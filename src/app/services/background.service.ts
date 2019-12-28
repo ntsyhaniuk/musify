@@ -9,10 +9,9 @@ export class BackgroundService {
 
   constructor() { }
 
-  updateBackgroundUrl(images) {
-    const first = images[0];
-    if (first) {
-      this.$backgroundUrl.next(first.url);
+  updateBackgroundUrl(image) {
+    if (image) {
+      this.$backgroundUrl.next(image.url);
     }
   }
 }

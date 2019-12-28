@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import get from 'lodash.get';
+
 import { SpotifyApiService } from '../../services/spotify.service';
 import { BackgroundService } from '../../services/background.service';
 
@@ -19,8 +22,14 @@ export class CategoryComponent implements OnInit {
       .subscribe(({playlists}) => {
         const { items } = playlists;
         this.playlists = items;
-        this.background.updateBackgroundUrl(items[0].images || items[0].icons);
+
+        this.updateBackground();
     });
   }
 
+  updateBackground() {
+    const image = get(this.playlists, '[0].images[0]');
+    const icon = get(this.playlists, '[0].icons[0]');
+    this.background.updateBackgroundUrl(image || icon);
+  }
 }

@@ -1,13 +1,11 @@
 <div class="category-wrapper">
-    <h1>{{title}}</h1>
-    <section class="items-list">
-        <div *ngFor="let item of items">
-            <div class="details">
-                <a [routerLink]="['/'+title, item.id]">
-                    <h3>{{item.name}}</h3>
-                    <img [src]="getCoverImage(item)" />
-                </a>
-            </div>
-        </div>
-    </section>
+  <h1>{{title}}</h1>
+  <h2 class="nothing-found__message" *ngIf="isEmpty">Nothing found</h2>
+  <section *ngIf="!isEmpty" class="items-list">
+    <div *ngFor="let item of items"
+         class="details"
+         [ngStyle]="{'background-image': 'url('+getCoverImage(item)+')'}">
+      <h3 [routerLink]="['/'+title, item.id]" [title]="item.name">{{getTitle(item)}}</h3>
+    </div>
+  </section>
 </div>
