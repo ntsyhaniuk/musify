@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SpotifyApiService } from '../../services/spotify.service';
 import { BackgroundService } from '../../services/background.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class CategoriesComponent implements OnInit, OnDestroy {
   albums: any[] = [];
   categories: any[] = [];
+  testItems: any[] = [];
   subscription$: Subscription;
 
   constructor(private spotifyService: SpotifyApiService, private background: BackgroundService) {}
@@ -19,6 +20,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.getAlbums();
     this.getCategories();
     this.getSearchResult();
+    this.experimental();
   }
 
   getCategories() {
@@ -27,6 +29,21 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         const { items } = categories;
         this.categories = items;
       });
+  }
+
+  experimental() {
+    forkJoin(
+      this.spotifyService.getCategories(),
+      this.spotifyService.getAlbums()
+    ).subscribe(data => {
+      console.log(data);
+      this.testItems = data.reduce((acc, item) => {
+        const [[title, {items}]]: any = Object.entries(item);
+        acc.push({title, items});
+        return acc;
+      }, []);
+
+    });
   }
 
   getAlbums() {
