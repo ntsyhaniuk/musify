@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CategoryComponent } from './components/category/category.component';
-import { AlbumComponent } from './components/album/album.component';
-import { PlaylistComponent } from './components/playlist/playlist.component';
+import { DetailsComponent } from './components/album/details.component';
 
 
 const routes: Routes = [
@@ -16,12 +15,8 @@ const routes: Routes = [
     component: CategoryComponent
   },
   {
-    path: 'albums/:id',
-    component: AlbumComponent
-  },
-  {
-    path: 'playlists/:id',
-    component: PlaylistComponent
+    path: ':entity/:id',
+    component: DetailsComponent
   }
 ];
 

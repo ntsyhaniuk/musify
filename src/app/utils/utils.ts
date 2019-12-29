@@ -37,3 +37,9 @@ export const toCamelCase = str => {
   return s.slice(0, 1).toLowerCase() + s.slice(1);
 };
 
+export const  mapSpotifyResponse = response => {
+  return response.reduce((acc, dataElement) => {
+    return ({...acc, ...dataElement});
+  }, {});
+};
+

@@ -36,6 +36,7 @@
       width: 320px;
       height: 320px;
       background-size: cover;
+      cursor: pointer;
 
       h3 {
         display: flex;
@@ -47,6 +48,7 @@
         height: 100%;
         padding: 0 5px;
         overflow: hidden;
+        outline: none;
         transition: .3s ease-in-out;
         visibility: hidden;
         z-index: 3;

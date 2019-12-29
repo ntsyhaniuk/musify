@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Subject } from 'rxjs';
 
 import { HttpService } from './http.service';
@@ -51,11 +52,11 @@ export class SpotifyApiService {
     return this.$http.request(params);
   }
 
-  getAlbum(id: string) {
+  getEntityData(endpoint: string) {
     const params = {
-      endpoint: `albums/${id}`,
+      endpoint,
       queryParams: {
-        limit: 25,
+        limit: 50,
         country: 'US'
       }
     };
@@ -66,7 +67,7 @@ export class SpotifyApiService {
     const params = {
       endpoint: `playlists/${id}`,
       queryParams: {
-        limit: 100,
+        limit: 50,
         country: 'US'
       }
     };

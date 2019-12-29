@@ -7,6 +7,8 @@ import get from 'lodash.get';
 import { SpotifyApiService } from '../../services/spotify.service';
 import { BackgroundService } from '../../services/background.service';
 
+import { mapSpotifyResponse } from '../../utils/utils';
+
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
@@ -31,16 +33,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       this.spotifyService.getAlbums(),
     )
       .pipe(
-        map(this.mapSpotifyResponse),
+        map(mapSpotifyResponse),
         map(this.prepareSpotifyData)
       )
       .subscribe(this.applyDataChanges.bind(this));
-  }
-
-  mapSpotifyResponse(response) {
-    return response.reduce((acc, dataElement) => {
-      return ({...acc, ...dataElement});
-    }, {});
   }
 
   prepareSpotifyData(spotifyData) {
