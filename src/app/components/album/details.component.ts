@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { zip } from 'rxjs';
+import { Subscribable, Subscription, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import get from 'lodash.get';
 
@@ -18,10 +18,11 @@ import { mapSpotifyResponse } from '../../utils/utils';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss']
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
   tracks: ITrack[] = [];
   entityName: string;
   entityId: string;
+  detailsSubscription$: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,7 +44,7 @@ export class DetailsComponent implements OnInit {
       requests.push(this.spotify.getEntityData(endpointConfig[entity]));
     }
 
-    zip(...requests)
+    this.detailsSubscription$ = zip(...requests)
       .pipe(
         map(mapSpotifyResponse)
       )
@@ -56,6 +57,10 @@ export class DetailsComponent implements OnInit {
     this.entityId = id;
     const tracksList = get(tracks, 'items', tracks);
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
+  }
+
+  ngOnDestroy(): void {
+    this.detailsSubscription$.unsubscribe();
   }
 
 }
