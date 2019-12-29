@@ -32,13 +32,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const { entity, id: entityId }: Params = this.route.snapshot.params;
+    const { entity, id }: Params = this.route.snapshot.params;
 
     const endpointConfig = {
-      artists: `${entity}/${entityId}/top-tracks`
+      artists: `${entity}/${id}/top-tracks`
     };
 
-    const requests = [this.spotify.getEntityData(`${entity}/${entityId}`)];
+    const requests = [this.spotify.getEntityData(`${entity}/${id}`)];
 
     if (endpointConfig[entity]) {
       requests.push(this.spotify.getEntityData(endpointConfig[entity]));

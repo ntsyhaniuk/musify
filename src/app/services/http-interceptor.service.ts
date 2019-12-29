@@ -30,7 +30,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   private interceptHandler(e: HttpEvent<any>): Observable<HttpEvent<any>> {
     if ((e as any).status === 401) {
       this.auth.clearSessionKey();
-      window.location.reload();
+      this.auth.authorize();
     }
 
     return throwError(e);
