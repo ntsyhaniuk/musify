@@ -1,11 +1,11 @@
-@import '../../../variables.scss';
+@import '../../../variables';
 
 h2,
 h5,
 h6,
 p {
   margin: 0;
-  color: #ffffff;
+  color: $whiteText;
 }
 
 .track {
@@ -13,6 +13,7 @@ p {
   justify-content: space-between;
   align-items: center;
   padding: 13px 0;
+
   h6 {
     margin: 0 15px;
     text-align: center;

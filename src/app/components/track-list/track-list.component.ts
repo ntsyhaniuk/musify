@@ -59,7 +59,7 @@ export class TrackListComponent implements OnInit, OnChanges {
     this.audioService.repeat(this.isRepeatable);
   }
 
-  getTitle(key) {
+  getButtonTitle(key) {
     const props = {
       repeat: this.isRepeatable,
       random: this.isRandomize

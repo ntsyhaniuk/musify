@@ -1,5 +1,5 @@
-$lightFontColor: #fff;
-$darkBackgroundColor: rgb(56, 56, 56);
+@import "../../../variables";
+
 .navigation {
   display: flex;
   justify-content: space-between;
@@ -12,16 +12,19 @@ $darkBackgroundColor: rgb(56, 56, 56);
   padding: 20px;
   height: 100px;
   margin: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+
   > * {
-    flex-grow:1;
+    flex-grow: 1;
     flex-basis: 0;
   }
+
   .logo {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: $lightFontColor;
+    color: $whiteText;
+
     h1 {
       margin-left: 5px;
     }
@@ -29,10 +32,11 @@ $darkBackgroundColor: rgb(56, 56, 56);
 }
 
 @media screen and (max-width: 415px) {
-    .navigation {
-        justify-content: center !important;
-        h1 {
-            font-size: 28px;
-        }
+  .navigation {
+    justify-content: center !important;
+
+    h1 {
+      font-size: 28px;
     }
+  }
 }

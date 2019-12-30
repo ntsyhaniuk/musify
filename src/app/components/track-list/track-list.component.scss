@@ -1,28 +1,33 @@
-$lightGreen: #00d949;
+@import "../../../variables";
 
 h2,
 h5,
 h6,
 p {
   margin: 0;
-  color: #ffffff;
+  color: $whiteText;
 }
+
 .toggle-menu_button {
   i {
     font-size: 38px;
   }
 }
+
 .mat-button {
   line-height: inherit;
   min-width: 0px;
   padding: 0px;
+
   &:focus {
     outline: none;
   }
 }
+
 .mat-divider {
-  border-top-color: rgba($color: #ffffff, $alpha: 0.5);
+  border-top-color: rgba($color: $whiteText, $alpha: 0.5);
 }
+
 .tracks-section {
   position: absolute;
   right: 0;
@@ -38,20 +43,24 @@ p {
   @media screen and (max-width: 415px) {
     width: 100%;
   }
+
   .title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .toggle-close {
       i {
-        color: #ffffff;
+        color: $whiteText;
       }
     }
+
     @media screen and (max-width: 415px) {
       button:first-child {
         margin-bottom: 15px;
       }
     }
+
     h2 {
       width: 100%;
       text-align: center;
@@ -60,27 +69,33 @@ p {
       }
     }
   }
+
   .controls-container {
     padding: 10px 0;
+
     button {
       margin-right: 10px;
     }
   }
+
   .tracks-list {
     box-shadow: inset -4px 18px 12px -12px rgba(0, 217, 73, 0.03);
     height: calc(100vh - 122px);
     overflow-y: scroll;
   }
 }
+
 .tracks-list::-webkit-scrollbar-track {
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.3);
 }
+
 .tracks-list::-webkit-scrollbar {
   width: 12px;
   opacity: 0.6;
   background: rgba(0, 0, 0, 0.3);
 }
+
 .tracks-list::-webkit-scrollbar-thumb {
   border-radius: 2px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

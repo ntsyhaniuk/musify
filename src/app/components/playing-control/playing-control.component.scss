@@ -1,4 +1,4 @@
-$lightGreen: #00d949;
+@import "../../../variables";
 
 .controls-container {
   display: flex;
@@ -17,6 +17,7 @@ $lightGreen: #00d949;
       font-size: 40px;
     }
   }
+
   &:hover {
     height: 100px;
   }
