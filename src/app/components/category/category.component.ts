@@ -18,7 +18,7 @@ export class CategoryComponent implements OnInit {
   constructor(private route: ActivatedRoute, private spotify: SpotifyApiService, private background: BackgroundService) { }
 
   ngOnInit() {
-    const { entity, id } = this.route.snapshot.params;
+    const { entity = 'playlists', id } = this.route.snapshot.params;
     const {
       getAlbums,
       getArtists,
@@ -30,7 +30,8 @@ export class CategoryComponent implements OnInit {
 
 
     const requestConfig = {
-      categories: id ? getCategoryPlaylists : getCategories,
+      categories: getCategories,
+      playlists: getCategoryPlaylists,
       artists: getArtists,
       albums: getAlbums
     };
