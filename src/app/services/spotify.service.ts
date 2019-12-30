@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { HttpService } from './http.service';
 
 @Injectable()
 export class SpotifyApiService {
   public dataList$ = new Subject<any>();
+  public emptySearchStr$ = new BehaviorSubject<boolean>(false);
 
   constructor(private $http: HttpService) { }
 
@@ -64,17 +65,6 @@ export class SpotifyApiService {
     return this.$http.request(params);
   }
 
-  getPlaylist(id: string) {
-    const params = {
-      endpoint: `playlists/${id}`,
-      queryParams: {
-        limit: 50,
-        country: 'US'
-      }
-    };
-    return this.$http.request(params);
-  }
-
   searchMusic(str: string) {
     const params = {
       endpoint: 'search',
@@ -84,8 +74,13 @@ export class SpotifyApiService {
         limit: 50
       }
     };
-    this.$http.request(params).subscribe((data: any) => {
-      this.dataList$.next(data);
-    });
+
+    if (str) {
+      this.$http.request(params).subscribe((data: any) => {
+        this.dataList$.next(data);
+      });
+    } else {
+      this.emptySearchStr$.next(true);
+    }
   }
 }

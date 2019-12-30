@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { forkJoin, Subscription } from 'rxjs';
+import { zip, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import get from 'lodash.get';
 
@@ -15,9 +15,9 @@ import { mapSpotifyResponse } from '../../utils/utils';
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
+  initialDataList: any[] = [];
   spotifyDataLists: any[] = [];
-  searchSubscription$: Subscription;
-  dataSubscription$: Subscription;
+  subscriptions$: Subscription[] = [];
 
   constructor(private spotifyService: SpotifyApiService, private background: BackgroundService) {}
 
@@ -27,7 +27,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   getSpotifyDataLists() {
-    this.dataSubscription$ = forkJoin(
+    this.subscriptions$.push(zip(
       this.spotifyService.getFollowedArtists(),
       this.spotifyService.getCategories(),
       this.spotifyService.getAlbums(),
@@ -36,18 +36,18 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         map(mapSpotifyResponse),
         map(this.prepareSpotifyData)
       )
-      .subscribe(this.applyDataChanges.bind(this));
+      .subscribe(this.applyDataChanges.bind(this)));
   }
 
   prepareSpotifyData(spotifyData) {
     return Object.entries(spotifyData)
-      .reduce((acc, [title, {items}]: any[]) => {
-        acc.push({title, items});
-        return acc;
-      }, []);
+      .reduce((acc, [title, {items}]: any[]) => [...acc, {title, items}], []);
   }
 
   applyDataChanges(preparedData) {
+    if (!this.initialDataList.length) {
+      this.initialDataList = preparedData;
+    }
     this.spotifyDataLists = preparedData;
     this.updateBackground(preparedData);
   }
@@ -58,13 +58,16 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   getSearchResult() {
-    this.searchSubscription$ = this.spotifyService.dataList$
-      .pipe(map(this.prepareSpotifyData))
-      .subscribe(this.applyDataChanges.bind(this));
+    this.subscriptions$.push(
+      this.spotifyService.dataList$
+        .pipe(map(this.prepareSpotifyData))
+        .subscribe(this.applyDataChanges.bind(this)),
+      this.spotifyService.emptySearchStr$
+        .subscribe(isEmpty => isEmpty ? this.applyDataChanges(this.initialDataList) : null)
+    );
   }
 
   ngOnDestroy() {
-    this.searchSubscription$.unsubscribe();
-    this.dataSubscription$.unsubscribe();
+    this.subscriptions$.forEach(subscription => subscription.unsubscribe());
   }
 }
