@@ -14,7 +14,8 @@ export class SpotifyApiService {
     const params = {
       endpoint: 'me/following',
       queryParams: {
-        type: 'artist'
+        type: 'artist',
+        limit: 50
       }
     };
     return this.$http.request(params);
@@ -24,7 +25,7 @@ export class SpotifyApiService {
     const params = {
       endpoint: 'browse/new-releases',
       queryParams: {
-        limit: 25,
+        limit: 50,
         country: 'US'
       }
     };
@@ -35,7 +36,7 @@ export class SpotifyApiService {
     const params = {
       endpoint: 'browse/categories/',
       queryParams: {
-        limit: 40
+        limit: 50
       }
     };
     return this.$http.request(params);
@@ -45,7 +46,7 @@ export class SpotifyApiService {
     const params = {
       endpoint: `browse/categories/${id}/playlists`,
       queryParams: {
-        limit: 25,
+        limit: 50,
         country: 'US'
       }
     };
