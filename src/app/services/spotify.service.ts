@@ -11,33 +11,33 @@ export class SpotifyApiService {
 
   constructor(private $http: HttpService) { }
 
-  getFollowedArtists() {
+  getArtists(limit) {
     const params = {
       endpoint: 'me/following',
       queryParams: {
         type: 'artist',
-        limit: 50
+        limit: limit || 50
       }
     };
     return this.$http.request(params);
   }
 
-  getAlbums() {
+  getAlbums(limit) {
     const params = {
       endpoint: 'browse/new-releases',
       queryParams: {
-        limit: 50,
+        limit: limit || 50,
         country: 'US'
       }
     };
     return this.$http.request(params);
   }
 
-  getCategories() {
+  getCategories(limit) {
     const params = {
       endpoint: 'browse/categories/',
       queryParams: {
-        limit: 50
+        limit: limit || 50
       }
     };
     return this.$http.request(params);

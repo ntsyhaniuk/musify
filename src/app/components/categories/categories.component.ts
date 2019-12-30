@@ -9,6 +9,8 @@ import { BackgroundService } from '../../services/background.service';
 
 import { mapSpotifyResponse } from '../../utils/utils';
 
+const MAX_CATEGORY_LIMIT = 15;
+
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
@@ -28,9 +30,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   getSpotifyDataLists() {
     this.subscriptions$.push(zip(
-      this.spotifyService.getFollowedArtists(),
-      this.spotifyService.getCategories(),
-      this.spotifyService.getAlbums(),
+      this.spotifyService.getArtists(MAX_CATEGORY_LIMIT),
+      this.spotifyService.getCategories(MAX_CATEGORY_LIMIT),
+      this.spotifyService.getAlbums(MAX_CATEGORY_LIMIT),
     )
       .pipe(
         map(mapSpotifyResponse),
@@ -41,7 +43,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   prepareSpotifyData(spotifyData) {
     return Object.entries(spotifyData)
-      .reduce((acc, [title, {items}]: any[]) => [...acc, {title, items}], []);
+      .reduce((acc, [title, {items, total}]: any[]) => [...acc, {title, items, total}], []);
   }
 
   applyDataChanges(preparedData) {

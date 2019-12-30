@@ -9,6 +9,7 @@ const MAX_TITLE_LENGTH = 140;
 })
 export class ItemsListComponent {
   @Input() title: string;
+  @Input() total: number;
   @Input() items: any[] = [];
 
   constructor() {}
@@ -24,5 +25,9 @@ export class ItemsListComponent {
 
   get isEmpty() {
     return !this.items.length;
+  }
+
+  get notFullList() {
+    return this.total > this.items.length;
   }
 }

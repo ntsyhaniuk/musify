@@ -1,3 +1,7 @@
 <div class="categories-page">
-  <app-items-list *ngFor="let item of spotifyDataLists" [title]="item.title" [items]="item.items"></app-items-list>
+  <app-items-list *ngFor="let item of spotifyDataLists"
+                  [title]="item.title"
+                  [items]="item.items"
+                  [total]="item.total"
+  ></app-items-list>
 </div>

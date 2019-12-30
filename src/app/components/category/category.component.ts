@@ -12,24 +12,39 @@ import { BackgroundService } from '../../services/background.service';
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
-  playlists: any[] = [];
+  entitiesList: any[] = [];
+  title: string;
 
   constructor(private route: ActivatedRoute, private spotify: SpotifyApiService, private background: BackgroundService) { }
 
   ngOnInit() {
-    const categoryId = this.route.snapshot.paramMap.get('id');
-    this.spotify.getCategoryPlaylists(categoryId)
-      .subscribe(({playlists}) => {
-        const { items } = playlists;
-        this.playlists = items;
+    const { entity, id } = this.route.snapshot.params;
+    const {
+      getAlbums,
+      getArtists,
+      getCategories,
+      getCategoryPlaylists
+    } = this.spotify;
 
+    this.title = entity;
+
+
+    const requestConfig = {
+      categories: id ? getCategoryPlaylists : getCategories,
+      artists: getArtists,
+      albums: getAlbums
+    };
+
+    requestConfig[entity].call(this.spotify, id || null)
+      .subscribe(({[entity]: {items}}) => {
+        this.entitiesList = items;
         this.updateBackground();
-    });
+      });
   }
 
   updateBackground() {
-    const image = get(this.playlists, '[0].images[0]');
-    const icon = get(this.playlists, '[0].icons[0]');
+    const image = get(this.entitiesList, '[0].images[0]');
+    const icon = get(this.entitiesList, '[0].icons[0]');
     this.background.updateBackgroundUrl(image || icon);
   }
 }

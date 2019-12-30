@@ -1,5 +1,8 @@
 <div class="category-wrapper">
-  <h1>{{title}}</h1>
+  <div class="title-row">
+    <h1>{{title}}</h1>
+    <span *ngIf="notFullList" [routerLink]="['/', title, 'all']">See All</span>
+  </div>
   <h2 class="nothing-found__message" *ngIf="isEmpty">Nothing found</h2>
   <section *ngIf="!isEmpty" class="items-list">
     <div *ngFor="let item of items"
