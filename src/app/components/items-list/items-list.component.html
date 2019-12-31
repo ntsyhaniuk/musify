@@ -1,10 +1,12 @@
 <div class="category-wrapper">
   <div class="title-row">
     <h1>{{title}}</h1>
-    <span *ngIf="notFullList" [routerLink]="['/', title, 'all']">See All</span>
   </div>
   <h2 class="nothing-found__message" *ngIf="isEmpty">Nothing found</h2>
   <section *ngIf="!isEmpty" class="items-list">
+    <div class="see-all_row" *ngIf="notFullList">
+      <span [routerLink]="['/', title, 'all']">See All</span>
+    </div>
     <div *ngFor="let item of items"
          class="details"
          [ngStyle]="{'background-image': 'url('+getCoverImage(item)+')'}">
