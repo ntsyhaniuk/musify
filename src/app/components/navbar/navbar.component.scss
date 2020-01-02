@@ -1,18 +1,40 @@
-$darkBackgroundColor: rgb(56, 56, 56);
-nav {
-  margin: 0 !important;
-  .navbar-link {
+@import "../../../variables";
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 20px;
+  left: 0;
+  z-index: 1;
+  padding: 20px;
+  height: 100px;
+  margin: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+
+  > * {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  .logo {
     display: flex;
     align-items: center;
+    text-decoration: none;
+    color: $whiteText;
+
+    h1 {
+      margin-left: 5px;
+    }
   }
-  h1 {
-    margin: 0;
-    color: #ffffff;
-  }
-  img {
-    margin-right: 10px;
-  }
-  @media screen and (max-width: 415px) {
+}
+
+@media screen and (max-width: 415px) {
+  .navigation {
+    justify-content: center !important;
+
     h1 {
       font-size: 28px;
     }

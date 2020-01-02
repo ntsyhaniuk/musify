@@ -18,12 +18,12 @@ export enum HttpMethods {
 export class HttpService {
   constructor(private $http: HttpClient) { }
 
-  request({ httpMethod = HttpMethods.GET, endpoint, body = {},  queryParams}): Observable<any> {
+  request({ httpMethod = HttpMethods.GET, endpoint, body = {},  queryParams = {}}): Observable<any> {
     const params = createQueryString(queryParams);
 
     switch (httpMethod) {
       case HttpMethods.GET:
-        return this.$http.get(`${BASE_URL}/${endpoint}?${params}`);
+        return this.$http.get(`${BASE_URL}/${endpoint}${params && `?${params}`}`);
       case HttpMethods.POST:
         return this.$http.post(`${BASE_URL}/${endpoint}`, body);
     }

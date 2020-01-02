@@ -23,16 +23,28 @@ import { AudioService } from './services/audio.service';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './components/search/search.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { AlbumsListComponent } from './components/albums-list/albums-list.component';
+import { ItemsListComponent } from './components/items-list/items-list.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
+import { DetailsComponent } from './components/album/details.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CategoriesComponent } from './components/categories/categories.component';
+import { CategoryComponent } from './components/category/category.component';
+import { TrackComponent } from './components/track/track.component';
+import { PlayingControlComponent } from './components/playing-control/playing-control.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     NavbarComponent,
-    AlbumsListComponent,
+    ItemsListComponent,
     TrackListComponent,
+    DetailsComponent,
+    ProfileComponent,
+    CategoriesComponent,
+    CategoryComponent,
+    TrackComponent,
+    PlayingControlComponent,
   ],
   imports: [
     FormsModule,

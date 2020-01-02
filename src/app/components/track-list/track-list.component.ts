@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 
 import { SpotifyApiService } from '../../services/spotify.service';
 import { AudioService } from '../../services/audio.service';
-import { ITrack, StreamState } from '../../types/interfaces';
+import { ITrack } from '../../types/interfaces';
 
 @Component({
   selector: 'app-track-list',
@@ -24,122 +22,48 @@ import { ITrack, StreamState } from '../../types/interfaces';
     ]),
   ]
 })
-export class TrackListComponent implements OnInit {
-  public tracks: ITrack[] = [];
-  public albumName: string;
-  public coverImage: string;
-  public isPlaylistClosed = true;
-  public currentTime$ = new Subject();
-  public state: StreamState;
-  public currentTrack: ITrack;
+export class TrackListComponent implements OnInit, OnChanges {
+  @Input() tracks: ITrack[] = [];
+  @Input() title: string;
+  @Input() listId: string;
+
+  private isPlaylistClosed = true;
+  private isRandomize = false;
+  private isRepeatable = false;
 
   constructor(
-    private route: ActivatedRoute,
     private spotifyService: SpotifyApiService,
     private audioService: AudioService
-  ) {
-    this.audioService.getState().subscribe(newState => {
-      this.state = newState;
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    const albumId = this.route.snapshot.paramMap.get('id');
-    this.spotifyService.getAlbum(albumId)
-      .subscribe(({ name, tracks, images }: any) => {
-        const audioID = this.audioService.getAudioID();
-        this.albumName = name;
-        this.coverImage = images[0].url;
-        const serviceTracks: ITrack[] = this.audioService.getTrackList();
-        if (serviceTracks.length && serviceTracks[0].name === tracks.items[0].name) {
-          return this.tracks = serviceTracks;
-        }
-        this.tracks = tracks.items.map(track => {
-          if (audioID === track.id) {
-            this.currentTrack = track;
-            track.isPlaying = true;
-          }
-          return track;
-        });
-      },
-        (error: any) => console.log(error)
-      );
+    this.isRandomize = this.audioService.getRandom();
+    this.isRepeatable = this.audioService.getRepeat();
   }
 
-  playStream(track: ITrack) {
-    this.currentTrack = track;
-    this.audioService.playStream(track, this.tracks).subscribe((event: Event) => {
-      if (event.type === 'ended') {
-        // setting track list when switching between albums
-        const trackId = this.audioService.getAudioID();
-        this.currentTrack = this.tracks.find(track => track.id === trackId);
-        this.tracks = this.audioService.getTrackList();
-        this.playNextTrack();
-      }
-    });
-  }
-
-  playPause(track: ITrack) {
-    if (track.isPlaying) {
-      this.pause(track);
-    } else {
-      this.play(track);
-    }
-  }
-
-  pause(track: ITrack) {
-    track.isPlaying = false;
-    this.audioService.pause();
-  }
-
-  play(track: ITrack) {
-    const id = this.audioService.getAudioID();
-    this.stopOtherTracks();
-    track.isPlaying = true;
-    if (id === track.id) {
-      this.audioService.play();
-    } else {
-      if (this.currentTrack) {
-        this.currentTrack.isPlaying = false;
-      }
-      this.playStream(track);
-    }
-  }
-
-  stop() {
-    this.currentTrack.isPlaying = false;
-    this.audioService.stop();
-  }
-
-  stopOtherTracks() {
-    this.tracks.map(track => {
-      track.isPlaying = false;
-    });
-  }
-
-  onSliderTimeChanged(change) {
-    this.audioService.rewindTo(change.value);
+  ngOnChanges() {
+    this.audioService.setListData(this.listId, this.tracks);
   }
 
   togglePlaylist() {
     this.isPlaylistClosed = !this.isPlaylistClosed;
   }
 
-  displayMillisecInMinSec(ms: number) {
-    const d = new Date(1000 * Math.round(ms / 1000));
-    return `${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
+  toggleRandomize() {
+    this.isRandomize = !this.isRandomize;
+    this.audioService.randomize(this.isRandomize);
   }
 
-  playNextTrack() {
-    const currentTrackNumber = this.currentTrack.track_number;
-    const nextTrack = this.tracks.find(track => track.track_number - 1 === currentTrackNumber);
-    const isTrackListEnd = this.tracks.length === currentTrackNumber;
-    this.stop();
-    if (isTrackListEnd) return;
-    this.play(nextTrack);
+  toggleRepeatable() {
+    this.isRepeatable = !this.isRepeatable;
+    this.audioService.repeat(this.isRepeatable);
   }
 
-  getCoverUrl() {
-    if (this.coverImage) return 'url(' + this.coverImage + ')';
+  getButtonTitle(key) {
+    const props = {
+      repeat: this.isRepeatable,
+      random: this.isRandomize
+    };
+    return `Turn ${key} ${props[key] ? 'off' : 'on'}`;
   }
 }

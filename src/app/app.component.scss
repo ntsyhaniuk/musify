@@ -1,0 +1,18 @@
+.app-container {
+  height: 100vh;
+  padding-top: 100px;
+
+  .background {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: all 500ms ease-in-out;
+    filter: blur(10px) drop-shadow(0px 0px 1px #000);
+  }
+}

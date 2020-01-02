@@ -1,8 +1,6 @@
-export interface Ihash {
-  access_token: string;
-}
+import { toCamelCase } from '../../utils/utils';
 
-export interface ITrack {
+export class Track {
   id: string;
   uri: string;
   href: string;
@@ -22,15 +20,13 @@ export interface ITrack {
   externalIds: object;
   externalUrls: object;
   availableMarkets: string[];
-}
 
-export interface IStreamState {
-  playing: boolean;
-  readableCurrentTime: string;
-  readableDuration: string;
-  duration: number | undefined;
-  currentTime: number | undefined;
-  currentId: string | undefined;
-  canplay: boolean;
-  error: boolean;
+  constructor(track) {
+    const modifiedTrack = Object.entries(track).reduce((acc, [key, value]) => {
+      acc[toCamelCase(key)] = value;
+      return acc;
+    }, {});
+    Object.assign(this, modifiedTrack);
+    this.isPlaying = false;
+  }
 }

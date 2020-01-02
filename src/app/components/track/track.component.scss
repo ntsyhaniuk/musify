@@ -1,0 +1,29 @@
+@import '../../../variables';
+
+h2,
+h5,
+h6,
+p {
+  margin: 0;
+  color: $whiteText;
+}
+
+.track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 0;
+
+  h6 {
+    margin: 0 15px;
+    text-align: center;
+  }
+}
+
+.mat-slider {
+  width: 100%;
+}
+
+.active {
+  color: $lightGreen;
+}

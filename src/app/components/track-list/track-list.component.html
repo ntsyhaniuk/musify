@@ -1,34 +1,24 @@
-<div class="cover" [ngStyle]="{'background-image': getCoverUrl()}">
-    <div class="content">
-        <app-navbar></app-navbar>
-        <div class="toggle-icon" *ngIf="isPlaylistClosed">
-            <button mat-button (click)="togglePlaylist()" class="toggle-menu_button">
-                <i class="material-icons">menu_open</i>
-            </button>
-        </div>
-        <div class="track-list" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
-            <div class="title">
-                <button mat-button (click)="togglePlaylist()" class="toggle-close">
-                    <i class="material-icons">close</i>
-                </button>
-                <h2>{{albumName}}</h2>
-            </div>
-            <div *ngFor="let track of tracks" class="tracks-container">
-                <div *ngIf="track.preview_url" class="track">
-                    <button class="transparent_button" (click)="playPause(track)">
-                        <i class="material-icons" id="play" *ngIf="track.isPlaying">pause_circle_outline</i>
-                        <i class="material-icons" id="pause" *ngIf="!track.isPlaying">play_circle_outline</i>
-                    </button>
-                    <h6 [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">{{track.name}}</h6>
-                    <p [style.color]="track.isPlaying ? '#00d949' : '#ffffff'">
-                        {{displayMillisecInMinSec(track.duration_ms)}}
-                    </p>
-                </div>
-                <mat-slider *ngIf="track.isPlaying" class="time-slider" min="0" [max]="state?.duration" step="1"
-                    [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">
-                </mat-slider>
-                <mat-divider *ngIf="track.preview_url"></mat-divider>
-            </div>
-        </div>
-    </div>
+<div class="toggle-icon" *ngIf="isPlaylistClosed">
+  <button mat-button (click)="togglePlaylist()" class="toggle-menu_button">
+    <i class="material-icons">menu_open</i>
+  </button>
 </div>
+<section class="tracks-section" [@slideInOut]="isPlaylistClosed ? 'out' : 'in'">
+  <div class="title">
+    <button mat-button (click)="togglePlaylist()" class="toggle-close">
+      <i class="material-icons">close</i>
+    </button>
+    <h2>{{title}}</h2>
+  </div>
+  <div class="controls-container">
+    <button mat-button [title]="getButtonTitle('random')" (click)="toggleRandomize()">
+      <i class="material-icons" [style.color]="isRandomize ? '#00d949' : '#fff'">import_export</i>
+    </button>
+    <button mat-button [title]="getButtonTitle('repeat')" (click)="toggleRepeatable()">
+      <i class="material-icons" [style.color]="isRepeatable ? '#00d949' : '#fff'">autorenew</i>
+    </button>
+  </div>
+  <div class="tracks-list">
+    <app-track *ngFor="let track of tracks" [track]="track"></app-track>
+  </div>
+</section>

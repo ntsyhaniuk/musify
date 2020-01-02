@@ -1,30 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { HttpService } from './http.service';
 
 @Injectable()
 export class SpotifyApiService {
   public dataList$ = new Subject<any>();
+  public emptySearchStr$ = new BehaviorSubject<boolean>(false);
 
   constructor(private $http: HttpService) { }
 
-  getAlbums() {
+  getArtists(limit) {
+    const params = {
+      endpoint: 'me/following',
+      queryParams: {
+        type: 'artist',
+        limit: limit || 50
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getAlbums(limit) {
     const params = {
       endpoint: 'browse/new-releases',
       queryParams: {
-        limit: 25,
+        limit: limit || 50,
         country: 'US'
       }
     };
     return this.$http.request(params);
   }
 
-  getAlbum(id: string) {
+  getCategories(limit) {
     const params = {
-      endpoint: `albums/${id}`,
+      endpoint: 'browse/categories/',
       queryParams: {
-        limit: 25,
+        limit: limit || 50
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getCategoryPlaylists(id: string) {
+    const params = {
+      endpoint: `browse/categories/${id}/playlists`,
+      queryParams: {
+        limit: 50,
+        country: 'US'
+      }
+    };
+    return this.$http.request(params);
+  }
+
+  getEntityData(endpoint: string) {
+    const params = {
+      endpoint,
+      queryParams: {
+        limit: 50,
         country: 'US'
       }
     };
@@ -36,12 +70,17 @@ export class SpotifyApiService {
       endpoint: 'search',
       queryParams: {
         q: str,
-        type: 'album',
-        limit: 25
+        type: 'album,playlist,artist',
+        limit: 50
       }
     };
-    this.$http.request(params).subscribe(({albums}: any) => {
-      this.dataList$.next(albums);
-    });
+
+    if (str) {
+      this.$http.request(params).subscribe((data: any) => {
+        this.dataList$.next(data);
+      });
+    } else {
+      this.emptySearchStr$.next(true);
+    }
   }
 }

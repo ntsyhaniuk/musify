@@ -1,5 +1,11 @@
-<div class="search-container">
+<label for="search" class="search-container">
   <i class="material-icons">search</i>
-  <input class="form-control mr-sm-2 shadow-none" type="search" placeholder="Search music..." aria-label="Search"
-    (keyup)="searchString$.next($event.target.value)" />
-</div>
+  <input
+    class="search-input"
+    type="search"
+    name="search"
+    placeholder="Search music..."
+    aria-label="Search"
+    autocomplete="off"
+    (keyup)="searchString$.next($event.target.value)"/>
+</label>

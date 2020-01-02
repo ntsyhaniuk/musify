@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<div class="app-container">
+  <div class="background"
+       *ngIf="backgroundUrl"
+       [ngStyle]="{'background-image': 'url('+backgroundUrl+')'}">
+  </div>
+  <app-navbar></app-navbar>
+  <router-outlet></router-outlet>
+  <app-playing-control></app-playing-control>
+</div>
