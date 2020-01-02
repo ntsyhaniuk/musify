@@ -13,8 +13,8 @@ import * as moment from 'moment';
 export class TrackComponent implements OnInit, OnDestroy {
   @Input() track: ITrack;
 
-  private state: IStreamState;
-  private stateSubscribtion$: Subscription;
+  state: IStreamState;
+  stateSubscribtion$: Subscription;
 
   constructor(private audioService: AudioService) { }
 

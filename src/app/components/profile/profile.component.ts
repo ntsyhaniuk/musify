@@ -9,7 +9,7 @@ import { UserProfile, IUser } from './user-profile';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  private user: IUser;
+  user: IUser;
 
   constructor(private auth: AuthService) { }
 

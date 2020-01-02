@@ -10,7 +10,7 @@ import { SpotifyApiService } from '../../services/spotify.service';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-  private searchString$ = new Subject<string>();
+  searchString$ = new Subject<string>();
 
   constructor(private spotifyService: SpotifyApiService) {
     this.searchString$.pipe(

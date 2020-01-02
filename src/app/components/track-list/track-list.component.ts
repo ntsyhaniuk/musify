@@ -27,9 +27,9 @@ export class TrackListComponent implements OnInit, OnChanges {
   @Input() title: string;
   @Input() listId: string;
 
-  private isPlaylistClosed = true;
-  private isRandomize = false;
-  private isRepeatable = false;
+  isPlaylistClosed = true;
+  isRandomize = false;
+  isRepeatable = false;
 
   constructor(
     private spotifyService: SpotifyApiService,
