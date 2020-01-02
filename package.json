@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
+    "config": "node ./src/config-env.js",
     "start": "ng serve --port=4300",
-    "build": "ng build --prod",
+    "build": "npm run config && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -23,6 +24,7 @@
     "@angular/router": "~8.2.14",
     "bootstrap": "^4.4.0",
     "dotenv": "^8.2.0",
+    "file-system": "^2.2.2",
     "hammerjs": "^2.0.8",
     "lodash.get": "^4.4.2",
     "mdbootstrap": "^4.10.0",
