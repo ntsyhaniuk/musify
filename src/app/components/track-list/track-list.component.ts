@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 
-import { SpotifyApiService } from '../../services/spotify.service';
+import { MusicApiService } from '../../services/music-api.service';
 import { AudioService } from '../../services/audio.service';
 import { ITrack } from '../../types/interfaces';
 
@@ -32,7 +32,7 @@ export class TrackListComponent implements OnInit, OnChanges {
   isRepeatable = false;
 
   constructor(
-    private spotifyService: SpotifyApiService,
+    private musicApi: MusicApiService,
     private audioService: AudioService
   ) {}
 

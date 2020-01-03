@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 // services
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
-import { SpotifyApiService } from './services/spotify.service';
+import { MusicApiService } from './services/music-api.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { AudioService } from './services/audio.service';
 
@@ -25,7 +25,7 @@ import { SearchComponent } from './components/search/search.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
-import { DetailsComponent } from './components/album/details.component';
+import { DetailsComponent } from './components/details/details.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CategoryComponent } from './components/category/category.component';
@@ -59,7 +59,7 @@ import { PlayingControlComponent } from './components/playing-control/playing-co
   providers: [
     AuthService,
     HttpService,
-    SpotifyApiService,
+    MusicApiService,
     AudioService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }
   ],
