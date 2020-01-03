@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { HttpService } from './http.service';
+import { environment } from '../../environments/environment';
 
 @Injectable()
-export class SpotifyApiService {
+export class MusicApiService {
   public dataList$ = new Subject<any>();
   public emptySearchStr$ = new BehaviorSubject<boolean>(false);
 
@@ -82,5 +83,21 @@ export class SpotifyApiService {
     } else {
       this.emptySearchStr$.next(true);
     }
+  }
+
+  getArtistBio(artist) {
+    const { LASTFM_API_KEY } = environment;
+
+    const params = {
+      base: 'lastfm',
+      queryParams: {
+        artist,
+        format: 'json',
+        api_key: LASTFM_API_KEY,
+        method: 'artist.getinfo'
+      }
+    };
+
+    return this.$http.request(params);
   }
 }

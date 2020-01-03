@@ -4,10 +4,10 @@ import { zip, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import get from 'lodash.get';
 
-import { SpotifyApiService } from '../../services/spotify.service';
+import { MusicApiService } from '../../services/music-api.service';
 import { BackgroundService } from '../../services/background.service';
 
-import { mapSpotifyResponse } from '../../utils/utils';
+import { mapApiResponse } from '../../utils/utils';
 
 const MAX_CATEGORY_LIMIT = 15;
 
@@ -21,7 +21,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   spotifyDataLists: any[] = [];
   subscriptions$: Subscription[] = [];
 
-  constructor(private spotifyService: SpotifyApiService, private background: BackgroundService) {}
+  constructor(private musicApi: MusicApiService, private background: BackgroundService) {}
 
   ngOnInit(): void {
     this.getSpotifyDataLists();
@@ -30,12 +30,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   getSpotifyDataLists() {
     this.subscriptions$.push(zip(
-      this.spotifyService.getArtists(MAX_CATEGORY_LIMIT),
-      this.spotifyService.getCategories(MAX_CATEGORY_LIMIT),
-      this.spotifyService.getAlbums(MAX_CATEGORY_LIMIT),
+      this.musicApi.getArtists(MAX_CATEGORY_LIMIT),
+      this.musicApi.getCategories(MAX_CATEGORY_LIMIT),
+      this.musicApi.getAlbums(MAX_CATEGORY_LIMIT),
     )
       .pipe(
-        map(mapSpotifyResponse),
+        map(mapApiResponse),
         map(this.prepareSpotifyData)
       )
       .subscribe(this.applyDataChanges.bind(this)));
@@ -61,10 +61,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   getSearchResult() {
     this.subscriptions$.push(
-      this.spotifyService.dataList$
+      this.musicApi.dataList$
         .pipe(map(this.prepareSpotifyData))
         .subscribe(this.applyDataChanges.bind(this)),
-      this.spotifyService.emptySearchStr$
+      this.musicApi.emptySearchStr$
         .subscribe(isEmpty => isEmpty ? this.applyDataChanges(this.initialDataList) : null)
     );
   }

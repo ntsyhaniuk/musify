@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import get from 'lodash.get';
 
-import { SpotifyApiService } from '../../services/spotify.service';
+import { MusicApiService } from '../../services/music-api.service';
 import { BackgroundService } from '../../services/background.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class CategoryComponent implements OnInit {
   entitiesList: any[] = [];
   title: string;
 
-  constructor(private route: ActivatedRoute, private spotify: SpotifyApiService, private background: BackgroundService) { }
+  constructor(private route: ActivatedRoute, private musicApi: MusicApiService, private background: BackgroundService) { }
 
   ngOnInit() {
     const { entity = 'playlists', id } = this.route.snapshot.params;
@@ -24,7 +24,7 @@ export class CategoryComponent implements OnInit {
       getArtists,
       getCategories,
       getCategoryPlaylists
-    } = this.spotify;
+    } = this.musicApi;
 
     this.title = entity;
 
@@ -36,7 +36,7 @@ export class CategoryComponent implements OnInit {
       albums: getAlbums
     };
 
-    requestConfig[entity].call(this.spotify, id || null)
+    requestConfig[entity].call(this.musicApi, id || null)
       .subscribe(({[entity]: {items}}) => {
         this.entitiesList = items;
         this.updateBackground();

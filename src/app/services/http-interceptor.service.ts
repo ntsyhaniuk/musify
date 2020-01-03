@@ -6,6 +6,9 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
+
+const { BASE_SPOTIFY_URL } = environment;
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -14,9 +17,13 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(this.extendHeaders(req)).pipe(
-      catchError(this.interceptHandler.bind(this))
-    );
+    if (req.url.startsWith(BASE_SPOTIFY_URL)) {
+      return next.handle(this.extendHeaders(req)).pipe(
+        catchError(this.interceptHandler.bind(this))
+      );
+    } else {
+      return next.handle(req);
+    }
   }
 
   private extendHeaders(req: HttpRequest<any>) {
