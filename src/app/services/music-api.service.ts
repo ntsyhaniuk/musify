@@ -85,17 +85,13 @@ export class MusicApiService {
     }
   }
 
-  getArtistBio(artist) {
+  getLastfmInfo(passedParams) {
     const { LASTFM_API_KEY } = environment;
+    const queryParams = {...passedParams, format: 'json', api_key: LASTFM_API_KEY };
 
     const params = {
       base: 'lastfm',
-      queryParams: {
-        artist,
-        format: 'json',
-        api_key: LASTFM_API_KEY,
-        method: 'artist.getinfo'
-      }
+      queryParams
     };
 
     return this.$http.request(params);

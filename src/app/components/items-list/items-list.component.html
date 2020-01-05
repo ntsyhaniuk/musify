@@ -10,7 +10,7 @@
     <div *ngFor="let item of items"
          class="details"
          [ngStyle]="{'background-image': 'url('+getCoverImage(item)+')'}">
-      <h3 [routerLink]="['/', title, item.id]" [fragment]="item.name" [title]="item.name">{{getTitle(item)}}</h3>
+      <h3 [routerLink]="['/', title, item.id]" [title]="item.name">{{getTitle(item)}}</h3>
     </div>
   </section>
 </div>

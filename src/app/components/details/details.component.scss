@@ -1,0 +1,10 @@
+@import "../../../variables";
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+
+  .details-info {
+    color: $whiteText;
+  }
+}

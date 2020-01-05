@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
-import { Subscription, zip } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { of, Subscription, zip, combineLatest } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import get from 'lodash.get';
 
 import { MusicApiService } from '../../services/music-api.service';
@@ -10,8 +10,13 @@ import { BackgroundService } from '../../services/background.service';
 
 import { AudioService } from '../../services/audio.service';
 import { Track } from '../track-list/track';
-import { ITrack } from '../../types/interfaces';
 import { mapApiResponse } from '../../utils/utils';
+import { ITrack } from '../../types/interfaces';
+
+const RespKeys = {
+  artist: 'artist',
+  album: 'album'
+};
 
 @Component({
   selector: 'app-album',
@@ -33,7 +38,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const { params: {entity, id}, fragment }: Params = this.route.snapshot;
+    const { entity, id }: Params = this.route.snapshot.params;
 
     const endpointConfig = {
       artists: `${entity}/${id}/top-tracks`
@@ -43,27 +48,48 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
     if (endpointConfig[entity]) {
       requests.push(
-        this.musicApi.getEntityData(endpointConfig[entity]),
-        this.musicApi.getArtistBio(fragment)
+        this.musicApi.getEntityData(endpointConfig[entity])
         );
     }
 
     this.detailsSubscription$ = zip(...requests)
       .pipe(
+        mergeMap(this.additionalRequest.bind(this)),
         map(mapApiResponse)
       )
       .subscribe(this.applyEntityData.bind(this));
   }
 
+  additionalRequest(data) {
+    const mergedData = mapApiResponse(data);
+    const { type, name, artists } = mergedData;
+
+    if (RespKeys[type]) {
+      const artistName = get(artists, '[0].name');
+      const params = {
+        method: `${type}.getInfo`,
+        artist: artistName || name,
+        album: artistName ? name : null
+      };
+      return combineLatest(this.musicApi.getLastfmInfo(params), of(mergedData));
+    }
+
+    return of(data);
+  }
+
   applyEntityData(data) {
-    const {images, name, id, tracks, artist} = data;
+    const { images, name, id, tracks, type } = data;
+    const key = {
+      [RespKeys.artist]: 'bio.content',
+      [RespKeys.album]: 'wiki.content'
+    };
 
     this.background.updateBackgroundUrl(images[0]);
     const tracksList = get(tracks, 'items', tracks);
 
     this.entityId = id;
     this.entityName = name;
-    this.biography = get(artist, 'bio.content', '').replace(/<a.*/, '');
+    this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
   }
 
