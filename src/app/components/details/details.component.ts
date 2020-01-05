@@ -26,8 +26,10 @@ const RespKeys = {
 export class DetailsComponent implements OnInit, OnDestroy {
   tracks: ITrack[] = [];
   entityId: string;
+  mainImage: string;
   biography: string;
   entityName: string;
+  popularity: number;
   detailsSubscription$: Subscription;
 
   constructor(
@@ -78,7 +80,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   applyEntityData(data) {
-    const { images, name, id, tracks, type } = data;
+    const { images, name, id, tracks, type, popularity } = data;
     const key = {
       [RespKeys.artist]: 'bio.content',
       [RespKeys.album]: 'wiki.content'
@@ -89,6 +91,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
     this.entityId = id;
     this.entityName = name;
+    this.popularity = popularity;
+    this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
   }

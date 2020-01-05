@@ -1,6 +1,21 @@
 <div class="details-container">
   <div class="details-info">
-    <p>{{biography}}</p>
+    <div class="top-info">
+      <img class="left-side" [src]="mainImage" alt="">
+      <div class="right-side">
+        <h1>{{entityName}}</h1>
+        <div class="buttons">
+          <button>play</button>
+        </div>
+        <div class="metadata">
+          <p>popularity: </p>
+          <progress [max]="100" [value]="popularity || 0"></progress>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-info" *ngIf="biography">
+      <p>{{biography}}</p>
+    </div>
   </div>
   <app-track-list [listId]="entityId" [title]="entityName" [tracks]="tracks"></app-track-list>
 </div>
