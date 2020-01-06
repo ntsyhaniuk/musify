@@ -26,11 +26,9 @@ $bars: 10;
     box-shadow: 0 10px 15px #000;
   }
 
-  $multiplier: 100 / $bars;
   @for $i from 0 through $bars {
     .bar:nth-child(#{$i}) {
-      $colorTone: 140 - $multiplier;
-      background-color: hsla($colorTone, 100, 50%, 1);
+      background-color: hsla(140, 100, 50%, 1);
       animation: grow#{$i} #{random(700) + 1500}ms alternate infinite;
     }
 
