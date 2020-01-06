@@ -1,6 +1,7 @@
 <label for="search" class="search-container">
   <i class="material-icons">search</i>
   <input
+    #input
     class="search-input"
     type="search"
     name="search"
@@ -8,4 +9,9 @@
     aria-label="Search"
     autocomplete="off"
     (keyup)="searchString$.next($event.target.value)"/>
+  <i *ngIf="searchString$ | async"
+     class="material-icons"
+     style="cursor: pointer"
+     (click)="searchString$.next(''); input.value = ''"
+  >clear</i>
 </label>
