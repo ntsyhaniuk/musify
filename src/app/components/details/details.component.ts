@@ -95,6 +95,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
+
+    this.audioService.setListData(this.entityId, this.tracks);
   }
 
   ngOnDestroy(): void {
