@@ -201,7 +201,7 @@ export class AudioService {
 
   setListData(listId: string, tracks: ITrack[]) {
     const isTheSameList = listId && this.listId && listId === this.listId;
-    if (isTheSameList) {
+    if (isTheSameList && this.audioID) {
       const currentTrack = this.tracks.find(({id}) => id === this.audioID);
       currentTrack.isPlaying = true;
       this.currentTrack = currentTrack;

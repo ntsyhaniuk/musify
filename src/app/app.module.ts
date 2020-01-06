@@ -1,12 +1,12 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
+  MatButtonModule,
   MatSliderModule,
-  MatDividerModule,
-  MatButtonModule
+  MatDividerModule
 } from '@angular/material';
 
 // modules
@@ -15,52 +15,54 @@ import { AppRoutingModule } from './app-routing.module';
 // services
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
+import { AudioService } from './services/audio.service';
 import { MusicApiService } from './services/music-api.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
-import { AudioService } from './services/audio.service';
 
 // components
 import { AppComponent } from './app.component';
+import { TrackComponent } from './components/track/track.component';
 import { SearchComponent } from './components/search/search.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ItemsListComponent } from './components/items-list/items-list.component';
-import { TrackListComponent } from './components/track-list/track-list.component';
 import { DetailsComponent } from './components/details/details.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { CategoriesComponent } from './components/categories/categories.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CategoryComponent } from './components/category/category.component';
-import { TrackComponent } from './components/track/track.component';
+import { ItemsListComponent } from './components/items-list/items-list.component';
+import { TrackListComponent } from './components/track-list/track-list.component';
+import { CategoriesComponent } from './components/categories/categories.component';
 import { PlayingControlComponent } from './components/playing-control/playing-control.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    TrackComponent,
     SearchComponent,
     NavbarComponent,
-    ItemsListComponent,
-    TrackListComponent,
     DetailsComponent,
     ProfileComponent,
-    CategoriesComponent,
+    SpinnerComponent,
     CategoryComponent,
-    TrackComponent,
+    ItemsListComponent,
+    TrackListComponent,
+    CategoriesComponent,
     PlayingControlComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
-    BrowserAnimationsModule,
+    MatButtonModule,
+    MatSliderModule,
     AppRoutingModule,
     HttpClientModule,
-    MatSliderModule,
     MatDividerModule,
-    MatButtonModule
+    BrowserAnimationsModule
   ],
   providers: [
     AuthService,
     HttpService,
-    MusicApiService,
     AudioService,
+    MusicApiService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]

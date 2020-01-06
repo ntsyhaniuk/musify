@@ -5,10 +5,10 @@ import { of, Subscription, zip, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import get from 'lodash.get';
 
+import { AudioService } from '../../services/audio.service';
 import { MusicApiService } from '../../services/music-api.service';
 import { BackgroundService } from '../../services/background.service';
 
-import { AudioService } from '../../services/audio.service';
 import { Track } from '../track-list/track';
 import { mapApiResponse } from '../../utils/utils';
 import { ITrack } from '../../types/interfaces';
@@ -95,6 +95,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
+
+    this.audioService.setListData(this.entityId, this.tracks);
   }
 
   ngOnDestroy(): void {

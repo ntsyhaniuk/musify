@@ -1,0 +1,45 @@
+$bars: 10;
+
+.spinner-template {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background: rgba(0,0,0, 0.5);
+  backdrop-filter: blur(10px);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+
+  .container {
+    width: #{$bars * 21}px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+  }
+  .bar {
+    width: 20px;
+    min-height: 10px;
+    margin-right: 1px;
+    box-shadow: 0 10px 15px #000;
+  }
+
+  $multiplier: 100 / $bars;
+  @for $i from 0 through $bars {
+    .bar:nth-child(#{$i}) {
+      $colorTone: 140 - $multiplier;
+      background-color: hsla($colorTone, 100, 50%, 1);
+      animation: grow#{$i} #{random(700) + 1500}ms alternate infinite;
+    }
+
+    @keyframes grow#{$i} {
+      @for $j from 0 through 10 {
+        #{$j * 10}% {
+          height: #{random(100)}px;
+        }
+      }
+    }
+  }
+}

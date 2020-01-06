@@ -1,7 +1,7 @@
 <div class="details-container">
   <div class="details-info">
     <div class="top-info">
-      <img class="left-side" [src]="mainImage" alt="">
+      <img *ngIf="mainImage" class="left-side" [src]="mainImage" alt="">
       <div class="right-side">
         <h1>{{entityName}}</h1>
         <div class="buttons">
@@ -16,6 +16,9 @@
     <div class="bottom-info" *ngIf="biography">
       <p>{{biography}}</p>
     </div>
+    <div class="tracks-list">
+      <app-track *ngFor="let track of tracks" [track]="track"></app-track>
+    </div>
   </div>
-  <app-track-list [listId]="entityId" [title]="entityName" [tracks]="tracks"></app-track-list>
+<!--  <app-track-list [listId]="entityId" [title]="entityName" [tracks]="tracks"></app-track-list>-->
 </div>
