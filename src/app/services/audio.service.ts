@@ -32,6 +32,7 @@ export class AudioService {
     readableDuration: '',
     duration: undefined,
     currentTime: undefined,
+    currentTrack: undefined,
     currentId: undefined,
     canplay: false,
     error: false
@@ -50,6 +51,7 @@ export class AudioService {
         break;
       case 'playing':
         this.state.playing = true;
+        this.state.currentTrack = this.currentTrack;
         this.state.currentId = this.audioID;
         break;
       case 'pause':
@@ -74,6 +76,7 @@ export class AudioService {
       readableDuration: '',
       duration: undefined,
       currentTime: undefined,
+      currentTrack: undefined,
       currentId: undefined,
       canplay: false,
       error: false

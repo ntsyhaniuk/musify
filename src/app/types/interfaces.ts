@@ -30,6 +30,7 @@ export interface IStreamState {
   readableDuration: string;
   duration: number | undefined;
   currentTime: number | undefined;
+  currentTrack: ITrack | undefined;
   currentId: string | undefined;
   canplay: boolean;
   error: boolean;

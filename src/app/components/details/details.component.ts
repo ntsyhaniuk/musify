@@ -11,7 +11,7 @@ import { BackgroundService } from '../../services/background.service';
 
 import { Track } from '../track-list/track';
 import { mapApiResponse } from '../../utils/utils';
-import { ITrack } from '../../types/interfaces';
+import { IStreamState, ITrack } from '../../types/interfaces';
 
 const RespKeys = {
   artist: 'artist',
@@ -30,6 +30,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   biography: string;
   entityName: string;
   popularity: number;
+  state: IStreamState;
+  stateSubscribtion$: Subscription;
   detailsSubscription$: Subscription;
 
   constructor(
@@ -60,6 +62,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
         map(mapApiResponse)
       )
       .subscribe(this.applyEntityData.bind(this));
+
+    this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
+      this.state = newState;
+    });
   }
 
   additionalRequest(data) {
@@ -99,8 +105,18 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.audioService.setListData(this.entityId, this.tracks);
   }
 
+  playPause() {
+    const track = this.state.currentTrack || this.tracks[0];
+    if (track.isPlaying) {
+      this.audioService.pause(track);
+    } else {
+      this.audioService.play(track);
+    }
+  }
+
   ngOnDestroy(): void {
     this.detailsSubscription$.unsubscribe();
+    this.stateSubscribtion$.unsubscribe();
   }
 
 }

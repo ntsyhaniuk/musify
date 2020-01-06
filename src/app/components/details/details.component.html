@@ -5,7 +5,7 @@
       <div class="right-side">
         <h1>{{entityName}}</h1>
         <div class="buttons">
-          <button>play</button>
+          <button (click)="playPause()">{{state.playing ? 'pause' : 'play'}}</button>
         </div>
         <div class="metadata">
           <p>popularity: </p>
