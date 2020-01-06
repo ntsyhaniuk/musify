@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpEventType, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
+import { SpinnerService } from './spinner.service';
 import { environment } from '../../environments/environment';
 
 const { BASE_SPOTIFY_URL } = environment;
@@ -13,16 +13,19 @@ const { BASE_SPOTIFY_URL } = environment;
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private spinner: SpinnerService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.url.startsWith(BASE_SPOTIFY_URL)) {
       return next.handle(this.extendHeaders(req)).pipe(
+        tap(this.spinnerSwitcher.bind(this)),
         catchError(this.interceptHandler.bind(this))
       );
     } else {
-      return next.handle(req);
+      return next.handle(req).pipe(
+        tap(this.spinnerSwitcher.bind(this)),
+      );
     }
   }
 
@@ -43,4 +46,10 @@ export class HttpInterceptorService implements HttpInterceptor {
     return throwError(e);
   }
 
+  private spinnerSwitcher(res) {
+    switch (res.type) {
+      case HttpEventType.Sent: return this.spinner.show();
+      case HttpEventType.Response: return this.spinner.hide();
+    }
+  }
 }

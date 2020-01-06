@@ -6,4 +6,5 @@
   <app-navbar></app-navbar>
   <router-outlet></router-outlet>
   <app-playing-control></app-playing-control>
+  <app-spinner *ngIf="isLoading | async"></app-spinner>
 </div>

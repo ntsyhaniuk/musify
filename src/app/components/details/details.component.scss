@@ -5,6 +5,7 @@
   flex-direction: column;
   margin-top: 250px;
   padding: 0 100px 100px;
+  min-height: calc(100% - 250px);
   background: rgba(0,0,0, 0.9);
 
   .details-info {
