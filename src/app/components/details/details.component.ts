@@ -11,7 +11,7 @@ import { BackgroundService } from '../../services/background.service';
 
 import { Track } from '../track-list/track';
 import { mapApiResponse } from '../../utils/utils';
-import { IStreamState, ITrack } from '../../types/interfaces';
+import { IStreamState, ITrack, IWebPlaybackState } from '../../types/interfaces';
 
 const RespKeys = {
   artist: 'artist',
@@ -30,7 +30,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   biography: string;
   entityName: string;
   popularity: number;
-  state: IStreamState;
+  state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
   detailsSubscription$: Subscription;
 
@@ -63,7 +63,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.applyEntityData.bind(this));
 
-    this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
+    this.stateSubscribtion$ = this.audioService.getNewState().subscribe(newState => {
       this.state = newState;
     });
   }
@@ -101,17 +101,18 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
-
-    this.audioService.setListData(this.entityId, this.tracks);
   }
 
   playPause() {
-    const track = this.state.currentTrack || this.tracks[0];
-    if (track.isPlaying) {
-      this.audioService.pause(track);
-    } else {
-      this.audioService.play(track);
-    }
+    const uris = this.tracks.map(track => track.uri);
+
+    this.audioService.playTrack(uris).subscribe();
+
+    // if (track.isPlaying) {
+    //   this.audioService.pause(track);
+    // } else {
+    //   this.audioService.play(track);
+    // }
   }
 
   ngOnDestroy(): void {

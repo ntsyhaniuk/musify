@@ -35,3 +35,37 @@ export interface IStreamState {
   canplay: boolean;
   error: boolean;
 }
+
+export interface IWebPlaybackState  {
+  paused: boolean;
+  position: number;
+  repeat_mode: number;
+  shuffle: boolean;
+  context: {
+    uri: string | null;
+  };
+  track_window: {
+    current_track: IWebPlaybackTrack,
+    previous_tracks: IWebPlaybackTrack[],
+    next_tracks: IWebPlaybackTrack[]
+  };
+}
+
+export interface IWebPlaybackTrack {
+  uri: string;
+  id: string;
+  type: string;
+  media_type: string;
+  name: string;
+  is_playable: boolean;
+  album: {
+    uri: string;
+    name: string;
+    images: [
+      { url: string }
+    ]
+  };
+  artists: [
+    { uri: string, name: string }
+  ];
+}

@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
+import get from 'lodash.get';
+
 import { AudioService } from '../../services/audio.service';
-import { IStreamState, ITrack } from '../../types/interfaces';
+import { ITrack, IWebPlaybackState } from '../../types/interfaces';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 
@@ -13,44 +15,36 @@ import * as moment from 'moment';
 export class TrackComponent implements OnInit, OnDestroy {
   @Input() track: ITrack;
 
-  state: IStreamState;
+  state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
 
   constructor(private audioService: AudioService) { }
 
   ngOnInit() {
-    this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
+    this.stateSubscribtion$ = this.audioService.getNewState().subscribe(newState => {
       this.state = newState;
     });
   }
 
-  playPause(track: ITrack) {
-    if (track.isPlaying) {
-      this.pause(track);
+  playPause() {
+    const stateUri = get(this.state, 'track_window.current_track.uri', null);
+    if (this.track.uri === stateUri) {
+      this.audioService.togglePlay();
     } else {
-      this.play(track);
+      this.audioService.playTrack(this.track.uri).subscribe();
     }
-  }
-
-  play(track: ITrack) {
-    this.audioService.play(track);
-  }
-
-  pause(track: ITrack) {
-    this.audioService.pause(track);
-  }
-
-  onSliderTimeChanged(change) {
-    this.audioService.rewindTo(change.value);
   }
 
   msToMinSec(ms: number) {
     return moment(ms).format('m:ss');
   }
 
-  isPlaying(track) {
-    const { currentId, playing } = this.state;
-    return playing && track.id === currentId;
+  isCurrentTrack() {
+    return this.track.id === get(this.state, 'track_window.current_track.id', null);
+  }
+
+  isPlaying() {
+    return this.state && !this.state.paused;
   }
 
   ngOnDestroy() {
