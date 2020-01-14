@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { of, Subscription, zip, combineLatest } from 'rxjs';
+import { of, Subscription, zip, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import get from 'lodash.get';
 
@@ -11,7 +11,7 @@ import { BackgroundService } from '../../services/background.service';
 
 import { Track } from '../track-list/track';
 import { mapApiResponse } from '../../utils/utils';
-import { IStreamState, ITrack, IWebPlaybackState } from '../../types/interfaces';
+import { ITrack, IWebPlaybackState } from '../../types/interfaces';
 
 const RespKeys = {
   artist: 'artist',
@@ -25,7 +25,7 @@ const RespKeys = {
 })
 export class DetailsComponent implements OnInit, OnDestroy {
   tracks: ITrack[] = [];
-  entityId: string;
+  contextUri: string;
   mainImage: string;
   biography: string;
   entityName: string;
@@ -33,8 +33,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
   detailsSubscription$: Subscription;
+  buttonLabel = new BehaviorSubject('play');
 
   constructor(
+    private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private musicApi: MusicApiService,
     private audioService: AudioService,
@@ -65,6 +67,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
     this.stateSubscribtion$ = this.audioService.getNewState().subscribe(newState => {
       this.state = newState;
+      this.updateLabel.call(this);
     });
   }
 
@@ -86,7 +89,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   applyEntityData(data) {
-    const { images, name, id, tracks, type, popularity } = data;
+    const { images, name, tracks, type, popularity, uri } = data;
     const key = {
       [RespKeys.artist]: 'bio.content',
       [RespKeys.album]: 'wiki.content'
@@ -95,24 +98,31 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.background.updateBackgroundUrl(images[0]);
     const tracksList = get(tracks, 'items', tracks);
 
-    this.entityId = id;
+    this.contextUri = uri;
     this.entityName = name;
     this.popularity = popularity;
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
-    this.tracks = tracksList.map((track, index) => new Track({...get(track, 'track', track), trackOrder: index}));
+    this.tracks = tracksList.map(
+      (track, index) => new Track({...get(track, 'track', track), trackOrder: index, contextUri: uri})
+    );
   }
 
   playPause() {
-    const uris = this.tracks.map(track => track.uri);
+    const { context: { uri } } = this.state;
+    if (uri === this.contextUri) {
+      this.audioService.togglePlay();
+    } else {
+      this.audioService.playTrack({context_uri: this.contextUri}).subscribe();
+    }
+  }
 
-    this.audioService.playTrack(uris).subscribe();
-
-    // if (track.isPlaying) {
-    //   this.audioService.pause(track);
-    // } else {
-    //   this.audioService.play(track);
-    // }
+  updateLabel() {
+    const { paused, context: { uri } } = this.state;
+    const label = this.contextUri === uri && !paused ? 'pause' : 'play';
+    console.log(label);
+    this.buttonLabel.next(label);
+    this.cd.detectChanges();
   }
 
   ngOnDestroy(): void {

@@ -15,7 +15,7 @@ export class Track {
   popularity: number;
   trackOrder: number;
   previewUrl: string;
-  isPlaying: boolean;
+  contextUri: string;
   trackNumber: number;
   externalIds: object;
   externalUrls: object;
@@ -27,6 +27,5 @@ export class Track {
       return acc;
     }, {});
     Object.assign(this, modifiedTrack);
-    this.isPlaying = false;
   }
 }

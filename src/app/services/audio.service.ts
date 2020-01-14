@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 
-import { ITrack, IStreamState, IWebPlaybackState } from '../types/interfaces';
+import { IWebPlaybackState } from '../types/interfaces';
 import { AuthService } from './auth.service';
 import { HttpMethods, HttpService } from './http.service';
 
@@ -70,15 +69,13 @@ export class AudioService {
     document.body.appendChild(script);
   }
 
-  playTrack(uris) {
+  playTrack(body) {
     const {id} = this.player._options;
 
     const params = {
+      body,
       httpMethod: HttpMethods.PUT,
       endpoint: 'me/player/play',
-      body: {
-        uris
-      },
       queryParams: {
         device_id: id
       }
