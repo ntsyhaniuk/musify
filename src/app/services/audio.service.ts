@@ -39,6 +39,10 @@ export class AudioService {
       const token = this.auth.getSessionKey();
 
       const errorHandler = ({message}) => console.log(message);
+      const stateHandler = state => {
+        if (!state) return;
+        this.newStateChange.next(state);
+      };
 
       this.player = new (window as any).Spotify.Player({
         name: 'Musify',
@@ -51,13 +55,10 @@ export class AudioService {
       this.player.addListener('authentication_error', errorHandler);
       this.player.addListener('initialization_error', errorHandler);
       this.player.addListener('not_ready', ({ device_id }) => { console.log('Device ID has gone offline', device_id); });
-      this.player.addListener('player_state_changed', this.newStateChange.next.bind(this));
+      this.player.addListener('player_state_changed', stateHandler.bind(this));
 
       setInterval(() => {
-        this.player.getCurrentState().then(state => {
-          if (!state) return;
-          this.newStateChange.next(state);
-        });
+        this.player.getCurrentState().then(stateHandler);
       }, 500);
 
       this.player.connect();

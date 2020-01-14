@@ -31,7 +31,20 @@ export class TrackComponent implements OnInit, OnDestroy {
     if (this.track.uri === stateUri) {
       this.audioService.togglePlay();
     } else {
-      this.audioService.playTrack(this.track.uri).subscribe();
+      let body = {};
+      if (this.track.contextUri.includes('artist')) {
+        body = {
+          uris: [this.track.uri]
+        };
+      } else {
+        body = {
+          context_uri: this.track.contextUri,
+          offset: {
+            position: this.track.trackOrder
+          }
+        };
+      }
+      this.audioService.playTrack(body).subscribe();
     }
   }
 
@@ -44,7 +57,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   }
 
   isPlaying() {
-    return this.state && !this.state.paused;
+    return this.isCurrentTrack() && this.state && !this.state.paused;
   }
 
   ngOnDestroy() {

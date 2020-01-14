@@ -15,6 +15,7 @@ export interface ITrack {
   discNumber: number;
   durationMs: number;
   popularity: number;
+  contextUri: string;
   trackOrder: number;
   previewUrl: string;
   isPlaying: boolean;
