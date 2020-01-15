@@ -1,17 +1,18 @@
 <label for="search" class="search-container">
-  <i class="material-icons">search</i>
+  <i class="fas fa-search"></i>
   <input
     #input
     class="search-input"
     type="search"
     name="search"
+    id="search"
     placeholder="Search music..."
     aria-label="Search"
     autocomplete="off"
     (keyup)="searchString$.next($event.target.value)"/>
-  <i *ngIf="searchString$ | async"
-     class="material-icons"
+  <i [ngStyle]="{'visibility': (searchString$ | async) ? 'visible' : 'hidden'}"
+     class="fas fa-times"
      style="cursor: pointer"
      (click)="searchString$.next(''); input.value = ''"
-  >clear</i>
+  ></i>
 </label>
