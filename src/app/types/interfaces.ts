@@ -25,18 +25,6 @@ export interface ITrack {
   availableMarkets: string[];
 }
 
-export interface IStreamState {
-  playing: boolean;
-  readableCurrentTime: string;
-  readableDuration: string;
-  duration: number | undefined;
-  currentTime: number | undefined;
-  currentTrack: ITrack | undefined;
-  currentId: string | undefined;
-  canplay: boolean;
-  error: boolean;
-}
-
 export interface IWebPlaybackState  {
   paused: boolean;
   position: number;

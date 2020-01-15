@@ -16,7 +16,9 @@ export class AudioService {
     this.initSpotifyWebSDK();
   }
 
-  public player: any;
+  private player: any;
+  private deviceId: string;
+  private updateStateInterval: number;
   private newState: IWebPlaybackState = {
     paused: true,
     position: 0,
@@ -46,39 +48,31 @@ export class AudioService {
 
       this.player = new (window as any).Spotify.Player({
         name: 'Musify',
-        getOAuthToken(cb: (token: string) => void): void {
-          cb(token);
-        }
+        getOAuthToken(cb) {cb(token); }
       });
       this.player.addListener('account_error', errorHandler);
       this.player.addListener('playback_error', errorHandler);
       this.player.addListener('authentication_error', errorHandler);
       this.player.addListener('initialization_error', errorHandler);
       this.player.addListener('not_ready', ({ device_id }) => { console.log('Device ID has gone offline', device_id); });
+      this.player.addListener('ready', ({ device_id }) => this.deviceId = device_id);
       this.player.addListener('player_state_changed', stateHandler.bind(this));
 
-      setInterval(() => {
+      this.updateStateInterval = setInterval(() => {
         this.player.getCurrentState().then(stateHandler);
       }, 500);
 
       this.player.connect();
     };
-
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://sdk.scdn.co/spotify-player.js';
-    document.body.appendChild(script);
   }
 
   playTrack(body) {
-    const {id} = this.player._options;
-
     const params = {
       body,
       httpMethod: HttpMethods.PUT,
       endpoint: 'me/player/play',
       queryParams: {
-        device_id: id
+        device_id: this.deviceId
       }
     };
 

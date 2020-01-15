@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import get from 'lodash.get';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
 import { AudioService } from '../../services/audio.service';
 import { ITrack, IWebPlaybackState } from '../../types/interfaces';
-import { Subscription } from 'rxjs';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-track',
@@ -26,24 +26,26 @@ export class TrackComponent implements OnInit, OnDestroy {
     });
   }
 
+  get stateTrackUri() {
+    const linkedUri = get(this.state, 'track_window.current_track.linked_from_uri', null);
+    const trackUri = get(this.state, 'track_window.current_track.uri', null);
+    return linkedUri || trackUri;
+  }
+
   playPause() {
-    const stateUri = get(this.state, 'track_window.current_track.uri', null);
-    if (this.track.uri === stateUri) {
+    if (this.track.uri === this.stateTrackUri) {
       this.audioService.togglePlay();
     } else {
-      let body = {};
-      if (this.track.contextUri.includes('artist')) {
-        body = {
+      const body = this.track.contextUri.includes('artist')
+        ? {
           uris: [this.track.uri]
-        };
-      } else {
-        body = {
+        }
+        : {
           context_uri: this.track.contextUri,
           offset: {
-            position: this.track.trackOrder
+            uri: this.track.uri
           }
         };
-      }
       this.audioService.playTrack(body).subscribe();
     }
   }
@@ -53,7 +55,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   }
 
   isCurrentTrack() {
-    return this.track.id === get(this.state, 'track_window.current_track.id', null);
+    return this.track.uri === this.stateTrackUri;
   }
 
   isPlaying() {

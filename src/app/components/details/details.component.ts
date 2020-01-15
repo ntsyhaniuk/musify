@@ -119,9 +119,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   updateLabel() {
     const { paused, context: { uri } } = this.state;
-    const label = this.contextUri === uri && !paused ? 'pause' : 'play';
-    console.log(label);
-    this.buttonLabel.next(label);
+    this.buttonLabel.next(this.contextUri === uri && !paused ? 'pause' : 'play');
     this.cd.detectChanges();
   }
 
