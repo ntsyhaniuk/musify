@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { of, Subscription, zip, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
 import get from 'lodash.get';
+import { map, mergeMap } from 'rxjs/operators';
+import { of, Subscription, zip, combineLatest, BehaviorSubject } from 'rxjs';
 
 import { AudioService } from '../../services/audio.service';
 import { MusicApiService } from '../../services/music-api.service';
@@ -65,9 +65,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.applyEntityData.bind(this));
 
-    this.stateSubscribtion$ = this.audioService.getNewState().subscribe(newState => {
+    this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
       this.state = newState;
-      this.updateLabel.call(this);
+      this.updateLabel();
     });
   }
 

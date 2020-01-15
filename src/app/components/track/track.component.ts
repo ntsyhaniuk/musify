@@ -21,7 +21,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   constructor(private audioService: AudioService) { }
 
   ngOnInit() {
-    this.stateSubscribtion$ = this.audioService.getNewState().subscribe(newState => {
+    this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
       this.state = newState;
     });
   }

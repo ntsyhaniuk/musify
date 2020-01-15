@@ -19,7 +19,7 @@ export class AudioService {
   private player: any;
   private deviceId: string;
   private updateStateInterval: number;
-  private newState: IWebPlaybackState = {
+  private state: IWebPlaybackState = {
     paused: true,
     position: 0,
     repeat_mode: 0,
@@ -34,7 +34,7 @@ export class AudioService {
     }
   };
 
-  private newStateChange: BehaviorSubject<IWebPlaybackState> = new BehaviorSubject(this.newState);
+  private stateChange: BehaviorSubject<IWebPlaybackState> = new BehaviorSubject(this.state);
 
   initSpotifyWebSDK() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
@@ -43,7 +43,7 @@ export class AudioService {
       const errorHandler = ({message}) => console.log(message);
       const stateHandler = state => {
         if (!state) return;
-        this.newStateChange.next(state);
+        this.stateChange.next(state);
       };
 
       this.player = new (window as any).Spotify.Player({
@@ -88,7 +88,7 @@ export class AudioService {
     return moment.utc(momentTime).format(format);
   }
 
-  getNewState(): Observable<IWebPlaybackState> {
-    return this.newStateChange.asObservable();
+  getState(): Observable<IWebPlaybackState> {
+    return this.stateChange.asObservable();
   }
 }
