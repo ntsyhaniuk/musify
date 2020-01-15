@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { AudioService } from '../../services/audio.service';
-import { IStreamState, ITrack } from '../../types/interfaces';
-import { Subscription } from 'rxjs';
+import get from 'lodash.get';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+
+import { AudioService } from '../../services/audio.service';
+import { ITrack, IWebPlaybackState } from '../../types/interfaces';
 
 @Component({
   selector: 'app-track',
@@ -13,7 +15,7 @@ import * as moment from 'moment';
 export class TrackComponent implements OnInit, OnDestroy {
   @Input() track: ITrack;
 
-  state: IStreamState;
+  state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
 
   constructor(private audioService: AudioService) { }
@@ -24,33 +26,40 @@ export class TrackComponent implements OnInit, OnDestroy {
     });
   }
 
-  playPause(track: ITrack) {
-    if (track.isPlaying) {
-      this.pause(track);
+  get stateTrackUri() {
+    const linkedUri = get(this.state, 'track_window.current_track.linked_from_uri', null);
+    const trackUri = get(this.state, 'track_window.current_track.uri', null);
+    return linkedUri || trackUri;
+  }
+
+  playPause() {
+    if (this.track.uri === this.stateTrackUri) {
+      this.audioService.togglePlay();
     } else {
-      this.play(track);
+      const body = this.track.contextUri.includes('artist')
+        ? {
+          uris: [this.track.uri]
+        }
+        : {
+          context_uri: this.track.contextUri,
+          offset: {
+            uri: this.track.uri
+          }
+        };
+      this.audioService.playTrack(body).subscribe();
     }
-  }
-
-  play(track: ITrack) {
-    this.audioService.play(track);
-  }
-
-  pause(track: ITrack) {
-    this.audioService.pause(track);
-  }
-
-  onSliderTimeChanged(change) {
-    this.audioService.rewindTo(change.value);
   }
 
   msToMinSec(ms: number) {
     return moment(ms).format('m:ss');
   }
 
-  isPlaying(track) {
-    const { currentId, playing } = this.state;
-    return playing && track.id === currentId;
+  isCurrentTrack() {
+    return this.track.uri === this.stateTrackUri;
+  }
+
+  isPlaying() {
+    return this.isCurrentTrack() && this.state && !this.state.paused;
   }
 
   ngOnDestroy() {

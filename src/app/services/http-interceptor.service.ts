@@ -10,6 +10,8 @@ import { environment } from '../../environments/environment';
 
 const { BASE_SPOTIFY_URL } = environment;
 
+const isSpotifyReq = url => url.startsWith(BASE_SPOTIFY_URL);
+
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
 
@@ -17,16 +19,10 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith(BASE_SPOTIFY_URL)) {
-      return next.handle(this.extendHeaders(req)).pipe(
-        tap(this.spinnerSwitcher.bind(this)),
-        catchError(this.interceptHandler.bind(this))
-      );
-    } else {
-      return next.handle(req).pipe(
-        tap(this.spinnerSwitcher.bind(this)),
-      );
-    }
+    return next.handle(this.extendHeaders(req)).pipe(
+      tap(this.spinnerSwitcher.bind(this)),
+      catchError(this.interceptHandler.bind(this))
+    );
   }
 
   private extendHeaders(req: HttpRequest<any>) {
@@ -34,15 +30,19 @@ export class HttpInterceptorService implements HttpInterceptor {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.auth.getSessionKey()}`
     });
-    return req.clone({headers});
+
+    return isSpotifyReq(req.url) ? req.clone({headers}) : req;
   }
 
   private interceptHandler(e: HttpEvent<any>): Observable<HttpEvent<any>> {
-    if ((e as any).status === 401) {
+    const { status, url } = (e as any);
+
+    if (isSpotifyReq(url) && status === 401) {
       this.auth.clearSessionKey();
       this.auth.authorize();
     }
 
+    this.spinner.hide();
     return throwError(e);
   }
 

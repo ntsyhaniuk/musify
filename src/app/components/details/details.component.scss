@@ -14,7 +14,6 @@
     justify-content: center;
     color: $whiteText;
     margin-top: -160px;
-    width: 60vw;
 
     .top-info {
       display: flex;
@@ -87,6 +86,7 @@
 
     .bottom-info {
       padding-top: 50px;
+      max-width: 60vw;
 
       p {
         font-family: "Proxima Light", serif;
@@ -99,6 +99,7 @@
     .tracks-list {
       margin-top: 30px;
       margin-left: -13px;
+      max-width: 60vw;
     }
   }
 }

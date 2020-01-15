@@ -28,17 +28,22 @@ export class AuthService {
   }
 
   redirectToSpotify(): void {
+    const scopes = [
+      'streaming',
+      'user-read-email',
+      'user-follow-read',
+      'user-read-private',
+      'user-read-playback-state',
+      'user-read-currently-playing'
+    ];
     const queryParams = {
       response_type: 'token',
-      scope: 'user-follow-read',
+      scope: scopes.join(','),
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI
     };
     const paramsStr = createQueryString(queryParams);
-
-    const link = document.createElement('a');
-    link.setAttribute('href', `${AUTH_URL}?${paramsStr}`);
-    link.click();
+    window.location.href = `${AUTH_URL}?${paramsStr}`;
   }
 
   getUserData() {

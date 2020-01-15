@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatSliderModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  MatButtonModule,
-  MatSliderModule,
-  MatDividerModule
-} from '@angular/material';
 
 // modules
 import { AppRoutingModule } from './app-routing.module';
@@ -51,11 +47,9 @@ import { PlayingControlComponent } from './components/playing-control/playing-co
   imports: [
     FormsModule,
     BrowserModule,
-    MatButtonModule,
     MatSliderModule,
     AppRoutingModule,
     HttpClientModule,
-    MatDividerModule,
     BrowserAnimationsModule
   ],
   providers: [

@@ -1,20 +1,14 @@
 <div class="container">
-  <div *ngIf="track.previewUrl" class="track">
-    <button class="transparent_button" (click)="playPause(track)">
-      <i class="material-icons active" *ngIf="isPlaying(track)">pause</i>
-      <i class="material-icons" *ngIf="!isPlaying(track)">play_arrow</i>
+  <div class="track">
+    <button class="transparent_button" (click)="playPause()">
+      <i class="fas" [ngClass]="{'fa-play': !isPlaying(), 'fa-pause': isPlaying(), 'active': isCurrentTrack()}"></i>
     </button>
-<!--    <h6 [ngClass]="{'active': isPlaying(track)}">{{track.name}}</h6>-->
-    <h6 *ngIf="!isPlaying(track)">{{track.name}}</h6>
+    <h6 [ngClass]="{'active': isCurrentTrack()}">{{track.name}}</h6>
 
-    <mat-slider *ngIf="isPlaying(track)" class="time-slider" min="0" [max]="state?.duration" step="1"
-                [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">
-    </mat-slider>
+<!--    <mat-slider *ngIf="isPlaying()" class="time-slider" min="0" [max]="state?.duration" step="1"-->
+<!--                [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">-->
+<!--    </mat-slider>-->
 
-    <p [ngClass]="{'active': isPlaying(track)}">{{msToMinSec(track.durationMs)}}</p>
+    <p [ngClass]="{'active': isCurrentTrack()}">{{msToMinSec(track.durationMs)}}</p>
   </div>
-<!--  <mat-slider *ngIf="isPlaying(track)" class="time-slider" min="0" [max]="state?.duration" step="1"-->
-<!--              [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">-->
-<!--  </mat-slider>-->
-  <mat-divider *ngIf="track.previewUrl"></mat-divider>
 </div>

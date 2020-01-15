@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 
 import { MusicApiService } from '../../services/music-api.service';
@@ -22,7 +22,7 @@ import { ITrack } from '../../types/interfaces';
     ]),
   ]
 })
-export class TrackListComponent implements OnInit, OnChanges {
+export class TrackListComponent implements OnInit {
   @Input() tracks: ITrack[] = [];
   @Input() title: string;
   @Input() listId: string;
@@ -36,27 +36,10 @@ export class TrackListComponent implements OnInit, OnChanges {
     private audioService: AudioService
   ) {}
 
-  ngOnInit() {
-    this.isRandomize = this.audioService.getRandom();
-    this.isRepeatable = this.audioService.getRepeat();
-  }
-
-  ngOnChanges() {
-    this.audioService.setListData(this.listId, this.tracks);
-  }
+  ngOnInit() {}
 
   togglePlaylist() {
     this.isPlaylistClosed = !this.isPlaylistClosed;
-  }
-
-  toggleRandomize() {
-    this.isRandomize = !this.isRandomize;
-    this.audioService.randomize(this.isRandomize);
-  }
-
-  toggleRepeatable() {
-    this.isRepeatable = !this.isRepeatable;
-    this.audioService.repeat(this.isRepeatable);
   }
 
   getButtonTitle(key) {
