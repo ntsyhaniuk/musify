@@ -64,6 +64,11 @@ export class AudioService {
 
       this.player.connect();
     };
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://sdk.scdn.co/spotify-player.js';
+    document.body.appendChild(script);
   }
 
   playTrack(body) {
