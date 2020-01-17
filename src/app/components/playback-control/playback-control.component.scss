@@ -1,0 +1,136 @@
+@import "../../../variables";
+
+.controls-container {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 90px;
+  border-top: 1px solid $lightGreen;
+  transition: all ease-in-out 200ms;
+  background-color: #000;
+  z-index: 3;
+
+  .left-part {
+    display: flex;
+    color: $whiteText;
+    width: 20%;
+
+    img {
+      width: 64px;
+      height: 64px;
+      margin: 13px;
+    }
+
+    .track-info {
+      display: flex;
+      flex-direction: column;
+
+      .track-name {
+        margin-top: 15px;
+        white-space: nowrap;
+        max-width: 300px;
+        overflow: hidden;
+
+        span {
+          display: inline-block;
+        }
+
+      }
+
+      .track-artist {
+        display: flex;
+        font-family: "Proxima Light", serif;
+        margin-bottom: 15px;
+        max-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        outline: none;
+
+        p {
+          display: inline-block;
+
+          span {
+            outline: none;
+
+            &:hover {
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .animated {
+        padding-left: 100%;
+        animation: marquee 10s linear infinite;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(-100%, 0);
+        }
+      }
+    }
+  }
+
+  .middle-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+
+    .top {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+
+      & > * {
+        margin: 0 10px;
+      }
+
+      button:nth-child(3) {
+        i {
+          font-size: 30px !important;
+        }
+      }
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      margin-top: -15px;
+
+      span {
+        font-family: "Proxima Light", serif;
+        font-size: 14px;
+        color: $whiteText;
+        width: 35px;
+      }
+
+      .time-slider {
+        width: 50vw;
+      }
+    }
+  }
+
+  .right-part {
+    width: 20%;
+  }
+
+  .transparent_button {
+    i {
+      font-size: 40px;
+    }
+  }
+
+  .small {
+    font-size: 20px !important;
+  }
+}

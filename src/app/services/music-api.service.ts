@@ -38,7 +38,8 @@ export class MusicApiService {
     const params = {
       endpoint: 'browse/categories/',
       queryParams: {
-        limit: limit || 50
+        limit: limit || 50,
+        country: 'US'
       }
     };
     return this.$http.request(params);

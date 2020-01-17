@@ -25,9 +25,9 @@ const RespKeys = {
 })
 export class DetailsComponent implements OnInit, OnDestroy {
   tracks: ITrack[] = [];
-  contextUri: string;
   mainImage: string;
   biography: string;
+  contextUri: string;
   entityName: string;
   popularity: number;
   state: IWebPlaybackState;
@@ -44,8 +44,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const { entity, id }: Params = this.route.snapshot.params;
+    this.route.params.subscribe(({entity, id}) => {
+      this.loadDetailsData(entity, id);
+    });
+  }
 
+  loadDetailsData(entity, id) {
     const endpointConfig = {
       artists: `${entity}/${id}/top-tracks`
     };
@@ -55,7 +59,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (endpointConfig[entity]) {
       requests.push(
         this.musicApi.getEntityData(endpointConfig[entity])
-        );
+      );
     }
 
     this.detailsSubscription$ = zip(...requests)
@@ -113,19 +117,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (uri === this.contextUri) {
       this.audioService.togglePlay();
     } else {
-      this.audioService.playTrack({context_uri: this.contextUri}).subscribe();
+      this.audioService.playTrack({context_uri: this.contextUri});
     }
   }
 
   updateLabel() {
     const { paused, context: { uri } } = this.state;
     this.buttonLabel.next(this.contextUri === uri && !paused ? 'pause' : 'play');
-    this.cd.detectChanges();
+    // @ts-ignore
+    if (!this.cd.destroyed) {
+      this.cd.detectChanges();
+    }
   }
 
   ngOnDestroy(): void {
-    this.detailsSubscription$.unsubscribe();
     this.stateSubscribtion$.unsubscribe();
+    this.detailsSubscription$.unsubscribe();
   }
 
 }

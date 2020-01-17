@@ -1,0 +1,54 @@
+<div class="controls-container">
+  <div class="left-part">
+    <img *ngIf="currentTrack" [src]="currentTrack?.image" alt="cover image">
+    <div class="track-info">
+      <div class="track-name">
+        <span [ngClass]="{'animated': isNameAnimated(currentTrack?.name)}">{{currentTrack?.name}}</span>
+      </div>
+      <div class="track-artist">
+        <p [ngClass]="{'animated': isArtistAnimated(currentTrack?.artists)}">
+          <span
+            *ngFor="let artist of parseArtists(currentTrack?.artists)"
+            [routerLink]="['/', 'artists', artist.id]"
+          > {{artist.name}} </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="middle-part">
+    <div class="top">
+      <button class="transparent_button" [ngClass]="{'active': isShuffle}" (click)="toggleShuffle()">
+        <i class="icon ion-ios-shuffle small"></i>
+      </button>
+      <button class="transparent_button active" (click)="previousTrack()">
+        <i class="icon ion-ios-skip-backward small"></i>
+      </button>
+
+      <button class="transparent_button active" (click)="togglePlay()">
+        <i class="icon" [ngClass]="{'ion-ios-play': !isPlaying, 'ion-ios-pause': isPlaying}"></i>
+      </button>
+
+      <button class="transparent_button active" (click)="nextTrack()">
+        <i class="icon ion-ios-skip-forward small"></i>
+      </button>
+      <button class="transparent_button active">
+        <i class="icon ion-ios-repeat small"></i>
+      </button>
+    </div>
+    <div class="bottom">
+      <span>{{formatTime(state?.position)}}</span>
+      <mat-slider
+        min="0"
+        step="1"
+        class="time-slider"
+        [max]="state?.duration"
+        [value]="state?.position || 0"
+        (input)="seekToPosition$.next($event.value)"></mat-slider>
+      <span>{{formatTime(state?.duration)}}</span>
+    </div>
+  </div>
+  <div class="right-part">
+    <span>playlist</span>
+    <span>volume</span>
+  </div>
+</div>

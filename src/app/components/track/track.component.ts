@@ -46,12 +46,12 @@ export class TrackComponent implements OnInit, OnDestroy {
             uri: this.track.uri
           }
         };
-      this.audioService.playTrack(body).subscribe();
+      this.audioService.playTrack(body);
     }
   }
 
   msToMinSec(ms: number) {
-    return moment(ms).format('m:ss');
+    return moment(ms).format('mm:ss');
   }
 
   isCurrentTrack() {

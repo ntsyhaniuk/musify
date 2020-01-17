@@ -30,7 +30,7 @@ export class HttpService {
       case HttpMethods.GET:
         return this.$http.get(`${BASE_URL[base]}/${endpoint}${params && `?${params}`}`);
       case HttpMethods.POST:
-        return this.$http.post(`${BASE_SPOTIFY_URL}/${endpoint}`, body);
+        return this.$http.post(`${BASE_SPOTIFY_URL}/${endpoint}${params && `?${params}`}`, body);
       case HttpMethods.PUT:
         return this.$http.put(`${BASE_SPOTIFY_URL}/${endpoint}${params && `?${params}`}`, body);
     }

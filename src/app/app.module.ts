@@ -27,7 +27,7 @@ import { CategoryComponent } from './components/category/category.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
 import { CategoriesComponent } from './components/categories/categories.component';
-import { PlayingControlComponent } from './components/playing-control/playing-control.component';
+import { PlaybackControlComponent } from './components/playback-control/playback-control.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { PlayingControlComponent } from './components/playing-control/playing-co
     ItemsListComponent,
     TrackListComponent,
     CategoriesComponent,
-    PlayingControlComponent,
+    PlaybackControlComponent,
   ],
   imports: [
     FormsModule,

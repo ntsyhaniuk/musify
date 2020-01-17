@@ -11,17 +11,13 @@ import { HttpMethods, HttpService } from './http.service';
   providedIn: 'root'
 })
 export class AudioService {
-
-  constructor(private auth: AuthService, private http$: HttpService) {
-    this.initSpotifyWebSDK();
-  }
-
   private player: any;
   private deviceId: string;
   private updateStateInterval: number;
   private state: IWebPlaybackState = {
     paused: true,
     position: 0,
+    duration: 0,
     repeat_mode: 0,
     shuffle: false,
     context: {
@@ -35,6 +31,10 @@ export class AudioService {
   };
 
   private stateChange: BehaviorSubject<IWebPlaybackState> = new BehaviorSubject(this.state);
+
+  constructor(private auth: AuthService, private http$: HttpService) {
+    this.initSpotifyWebSDK();
+  }
 
   initSpotifyWebSDK() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
@@ -60,7 +60,7 @@ export class AudioService {
 
       this.updateStateInterval = setInterval(() => {
         this.player.getCurrentState().then(stateHandler);
-      }, 500);
+      }, 200);
 
       this.player.connect();
     };
@@ -81,7 +81,28 @@ export class AudioService {
       }
     };
 
-    return this.http$.request(params);
+    return this.http$.request(params).subscribe();
+  }
+
+  seekToPosition(position) {
+    this.player.seek(position);
+  }
+
+  prevOrNext(action) {
+    this.player[`${action}Track`]();
+  }
+
+  toggleShuffle(state) {
+    const params = {
+      httpMethod: HttpMethods.PUT,
+      endpoint: 'me/player/shuffle',
+      queryParams: {
+        state,
+        device_id: this.deviceId
+      }
+    };
+
+    return this.http$.request(params).subscribe();
   }
 
   togglePlay() {
@@ -89,8 +110,7 @@ export class AudioService {
   }
 
   formatTime(time: number, format: string = 'mm:ss') {
-    const momentTime = time * 1000;
-    return moment.utc(momentTime).format(format);
+    return moment.utc(time).format(format);
   }
 
   getState(): Observable<IWebPlaybackState> {
