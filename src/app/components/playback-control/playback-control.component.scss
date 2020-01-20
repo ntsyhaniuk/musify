@@ -28,11 +28,12 @@
     .track-info {
       display: flex;
       flex-direction: column;
+      width: calc(100% - 90px);
 
       .track-name {
         margin-top: 15px;
         white-space: nowrap;
-        max-width: 300px;
+        width: 100%;
         overflow: hidden;
 
         span {
@@ -44,8 +45,7 @@
       .track-artist {
         display: flex;
         font-family: "Proxima Light", serif;
-        margin-bottom: 15px;
-        max-width: 300px;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
         outline: none;
@@ -100,6 +100,24 @@
           font-size: 30px !important;
         }
       }
+
+      .track::before {
+        content: 'T';
+        display: block;
+        font-size: 12px;
+        position: absolute;
+        top: 16px;
+        margin-left: 7px;
+      }
+
+      .all::before {
+        content: 'A';
+        display: block;
+        font-size: 12px;
+        position: absolute;
+        top: 16px;
+        margin-left: 7px;
+      }
     }
 
     .bottom {
@@ -121,7 +139,18 @@
   }
 
   .right-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 20%;
+
+    button {
+      margin: 5px;
+    }
+
+    .time-slider {
+      margin-bottom: 3px;
+    }
   }
 
   .transparent_button {

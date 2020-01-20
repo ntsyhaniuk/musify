@@ -25,17 +25,17 @@ $mat-green: (
   A400: #00d949,
   A700: #00d949,
   contrast: (
-    50: $black-87-opacity,
-    100: $black-87-opacity,
-    200: $black-87-opacity,
-    300: $black-87-opacity,
-    400: $black-87-opacity,
+    50: $white-87-opacity,
+    100: $white-87-opacity,
+    200: $white-87-opacity,
+    300: $white-87-opacity,
+    400: white,
     500: white,
     600: white,
     700: white,
     800: $white-87-opacity,
     900: $white-87-opacity,
-    A100: $black-87-opacity,
+    A100: $white-87-opacity,
     A200: white,
     A400: white,
     A700: white,
@@ -44,21 +44,14 @@ $mat-green: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$music-player-primary: mat-palette($mat-light-blue);
-$music-player-accent: mat-palette($mat-green, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$music-player-warn: mat-palette($mat-red);
-
+$music-player-primary: mat-palette($mat-green, A200, A100, A400);
 // Create the theme object (a Sass map containing all of the palettes).
-$music-player-theme: mat-light-theme($music-player-primary, $music-player-accent, $music-player-warn);
+$music-player-theme: mat-dark-theme($music-player-primary, $music-player-primary);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($music-player-theme);
-
-@include mat-slide-toggle-theme($music-player-theme);
 
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/bootstrap.scss";

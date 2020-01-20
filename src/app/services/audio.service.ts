@@ -15,6 +15,7 @@ export class AudioService {
   private deviceId: string;
   private updateStateInterval: number;
   private state: IWebPlaybackState = {
+    volume: 100,
     paused: true,
     position: 0,
     duration: 0,
@@ -59,8 +60,13 @@ export class AudioService {
       this.player.addListener('player_state_changed', stateHandler.bind(this));
 
       this.updateStateInterval = setInterval(() => {
-        this.player.getCurrentState().then(stateHandler);
-      }, 200);
+        Promise.all([
+          this.player.getVolume(),
+          this.player.getCurrentState()
+        ])
+          .then(([volume, state]) => (state ? {volume: Math.round(volume * 100), ...state} : null))
+          .then(stateHandler);
+      }, 500);
 
       this.player.connect();
     };
@@ -88,6 +94,10 @@ export class AudioService {
     this.player.seek(position);
   }
 
+  changeVolume(value) {
+    return this.player && this.player.setVolume(value / 100);
+  }
+
   prevOrNext(action) {
     this.player[`${action}Track`]();
   }
@@ -96,6 +106,19 @@ export class AudioService {
     const params = {
       httpMethod: HttpMethods.PUT,
       endpoint: 'me/player/shuffle',
+      queryParams: {
+        state,
+        device_id: this.deviceId
+      }
+    };
+
+    return this.http$.request(params).subscribe();
+  }
+
+  toggleRepeatMode(state) {
+    const params = {
+      httpMethod: HttpMethods.PUT,
+      endpoint: 'me/player/repeat',
       queryParams: {
         state,
         device_id: this.deviceId

@@ -26,6 +26,7 @@ export interface ITrack {
 }
 
 export interface IWebPlaybackState  {
+  volume: number;
   paused: boolean;
   position: number;
   duration: number;

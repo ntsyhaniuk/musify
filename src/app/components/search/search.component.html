@@ -1,5 +1,5 @@
 <label for="search" class="search-container">
-  <i class="fas fa-search"></i>
+  <i class="icon ion-ios-search"></i>
   <input
     #input
     class="search-input"
@@ -11,7 +11,7 @@
     autocomplete="off"
     (keyup)="searchString$.next($event.target.value)"/>
   <i [ngStyle]="{'visibility': (searchString$ | async) ? 'visible' : 'hidden'}"
-     class="fas fa-times"
+     class="icon ion-ios-close"
      style="cursor: pointer"
      (click)="searchString$.next(''); input.value = ''"
   ></i>

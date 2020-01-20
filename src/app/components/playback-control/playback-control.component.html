@@ -1,15 +1,15 @@
-<div class="controls-container">
+<div class="controls-container" *ngIf="isPlaybackVisible">
   <div class="left-part">
     <img *ngIf="currentTrack" [src]="currentTrack?.image" alt="cover image">
-    <div class="track-info">
+    <div class="track-info" #trackInfo>
       <div class="track-name">
-        <span [ngClass]="{'animated': isNameAnimated(currentTrack?.name)}">{{currentTrack?.name}}</span>
+        <span [ngClass]="{'animated': isNameAnimated(currentTrack?.name, trackInfo)}">{{currentTrack?.name}}</span>
       </div>
       <div class="track-artist">
-        <p [ngClass]="{'animated': isArtistAnimated(currentTrack?.artists)}">
+        <p [ngClass]="{'animated': isArtistAnimated(currentTrack?.artists, trackInfo)}">
           <span
             *ngFor="let artist of parseArtists(currentTrack?.artists)"
-            [routerLink]="['/', 'artists', artist.id]"
+            (click)="redirectTo(artist.id)"
           > {{artist.name}} </span>
         </p>
       </div>
@@ -20,7 +20,10 @@
       <button class="transparent_button" [ngClass]="{'active': isShuffle}" (click)="toggleShuffle()">
         <i class="icon ion-ios-shuffle small"></i>
       </button>
-      <button class="transparent_button active" (click)="previousTrack()">
+      <button class="transparent_button"
+              [ngClass]="{'active': isPreviousAvailable}"
+              [disabled]="!isPreviousAvailable"
+              (click)="previousTrack()">
         <i class="icon ion-ios-skip-backward small"></i>
       </button>
 
@@ -28,10 +31,15 @@
         <i class="icon" [ngClass]="{'ion-ios-play': !isPlaying, 'ion-ios-pause': isPlaying}"></i>
       </button>
 
-      <button class="transparent_button active" (click)="nextTrack()">
+      <button class="transparent_button"
+              [ngClass]="{'active': isNextAvailable}"
+              [disabled]="!isNextAvailable"
+              (click)="nextTrack()">
         <i class="icon ion-ios-skip-forward small"></i>
       </button>
-      <button class="transparent_button active">
+      <button class="transparent_button"
+              [ngClass]="{'active': state?.repeat_mode > 0, 'track': state?.repeat_mode === 1, 'all': state?.repeat_mode === 2}"
+              (click)="toggleRepeatMode(state?.repeat_mode)">
         <i class="icon ion-ios-repeat small"></i>
       </button>
     </div>
@@ -48,7 +56,17 @@
     </div>
   </div>
   <div class="right-part">
-    <span>playlist</span>
-    <span>volume</span>
+    <button class="transparent_button">
+      <i class="icon small"
+         [ngClass]="getVolumeIcon(state?.volume)"></i>
+    </button>
+    <mat-slider
+      min="0"
+      step="1"
+      max="100"
+      thumbLabel
+      class="time-slider"
+      [value]="state?.volume"
+      (input)="volumeLevel$.next($event.value)"></mat-slider>
   </div>
 </div>

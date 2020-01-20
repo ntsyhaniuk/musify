@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import get from 'lodash.get';
-import { Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { AudioService } from '../../services/audio.service';
@@ -19,8 +20,9 @@ export class PlaybackControlComponent implements OnInit {
   state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
   seekToPosition$: Subject<number> = new Subject<number>();
+  volumeLevel$: BehaviorSubject<number> = new BehaviorSubject<number>(100);
 
-  constructor(private audio: AudioService, private cd: ChangeDetectorRef) {
+  constructor(private audio: AudioService, private cd: ChangeDetectorRef, private router: Router, private zone: NgZone) {
   }
 
   ngOnInit() {
@@ -33,6 +35,37 @@ export class PlaybackControlComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe(value => this.audio.seekToPosition(value));
+
+    this.volumeLevel$.subscribe(value => this.audio.changeVolume(value));
+  }
+
+  get isPlaying() {
+    return this.state && !this.state.paused;
+  }
+
+  get isShuffle() {
+    return this.state && this.state.shuffle;
+  }
+
+  get isNextAvailable() {
+    return !!get(this.state, 'track_window.next_tracks', []).length;
+  }
+
+  get isPreviousAvailable() {
+    return !!get(this.state, 'track_window.previous_tracks', []).length;
+  }
+
+  get isPlaybackVisible() {
+    return !!get(this.state, 'track_window.current_track', null);
+  }
+
+  getVolumeIcon(val) {
+    const between = (value, min, max) => min < value && value <= max;
+    return ({
+      'ion-ios-volume-high': between(val, 50, 100),
+      'ion-ios-volume-low': between(val, 0, 50),
+      'ion-ios-volume-off': val === 0
+    });
   }
 
   updateCurrentTrack() {
@@ -63,25 +96,33 @@ export class PlaybackControlComponent implements OnInit {
   previousTrack() {
     this.audio.prevOrNext('previous');
   }
-
   formatTime(time) {
     return this.audio.formatTime(time);
   }
 
-  get isPlaying() {
-    return this.state && !this.state.paused;
+  isNameAnimated(name, { offsetWidth }) {
+    return name && name.length >= offsetWidth / 8; // 8 - pixels per symbol
   }
 
-  get isShuffle() {
-    return this.state && this.state.shuffle;
+  isArtistAnimated(artists, { offsetWidth }) {
+    return artists && artists.map(({name}) => name).join('').length >= offsetWidth / 8; // 8 - pixels per symbol
   }
 
-  isNameAnimated(name) {
-    return name && name.length >= 19;
+  redirectTo(id) {
+    this.zone.run(() => this.router.navigate([`/artists/${id}`])).then();
   }
 
-  isArtistAnimated(artists) {
-    return artists && artists.map(({name}) => name).join('').length >= 19;
+  toggleRepeatMode(value) {
+
+    console.log(value);
+
+    const options = {
+      0: 'track',
+      1: 'context',
+      2: 'off'
+    };
+
+    this.audio.toggleRepeatMode(options[value]);
   }
 
   parseArtists(artists) {
