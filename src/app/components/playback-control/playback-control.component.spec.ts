@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayingControlComponent } from './playing-control.component';
+import { PlaybackControlComponent } from './playback-control.component';
 
 describe('PlayingControlComponent', () => {
-  let component: PlayingControlComponent;
-  let fixture: ComponentFixture<PlayingControlComponent>;
+  let component: PlaybackControlComponent;
+  let fixture: ComponentFixture<PlaybackControlComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayingControlComponent ]
+      declarations: [ PlaybackControlComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PlayingControlComponent);
+    fixture = TestBed.createComponent(PlaybackControlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

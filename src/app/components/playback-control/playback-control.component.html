@@ -1,0 +1,72 @@
+<div class="controls-container" *ngIf="isPlaybackVisible">
+  <div class="left-part">
+    <img *ngIf="currentTrack" [src]="currentTrack?.image" alt="cover image">
+    <div class="track-info" #trackInfo>
+      <div class="track-name">
+        <span [ngClass]="{'animated': isNameAnimated(currentTrack?.name, trackInfo)}">{{currentTrack?.name}}</span>
+      </div>
+      <div class="track-artist">
+        <p [ngClass]="{'animated': isArtistAnimated(currentTrack?.artists, trackInfo)}">
+          <span
+            *ngFor="let artist of parseArtists(currentTrack?.artists)"
+            (click)="redirectTo(artist.id)"
+          > {{artist.name}} </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="middle-part">
+    <div class="top">
+      <button class="transparent_button" [ngClass]="{'active': isShuffle}" (click)="toggleShuffle()">
+        <i class="icon ion-ios-shuffle small"></i>
+      </button>
+      <button class="transparent_button"
+              [ngClass]="{'active': isPreviousAvailable}"
+              [disabled]="!isPreviousAvailable"
+              (click)="previousTrack()">
+        <i class="icon ion-ios-skip-backward small"></i>
+      </button>
+
+      <button class="transparent_button active" (click)="togglePlay()">
+        <i class="icon" [ngClass]="{'ion-ios-play': !isPlaying, 'ion-ios-pause': isPlaying}"></i>
+      </button>
+
+      <button class="transparent_button"
+              [ngClass]="{'active': isNextAvailable}"
+              [disabled]="!isNextAvailable"
+              (click)="nextTrack()">
+        <i class="icon ion-ios-skip-forward small"></i>
+      </button>
+      <button class="transparent_button"
+              [ngClass]="{'active': state?.repeat_mode > 0, 'track': state?.repeat_mode === 1, 'all': state?.repeat_mode === 2}"
+              (click)="toggleRepeatMode(state?.repeat_mode)">
+        <i class="icon ion-ios-repeat small"></i>
+      </button>
+    </div>
+    <div class="bottom">
+      <span>{{formatTime(state?.position)}}</span>
+      <mat-slider
+        min="0"
+        step="1"
+        class="time-slider"
+        [max]="state?.duration"
+        [value]="state?.position || 0"
+        (input)="seekToPosition$.next($event.value)"></mat-slider>
+      <span>{{formatTime(state?.duration)}}</span>
+    </div>
+  </div>
+  <div class="right-part">
+    <button class="transparent_button">
+      <i class="icon small"
+         [ngClass]="getVolumeIcon(state?.volume)"></i>
+    </button>
+    <mat-slider
+      min="0"
+      step="1"
+      max="100"
+      thumbLabel
+      class="time-slider"
+      [value]="state?.volume"
+      (input)="volumeLevel$.next($event.value)"></mat-slider>
+  </div>
+</div>

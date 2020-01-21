@@ -26,8 +26,10 @@ export interface ITrack {
 }
 
 export interface IWebPlaybackState  {
+  volume: number;
   paused: boolean;
   position: number;
+  duration: number;
   repeat_mode: number;
   shuffle: boolean;
   context: {

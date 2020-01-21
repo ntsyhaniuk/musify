@@ -1,14 +1,9 @@
 <div class="container">
   <div class="track">
     <button class="transparent_button" (click)="playPause()">
-      <i class="fas" [ngClass]="{'fa-play': !isPlaying(), 'fa-pause': isPlaying(), 'active': isCurrentTrack()}"></i>
+      <i class="icon" [ngClass]="{'ion-ios-play': !isPlaying(), 'ion-ios-pause': isPlaying(), 'active': isCurrentTrack()}"></i>
     </button>
     <h6 [ngClass]="{'active': isCurrentTrack()}">{{track.name}}</h6>
-
-<!--    <mat-slider *ngIf="isPlaying()" class="time-slider" min="0" [max]="state?.duration" step="1"-->
-<!--                [value]="state?.currentTime" (input)="onSliderTimeChanged($event)">-->
-<!--    </mat-slider>-->
-
     <p [ngClass]="{'active': isCurrentTrack()}">{{msToMinSec(track.durationMs)}}</p>
   </div>
 </div>
