@@ -21,7 +21,7 @@ export class AuthService {
 
     if (access_token) {
       this.setSessionKey(access_token);
-      this.router.navigate(['']);
+      window.history.go(-1);
     } else {
       this.redirectToSpotify();
     }

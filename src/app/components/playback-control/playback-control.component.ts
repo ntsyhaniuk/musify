@@ -113,9 +113,6 @@ export class PlaybackControlComponent implements OnInit {
   }
 
   toggleRepeatMode(value) {
-
-    console.log(value);
-
     const options = {
       0: 'track',
       1: 'context',
