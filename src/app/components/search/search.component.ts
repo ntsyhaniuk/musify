@@ -26,8 +26,8 @@ export class SearchComponent implements OnInit {
     ).subscribe((searchStr: string) => this.musicApi.searchMusic(searchStr));
   }
 
-  checkRedirection() {
-    if (window.location.href !== environment.REDIRECT_URI) {
+  checkRedirection(searchStr) {
+    if (window.location.href !== environment.REDIRECT_URI && searchStr) {
       this.router.navigate(['/']);
     }
   }
