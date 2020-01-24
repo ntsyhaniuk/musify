@@ -1,0 +1,15 @@
+.recommendation {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+  cursor: pointer;
+  box-shadow: 0 0 20px -5px #000;
+
+  p {
+    white-space: nowrap;
+    text-shadow: 0 0 10px #000;
+  }
+}

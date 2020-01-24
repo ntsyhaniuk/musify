@@ -28,6 +28,8 @@ import { ItemsListComponent } from './components/items-list/items-list.component
 import { TrackListComponent } from './components/track-list/track-list.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { PlaybackControlComponent } from './components/playback-control/playback-control.component';
+import { RecommendationComponent } from './components/recommendation/recommendation.component';
+import { RecommendationsComponent } from './components/recommendations/recommendations.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { PlaybackControlComponent } from './components/playback-control/playback
     TrackListComponent,
     CategoriesComponent,
     PlaybackControlComponent,
+    RecommendationComponent,
+    RecommendationsComponent,
   ],
   imports: [
     FormsModule,

@@ -31,6 +31,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   getSpotifyDataLists() {
     this.subscriptions$.push(zip(
       this.musicApi.getArtists(MAX_CATEGORY_LIMIT),
+      this.musicApi.getPlaylists(MAX_CATEGORY_LIMIT),
       this.musicApi.getCategories(MAX_CATEGORY_LIMIT),
       this.musicApi.getAlbums(MAX_CATEGORY_LIMIT),
     )

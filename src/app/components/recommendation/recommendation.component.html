@@ -1,0 +1,5 @@
+<div class="recommendation"
+     [routerLink]="['/', entity, recommendation?.id]"
+     [ngStyle]="{'background-image': 'url('+getCoverImage(recommendation)+')'}">
+  <p>{{recommendation?.name}}</p>
+</div>

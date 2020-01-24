@@ -2,7 +2,7 @@
 
 .details-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-top: 250px;
   padding: 0 100px 100px;
   min-height: calc(100% - 250px);
@@ -11,6 +11,7 @@
   .details-info {
     display: flex;
     flex-direction: column;
+    flex-grow: 2;
     justify-content: center;
     color: $whiteText;
     margin-top: -160px;
@@ -101,5 +102,11 @@
       margin-left: -5px;
       max-width: 60vw;
     }
+  }
+
+  .recommendations {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
   }
 }

@@ -30,6 +30,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   contextUri: string;
   entityName: string;
   popularity: number;
+  recommendations: {};
   state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
   detailsSubscription$: Subscription;
@@ -51,15 +52,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   loadDetailsData(entity, id) {
     const endpointConfig = {
-      artists: `${entity}/${id}/top-tracks`
+      artists: [`${entity}/${id}/top-tracks`, `${entity}/${id}/related-artists`]
     };
 
     const requests = [this.musicApi.getEntityData(`${entity}/${id}`)];
 
-    if (endpointConfig[entity]) {
-      requests.push(
-        this.musicApi.getEntityData(endpointConfig[entity])
-      );
+    if (endpointConfig[entity] && endpointConfig[entity].length) {
+      endpointConfig[entity].forEach(endpoint => {
+        requests.push(
+          this.musicApi.getEntityData(endpoint)
+        );
+      });
     }
 
     this.detailsSubscription$ = zip(...requests)
@@ -93,7 +96,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   applyEntityData(data) {
-    const { images, name, tracks, type, popularity, uri } = data;
+    const { images, name, tracks, type, popularity, uri, artists } = data;
     const key = {
       [RespKeys.artist]: 'bio.content',
       [RespKeys.album]: 'wiki.content'
@@ -105,6 +108,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.contextUri = uri;
     this.entityName = name;
     this.popularity = popularity;
+    this.recommendations = {artists};
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map(
