@@ -1,5 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
+import get from 'lodash.get';
+
 @Component({
   selector: 'app-recommendations',
   templateUrl: './recommendations.component.html',
@@ -13,7 +15,7 @@ export class RecommendationsComponent implements OnChanges {
   ngOnChanges() {
     return this.recommendations && Object.entries(this.recommendations).map(([entity, items]) => {
       this.entity = entity;
-      this.items = items;
+      this.items = get(items, 'items', items);
     });
   }
 

@@ -13,14 +13,26 @@
         </div>
       </div>
     </div>
-    <div class="bottom-info" *ngIf="biography">
-      <p>{{biography}}</p>
+    <div class="bottom-info">
+      <p *ngIf="biography">{{biography}}</p>
+      <div class="navigation">
+        <span
+          [ngClass]="{'active': (activeTab | async) === 'tracks'}"
+          (click)="activeTab.next('tracks')"
+        >Tracks</span>
+        <span
+          [ngClass]="{'active': (activeTab | async) === 'recommendations'}"
+          (click)="activeTab.next('recommendations')"
+        >Recommendations</span>
+      </div>
     </div>
-    <div class="tracks-list">
-      <app-track *ngFor="let track of tracks" [track]="track"></app-track>
+    <div class="content-wrapper" [ngSwitch]="activeTab | async">
+      <div *ngSwitchCase="'tracks'">
+        <app-track *ngFor="let track of tracks" [track]="track"></app-track>
+      </div>
+      <div *ngSwitchCase="'recommendations'">
+        <app-recommendations [recommendations]="recommendations"></app-recommendations>
+      </div>
     </div>
-  </div>
-  <div class="recommendations">
-    <app-recommendations [recommendations]="recommendations"></app-recommendations>
   </div>
 </div>

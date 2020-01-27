@@ -5,16 +5,14 @@
   flex-direction: column;
   align-items: center;
   color: $whiteText;
-  margin-top: 25px;
 
   .recommendations-list {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     padding-top: 110px;
-    overflow-y: scroll;
-    width: 300px;
-    max-height: 60vh;
+    padding-left: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
   }
 
   .recommendation {

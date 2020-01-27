@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import get from 'lodash.get';
+
 @Component({
   selector: 'app-recommendation',
   templateUrl: './recommendation.component.html',
@@ -16,7 +18,7 @@ export class RecommendationComponent implements OnInit {
 
   getCoverImage(item: any) {
     const images = item && (item.images || item.icons);
-    return images && images.length ? images[1].url : '../assets/no-cover.jpg';
+    return get(images, '[0].url', '../assets/no-cover.jpg');
   }
 
 }

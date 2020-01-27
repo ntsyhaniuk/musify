@@ -1,10 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import get from 'lodash.get';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { AudioService } from '../../services/audio.service';
+
+import { parseArtists } from '../../utils/utils';
+
 import { ITrack, IWebPlaybackState } from '../../types/interfaces';
 
 @Component({
@@ -18,7 +22,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
 
-  constructor(private audioService: AudioService) { }
+  constructor(private audioService: AudioService, private zone: NgZone, private router: Router) { }
 
   ngOnInit() {
     this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
@@ -60,6 +64,14 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   isPlaying() {
     return this.isCurrentTrack() && this.state && !this.state.paused;
+  }
+
+  getArtists(artists) {
+    return parseArtists(artists);
+  }
+
+  redirectTo(id) {
+    this.zone.run(() => this.router.navigate([`/artists/${id}`])).then();
   }
 
   ngOnDestroy() {
