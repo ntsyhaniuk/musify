@@ -9,8 +9,8 @@ import get from 'lodash.get';
 })
 export class RecommendationsComponent implements OnChanges {
   @Input() recommendations: {} = {};
-  private entity: string;
-  private items: any;
+  public entity: string;
+  public items: any;
 
   ngOnChanges() {
     return this.recommendations && Object.entries(this.recommendations).map(([entity, items]) => {
