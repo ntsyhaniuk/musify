@@ -1,6 +1,6 @@
 <div class="recommendations-container">
   <h3>Recommended {{entity}}</h3>
-  <div class="recommendations-list">
+  <div class="recommendations-list" (wheel)="horizontalScroll($event)">
     <app-recommendation class="recommendation"
                         *ngFor="let recommendation of items"
                         [entity]="entity"

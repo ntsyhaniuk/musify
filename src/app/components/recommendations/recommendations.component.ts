@@ -19,4 +19,11 @@ export class RecommendationsComponent implements OnChanges {
     });
   }
 
+  horizontalScroll(e) {
+    e.preventDefault();
+    e.currentTarget.scrollLeft = e.deltaY > 0
+      ? e.currentTarget.scrollLeft + 300
+      : e.currentTarget.scrollLeft - 300;
+  }
+
 }
