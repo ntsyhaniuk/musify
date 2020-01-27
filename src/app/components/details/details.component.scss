@@ -2,7 +2,7 @@
 
 .details-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-top: 250px;
   padding: 0 100px 100px;
   min-height: calc(100% - 250px);
@@ -12,6 +12,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
+    width: 100%;
     color: $whiteText;
     margin-top: -160px;
 
@@ -20,6 +22,8 @@
       height: 320px;
 
       .left-side {
+        width: 320px;
+        height: 320px;
         object-fit: cover;
         box-shadow: 0 0 20px -5px #000;
       }
@@ -91,15 +95,30 @@
       p {
         font-family: "Proxima Light", serif;
         font-size: 16px;
-        height: 200px;
+        max-height: 200px;
         overflow-y: scroll;
+      }
+
+      .navigation {
+
+        span {
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          cursor: pointer;
+          margin: 0 20px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
       }
     }
 
-    .tracks-list {
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
       margin-top: 30px;
-      margin-left: -5px;
-      max-width: 60vw;
+      width: 100%;
     }
   }
 }

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import get from 'lodash.get';
 import { map, mergeMap } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { BackgroundService } from '../../services/background.service';
 
 import { Track } from '../track-list/track';
 import { mapApiResponse } from '../../utils/utils';
+
 import { ITrack, IWebPlaybackState } from '../../types/interfaces';
 
 const RespKeys = {
@@ -30,10 +31,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
   contextUri: string;
   entityName: string;
   popularity: number;
+  recommendations: {};
   state: IWebPlaybackState;
   stateSubscribtion$: Subscription;
   detailsSubscription$: Subscription;
   buttonLabel = new BehaviorSubject('play');
+  activeTab = new BehaviorSubject('tracks');
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -51,15 +54,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   loadDetailsData(entity, id) {
     const endpointConfig = {
-      artists: `${entity}/${id}/top-tracks`
+      artists: [`${entity}/${id}/top-tracks`, `${entity}/${id}/related-artists`],
+      playlists: ['browse/featured-playlists']
     };
 
     const requests = [this.musicApi.getEntityData(`${entity}/${id}`)];
 
-    if (endpointConfig[entity]) {
-      requests.push(
-        this.musicApi.getEntityData(endpointConfig[entity])
-      );
+    if (endpointConfig[entity] && endpointConfig[entity].length) {
+      endpointConfig[entity].forEach(endpoint => {
+        requests.push(this.musicApi.getEntityData(endpoint));
+      });
     }
 
     this.detailsSubscription$ = zip(...requests)
@@ -93,7 +97,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   applyEntityData(data) {
-    const { images, name, tracks, type, popularity, uri } = data;
+    const { images, name, tracks, type, popularity, uri, artists, playlists } = data;
     const key = {
       [RespKeys.artist]: 'bio.content',
       [RespKeys.album]: 'wiki.content'
@@ -105,6 +109,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.contextUri = uri;
     this.entityName = name;
     this.popularity = popularity;
+    this.recommendations = artists ? ({artists}) : playlists ? ({playlists}) : null;
     this.mainImage = images[1] ? images[1].url : images[0].url;
     this.biography = get(data[type], key[type], '').replace(/<a.*/, '');
     this.tracks = tracksList.map(

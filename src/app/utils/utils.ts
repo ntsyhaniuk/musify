@@ -43,3 +43,8 @@ export const  mapApiResponse = response => {
   }, {});
 };
 
+export const parseArtists = artists => artists && artists.reduce((acc, {name, uri}) => {
+  const id = uri.match(/[^:]+$/)[0];
+  return [...acc, {name, id}];
+}, []);
+

@@ -1,8 +1,10 @@
 @import '../../../variables';
 
-.container {
+.track-container {
   font-family: "Proxima Light", serif;
+  margin: 0;
   padding: 0;
+  width: 100%;
 
   h2,
   h5,
@@ -14,15 +16,45 @@
 
   .track {
     display: flex;
+    flex-basis: 100%;
     justify-content: space-between;
     align-items: center;
     padding: 13px 0;
     max-height: 52px;
 
-    h6 {
-      margin: 0 15px;
-      text-align: center;
-      transition: all 200ms ease-in;
+    .track-info {
+      display: flex;
+      flex-basis: 100%;
+
+      .artists {
+        font-family: "Proxima", serif;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50%;
+        margin: 0 50px;
+
+        span {
+          white-space: nowrap;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50%;
+        margin: 0 20px;
+
+        span {
+          text-align: center;
+          transition: all 200ms ease-in;
+          white-space: nowrap;
+        }
+      }
     }
   }
 

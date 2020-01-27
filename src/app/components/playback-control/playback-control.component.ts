@@ -7,6 +7,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { AudioService } from '../../services/audio.service';
 
+import { parseArtists } from '../../utils/utils';
+
 import { IWebPlaybackState } from '../../types/interfaces';
 
 @Component({
@@ -123,9 +125,6 @@ export class PlaybackControlComponent implements OnInit {
   }
 
   parseArtists(artists) {
-    return artists && artists.reduce((acc, {name, uri}) => {
-      const id = uri.match(/[^:]+$/)[0];
-      return [...acc, {name, id}];
-    }, []);
+    return parseArtists(artists);
   }
 }

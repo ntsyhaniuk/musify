@@ -1,0 +1,28 @@
+@import "../../../variables";
+
+.recommendations-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $whiteText;
+
+  .recommendations-list {
+    display: flex;
+    padding-top: 110px;
+    padding-left: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+  }
+
+  .recommendation {
+    transform: translate3d(0, 0, 0);
+    transition: .25s all;
+    margin-top: -50px;
+
+    &:hover {
+      transform: translateY(-25px) scale3d(1.3, 1.3, 1.3);
+      z-index: 1;
+    }
+  }
+}

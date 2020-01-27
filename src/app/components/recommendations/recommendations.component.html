@@ -1,0 +1,10 @@
+<div class="recommendations-container">
+  <h3>Recommended {{entity}}</h3>
+  <div class="recommendations-list">
+    <app-recommendation class="recommendation"
+                        *ngFor="let recommendation of items"
+                        [entity]="entity"
+                        [recommendation]="recommendation"
+    ></app-recommendation>
+  </div>
+</div>

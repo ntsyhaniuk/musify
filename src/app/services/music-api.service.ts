@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { HttpService } from './http.service';
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class MusicApiService {
@@ -21,6 +22,18 @@ export class MusicApiService {
       }
     };
     return this.$http.request(params);
+  }
+
+  getPlaylists(limit) {
+    const params = {
+      endpoint: 'me/playlists',
+      queryParams: {
+        limit: limit || 50
+      }
+    };
+    return this.$http.request(params).pipe(
+      map(({items}) => ({playlists: {items}}))
+    );
   }
 
   getAlbums(limit) {
