@@ -84,11 +84,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const { type, name, artists } = mergedData;
 
     if (RespKeys[type]) {
-      const artistName = get(artists, '[0].name');
+      const isArtist = type === 'artist';
       const params = {
         method: `${type}.getInfo`,
-        artist: artistName || name,
-        album: artistName ? name : null
+        artist: isArtist ? name : get(artists, '[0].name'),
+        album: !isArtist ? name : null
       };
       return combineLatest(this.musicApi.getLastfmInfo(params), of(mergedData));
     }
