@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { HttpService } from './http.service';
 import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class MusicApiService {

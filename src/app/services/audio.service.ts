@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 
-import { IWebPlaybackState } from '../types/interfaces';
 import { AuthService } from './auth.service';
 import { HttpMethods, HttpService } from './http.service';
+
+import { IWebPlaybackState } from '../types/interfaces';
 
 @Injectable({
   providedIn: 'root'
