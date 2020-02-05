@@ -8,8 +8,6 @@ import { Subject } from 'rxjs';
 export class BackgroundService {
   public $backgroundUrl = new Subject<any>();
 
-  constructor() { }
-
   updateBackgroundUrl(image) {
     if (image) {
       this.$backgroundUrl.next(image.url);
