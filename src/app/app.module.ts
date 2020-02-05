@@ -27,9 +27,9 @@ import { CategoryComponent } from './components/category/category.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
 import { CategoriesComponent } from './components/categories/categories.component';
-import { PlaybackControlComponent } from './components/playback-control/playback-control.component';
 import { RecommendationComponent } from './components/recommendation/recommendation.component';
 import { RecommendationsComponent } from './components/recommendations/recommendations.component';
+import { PlaybackControlComponent } from './components/playback-control/playback-control.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +44,9 @@ import { RecommendationsComponent } from './components/recommendations/recommend
     ItemsListComponent,
     TrackListComponent,
     CategoriesComponent,
-    PlaybackControlComponent,
     RecommendationComponent,
     RecommendationsComponent,
+    PlaybackControlComponent,
   ],
   imports: [
     FormsModule,

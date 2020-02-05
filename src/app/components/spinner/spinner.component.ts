@@ -5,8 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss']
 })
-export class SpinnerComponent {
-
-  constructor() { }
-
-}
+export class SpinnerComponent {}

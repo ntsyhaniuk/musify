@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { HttpService } from './http.service';
 import { createQueryString, parseHash } from '../utils/utils';
+
 import { environment } from '../../environments/environment';
 import { Ihash } from '../types/interfaces';
 

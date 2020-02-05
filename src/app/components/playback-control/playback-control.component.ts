@@ -24,8 +24,7 @@ export class PlaybackControlComponent implements OnInit {
   seekToPosition$: Subject<number> = new Subject<number>();
   volumeLevel$: BehaviorSubject<number> = new BehaviorSubject<number>(100);
 
-  constructor(private audio: AudioService, private cd: ChangeDetectorRef, private router: Router, private zone: NgZone) {
-  }
+  constructor(private audio: AudioService, private cd: ChangeDetectorRef, private router: Router, private zone: NgZone) {}
 
   ngOnInit() {
     this.stateSubscribtion$ = this.audio.getState().subscribe(newState => {
@@ -98,6 +97,7 @@ export class PlaybackControlComponent implements OnInit {
   previousTrack() {
     this.audio.prevOrNext('previous');
   }
+
   formatTime(time) {
     return this.audio.formatTime(time);
   }

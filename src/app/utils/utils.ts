@@ -1,6 +1,5 @@
 export const parseHash = (urlString = ''): any => {
-  const fragmentsList = urlString.split('&');
-  return fragmentsList.reduce((res, el) => {
+  return urlString.split('&').reduce((res, el) => {
     const [key, value] = el.split('=');
     res[key] = value;
     return res;
@@ -8,9 +7,6 @@ export const parseHash = (urlString = ''): any => {
 };
 
 export const createQueryString = (params = {}) => {
-  if (!params) {
-    return '';
-  }
   const keys = Object.keys(params);
   if (!keys.length) {
     return '';
@@ -38,9 +34,7 @@ export const toCamelCase = str => {
 };
 
 export const  mapApiResponse = response => {
-  return response.reduce((acc, dataElement) => {
-    return ({...acc, ...dataElement});
-  }, {});
+  return response.reduce((acc, dataElement) => ({...acc, ...dataElement}), {});
 };
 
 export const parseArtists = artists => artists && artists.reduce((acc, {name, uri}) => {
