@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
 
 import { MusicApiService } from '../../services/music-api.service';
@@ -22,7 +22,7 @@ import { ITrack } from '../../types/interfaces';
     ]),
   ]
 })
-export class TrackListComponent implements OnInit {
+export class TrackListComponent {
   @Input() tracks: ITrack[] = [];
   @Input() title: string;
   @Input() listId: string;
@@ -35,8 +35,6 @@ export class TrackListComponent implements OnInit {
     private musicApi: MusicApiService,
     private audioService: AudioService
   ) {}
-
-  ngOnInit() {}
 
   togglePlaylist() {
     this.isPlaylistClosed = !this.isPlaylistClosed;

@@ -12,8 +12,6 @@ export class ItemsListComponent {
   @Input() total: number;
   @Input() items: any[] = [];
 
-  constructor() {}
-
   getCoverImage(item: any) {
     const images = item && (item.images || item.icons);
     return images.length ? images[0].url : '../assets/no-cover.jpg';
