@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.searchString$.pipe(
       tap(this.checkRedirection.bind(this)),
-      debounceTime(500),
+      debounceTime(1000),
       distinctUntilChanged()
     ).subscribe((searchStr: string) => this.musicApi.searchMusic(searchStr));
   }

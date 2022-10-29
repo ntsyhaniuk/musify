@@ -67,6 +67,10 @@ h1 {
   }
 }
 
+h1 {
+  overflow: hidden;
+}
+
 @font-face {
   font-family: Proxima;
   src: url('assets/fonts/ProximaNova-Bold.woff') format('woff');
