@@ -1,5 +1,5 @@
-![Musify](https://msf.netlify.com/assets/musify_logo.png)
+![Musify](https://msf.netlify.app/assets/musify_logo.png)
 
-# Musify  https://msf.netlify.com/
+# Musify  https://msf.netlify.app/
 
-You should have Spotify PREMIUM account to try this!
+You need Spotify PREMIUM to try this!
