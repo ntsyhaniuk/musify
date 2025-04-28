@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import get from 'lodash.get';
 import { map, mergeMap } from 'rxjs/operators';
-import { of, Subscription, zip, combineLatest, BehaviorSubject } from 'rxjs';
+import { of, Subscription, forkJoin, combineLatest, BehaviorSubject } from 'rxjs';
 
 import { AudioService } from '../../services/audio.service';
 import { MusicApiService } from '../../services/music-api.service';
@@ -54,7 +54,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   loadDetailsData(entity, id) {
     const endpointConfig = {
-      artists: [`${entity}/${id}/top-tracks`, `${entity}/${id}/related-artists`],
+      artists: [`${entity}/${id}/top-tracks`],
       playlists: ['browse/featured-playlists']
     };
 
@@ -66,12 +66,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.detailsSubscription$ = zip(...requests)
+    this.detailsSubscription$ = forkJoin(requests)
       .pipe(
-        mergeMap(this.additionalRequest.bind(this)),
-        map(mapApiResponse)
+        map(results => results.filter(Boolean)),
+        mergeMap(data => this.additionalRequest(data)),
+        map(response => mapApiResponse(response)),
       )
-      .subscribe(this.applyEntityData.bind(this));
+      .subscribe(data => this.applyEntityData(data));
 
     this.stateSubscribtion$ = this.audioService.getState().subscribe(newState => {
       this.state = newState;
@@ -90,7 +91,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
         artist: isArtist ? name : get(artists, '[0].name'),
         album: !isArtist ? name : null
       };
-      return combineLatest(this.musicApi.getLastfmInfo(params), of(mergedData));
+      
+      return combineLatest([
+        this.musicApi.getLastfmInfo(params), 
+        of(mergedData)
+      ]);
     }
 
     return of(data);
