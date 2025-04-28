@@ -52,7 +52,7 @@ export class MusicApiService {
       endpoint: 'browse/categories/',
       queryParams: {
         limit: limit || 50,
-        country: 'US'
+        locale: 'en_US'
       }
     };
     return this.$http.request(params);
@@ -73,8 +73,7 @@ export class MusicApiService {
     const params = {
       endpoint,
       queryParams: {
-        limit: 50,
-        country: 'US'
+        market: 'US'
       }
     };
     return this.$http.request(params);
