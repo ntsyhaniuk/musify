@@ -1,5 +1,6 @@
 @if (player.isVisible()) {
-  <div class="controls-container">
+  <!-- Desktop classic bar -->
+  <div class="player player--desktop controls-container">
     <div class="left-part">
       @if (player.currentTrack()?.image; as image) {
         <img
@@ -41,7 +42,7 @@
       <div class="top">
         <button
           type="button"
-          class="btn--transparent"
+          class="btn--transparent control--secondary"
           [class.is-active]="player.shuffle()"
           aria-label="Shuffle"
           (click)="player.toggleShuffle()"
@@ -87,7 +88,7 @@
 
         <button
           type="button"
-          class="btn--transparent"
+          class="btn--transparent control--secondary"
           [class.is-active]="player.repeatMode() > 0"
           [class.track]="player.repeatMode() === 1"
           [class.all]="player.repeatMode() === 2"
@@ -133,6 +134,194 @@
           (valueChange)="onVolume($event)"
         />
       </mat-slider>
+    </div>
+  </div>
+
+  <!-- Mobile full-viewport bottom sheet (always mounted; translateY drives expand) -->
+  <div
+    class="player player--mobile"
+    [class.player--expanded]="expanded()"
+    [class.player--dragging]="isDragging()"
+    [style.transform]="sheetTransform()"
+  >
+    <!-- Mini must be first: collapsed translateY peeks the top of the sheet. -->
+    <div
+      class="player__mini player__drag-surface"
+      role="button"
+      [attr.tabindex]="expanded() ? -1 : 0"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-hidden]="expanded()"
+      aria-label="Expand player"
+      (click)="onMiniActivate()"
+      (keyup.enter)="onMiniActivate()"
+      (pointerdown)="onSheetPointerDown($event)"
+      (pointermove)="onSheetPointerMove($event)"
+      (pointerup)="onSheetPointerUp($event)"
+      (pointercancel)="onSheetPointerCancel($event)"
+    >
+      @if (player.currentTrack()?.image; as image) {
+        <img [src]="image" alt="" class="player__mini-cover" />
+      }
+      <div class="player__mini-info">
+        <div class="player__mini-title">{{ player.currentTrack()?.name }}</div>
+        <div class="player__mini-artist">
+          @for (artist of player.currentTrack()?.artists; track artist.name; let last = $last) {
+            <span>{{ artist.name }}</span>@if (!last) {
+              <span>, </span>
+            }
+          }
+        </div>
+      </div>
+      <button
+        #miniPlayBtn
+        type="button"
+        class="btn--transparent player__mini-play"
+        [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
+        (click)="player.togglePlay(); $event.stopPropagation()"
+      >
+        <i
+          class="icon"
+          [class.ion-ios-play]="!player.isPlaying()"
+          [class.ion-ios-pause]="player.isPlaying()"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+
+    <div
+      class="player__expanded"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-hidden]="!expanded()"
+      aria-labelledby="player-expanded-title"
+    >
+      @if (player.currentTrack()?.image; as image) {
+        <div class="player__backdrop" [style.background-image]="'url(' + image + ')'"></div>
+      }
+
+      <div class="player__expanded-content">
+        <div
+          class="player__sheet-header player__drag-surface"
+          (pointerdown)="onSheetPointerDown($event)"
+          (pointermove)="onSheetPointerMove($event)"
+          (pointerup)="onSheetPointerUp($event)"
+          (pointercancel)="onSheetPointerCancel($event)"
+        >
+          <div class="player__drag-handle" aria-hidden="true"></div>
+          <button
+            #collapseBtn
+            type="button"
+            class="btn--transparent player__collapse"
+            aria-label="Collapse player"
+            (click)="collapse()"
+          >
+            <i class="icon ion-ios-arrow-down" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        @if (player.currentTrack()?.image; as image) {
+          <img [src]="image" alt="Album cover" class="player__cover" />
+        }
+
+        <div class="player__meta">
+          <h2 class="player__title" id="player-expanded-title">
+            {{ player.currentTrack()?.name }}
+          </h2>
+          <p class="player__artists">
+            @for (artist of player.currentTrack()?.artists; track artist.name; let last = $last) {
+              <span
+                class="cover-link"
+                role="link"
+                tabindex="0"
+                (click)="goToArtist(artist)"
+                (keyup.enter)="goToArtist(artist)"
+              >
+                {{ artist.name }}
+              </span>
+              @if (!last) {
+                <span>, </span>
+              }
+            }
+          </p>
+        </div>
+
+        <div class="player__progress">
+          <span>{{ player.formatTime(player.position()) }}</span>
+          <mat-slider
+            class="time-slider"
+            [min]="0"
+            [max]="player.duration() || 1"
+            [discrete]="false"
+          >
+            <input
+              matSliderThumb
+              [value]="player.position()"
+              (valueChange)="onSeek($event)"
+            />
+          </mat-slider>
+          <span>{{ player.formatTime(player.duration()) }}</span>
+        </div>
+
+        <div class="player__transport">
+          <button
+            type="button"
+            class="btn--transparent control--secondary"
+            [class.is-active]="player.shuffle()"
+            aria-label="Shuffle"
+            (click)="player.toggleShuffle()"
+          >
+            <i class="icon ion-ios-shuffle small" aria-hidden="true"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn--transparent"
+            [class.is-active]="player.hasPrevious()"
+            [disabled]="!player.hasPrevious()"
+            aria-label="Previous"
+            (click)="player.previousTrack()"
+          >
+            <i class="icon ion-ios-skip-backward small" aria-hidden="true"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn--transparent is-active player__play"
+            [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
+            (click)="player.togglePlay()"
+          >
+            <i
+              class="icon"
+              [class.ion-ios-play]="!player.isPlaying()"
+              [class.ion-ios-pause]="player.isPlaying()"
+              aria-hidden="true"
+            ></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn--transparent"
+            [class.is-active]="player.hasNext()"
+            [disabled]="!player.hasNext()"
+            aria-label="Next"
+            (click)="player.nextTrack()"
+          >
+            <i class="icon ion-ios-skip-forward small" aria-hidden="true"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn--transparent control--secondary"
+            [class.is-active]="player.repeatMode() > 0"
+            [class.track]="player.repeatMode() === 1"
+            [class.all]="player.repeatMode() === 2"
+            aria-label="Repeat"
+            (click)="player.cycleRepeatMode()"
+          >
+            <i class="icon ion-ios-repeat small" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 }
