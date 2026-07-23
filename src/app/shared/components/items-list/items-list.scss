@@ -14,16 +14,14 @@
     text-transform: capitalize;
 
     h1 {
-      display: inline-block;
-      max-width: 100%;
       margin-bottom: 35px;
-      padding: 0.12em 0.4em;
       align-self: center;
-      border-radius: 4px;
       color: $whiteText;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: brightness(0.55);
-      text-shadow: 0 0 10px #000;
+      text-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.95),
+        0 0 4px rgba(0, 0, 0, 0.85),
+        0 0 12px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(0, 0, 0, 0.45);
       @media screen and (max-width: 415px) {
         font-size: 24px;
       }
@@ -119,6 +117,7 @@
         outline: none;
         transition: .3s ease-in-out;
         visibility: hidden;
+        box-sizing: border-box;
         z-index: 3;
         @media screen and (max-width: 978px) {
           font-size: 20px;
