@@ -14,9 +14,9 @@ import {
   SpotifyPaging,
   SpotifyPlayHistoryItem,
   SpotifyPlaylist,
+  SpotifyPlaylistItem,
   SpotifySavedAlbum,
   SpotifySearchResponse,
-  SpotifyTrack,
   SpotifyUserProfile,
   playlistItemTrack,
   playlistItemsPaging,
@@ -279,7 +279,7 @@ export class SpotifyApi {
   ): Observable<SpotifySearchResponse> {
     const requests = Array.from({ length: pages }, (_, page) =>
       this.search({ q, types, limit: SEARCH_LIMIT, offset: page * SEARCH_LIMIT }).pipe(
-        catchError(() => of({} as SpotifySearchResponse)),
+        catchError(() => of(emptySearchResponse())),
       ),
     );
 
@@ -325,10 +325,10 @@ export class SpotifyApi {
     id: string,
     limit = 50,
     offset = 0,
-  ): Observable<SpotifyPagingLike<PlaylistItemsEntry>> {
+  ): Observable<SpotifyPagingLike<SpotifyPlaylistItem>> {
     const params = new HttpParams().set('limit', String(limit)).set('offset', String(offset));
     return this.http
-      .get<SpotifyPagingLike<PlaylistItemsEntry>>(`${this.baseUrl}/playlists/${id}/items`, {
+      .get<SpotifyPagingLike<SpotifyPlaylistItem>>(`${this.baseUrl}/playlists/${id}/items`, {
         params,
       })
       .pipe(
@@ -471,10 +471,9 @@ interface SpotifyPagingLike<T> {
   cursors?: { after?: string; before?: string };
 }
 
-interface PlaylistItemsEntry {
-  item?: SpotifyTrack | null;
-  track?: SpotifyTrack | null;
-  added_at?: string;
+/** Explicit empty result — avoids a blind `{} as SpotifySearchResponse` cast. */
+function emptySearchResponse(): SpotifySearchResponse {
+  return { artists: undefined, albums: undefined, playlists: undefined, tracks: undefined };
 }
 
 function mergeSearchPages(pages: SpotifySearchResponse[]): SpotifySearchResponse {

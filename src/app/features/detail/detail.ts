@@ -10,12 +10,14 @@ import { Player } from '@app/features/player/player';
 import { TrackRow } from '@app/shared/components/track-row/track-row';
 import {
   SpotifyAlbum,
-  SpotifyArtist,
   SpotifyEntityType,
   SpotifyListItem,
   SpotifyTrackSummary,
+  isSpotifyAlbum,
+  playlistItemTrack,
   playlistItemsPaging,
   toListItemFromArtist,
+  toTrackSummary,
 } from '@app/shared/models/spotify.models';
 
 type DetailTab = 'primary' | 'recommendations';
@@ -68,11 +70,13 @@ export class Detail {
       if (type === 'artist') {
         return { kind: 'artist' as const, artist: entity.name };
       }
-      const album = entity as SpotifyAlbum;
+      if (!isSpotifyAlbum(entity)) {
+        return null;
+      }
       return {
         kind: 'album' as const,
-        artist: album.artists?.[0]?.name ?? '',
-        album: album.name,
+        artist: entity.artists?.[0]?.name ?? '',
+        album: entity.name,
       };
     },
     stream: ({ params }) => {
@@ -115,22 +119,12 @@ export class Detail {
               map((page) =>
                 page.items
                   .map((entry, index) => {
-                    const track = entry.item ?? entry.track;
-                    if (!track) {
-                      return null;
-                    }
-                    return {
-                      id: track.id,
-                      name: track.name,
-                      uri: track.uri,
-                      durationMs: track.duration_ms,
-                      artists: track.artists ?? [],
-                      contextUri: playlist.uri,
-                      trackOrder: index,
-                      image: track.album?.images?.[0]?.url,
-                    };
+                    const track = playlistItemTrack(entry);
+                    return track
+                      ? toTrackSummary(track, { contextUri: playlist.uri, trackOrder: index })
+                      : null;
                   })
-                  .filter((t): t is NonNullable<typeof t> => !!t),
+                  .filter((t): t is SpotifyTrackSummary => !!t),
               ),
             );
           }),
@@ -170,10 +164,9 @@ export class Detail {
       if (!params) {
         return of([] as SpotifyListItem[]);
       }
-      if (params.type === 'album') {
-        const album = params.entity as SpotifyAlbum;
+      if (params.type === 'album' && isSpotifyAlbum(params.entity)) {
         return of(
-          (album.artists ?? []).map((a) =>
+          (params.entity.artists ?? []).map((a) =>
             toListItemFromArtist({
               id: a.id,
               name: a.name,
@@ -192,7 +185,7 @@ export class Detail {
   protected readonly entityName = computed(() => this.entity.value()?.name ?? '');
   protected readonly contextUri = computed(() => this.entity.value()?.uri ?? '');
   protected readonly popularity = computed(() => {
-    const value = this.entity.value() as SpotifyArtist | SpotifyAlbum | undefined;
+    const value = this.entity.value();
     return value && 'popularity' in value ? value.popularity : undefined;
   });
 

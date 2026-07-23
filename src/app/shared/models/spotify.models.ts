@@ -179,6 +179,16 @@ export type SpotifyEntityType = 'artist' | 'album' | 'playlist';
 
 export type SpotifyEntity = SpotifyArtist | SpotifyAlbum | SpotifyPlaylist;
 
+/** Discriminates a detail-page entity as an album without a blind cast. */
+export function isSpotifyAlbum(entity: SpotifyEntity): entity is SpotifyAlbum {
+  return entity.type === 'album';
+}
+
+/** Discriminates a detail-page entity as an artist without a blind cast. */
+export function isSpotifyArtist(entity: SpotifyEntity): entity is SpotifyArtist {
+  return entity.type === 'artist';
+}
+
 /** Normalized list row used by home/search UI. */
 export interface SpotifyListItem {
   id: string;

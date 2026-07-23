@@ -1,6 +1,7 @@
 /// <reference types="spotify-web-playback-sdk" />
 
 import { Injectable, computed, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import { Auth } from '@app/core/auth/auth';
 import { PlayBody, SpotifyApi } from '@app/data-access/spotify/spotify-api';
@@ -81,9 +82,9 @@ export class Player {
       console.warn('[Player] Device not ready');
       return;
     }
-    this.spotify.play(deviceId, body).subscribe({
-      error: (err) => console.error('[Player] play failed', err),
-    });
+    void firstValueFrom(this.spotify.play(deviceId, body)).catch((err: unknown) =>
+      console.error('[Player] play failed', err),
+    );
   }
 
   togglePlay(): void {
@@ -114,10 +115,9 @@ export class Player {
       return;
     }
     const next = !this.shuffle();
-    this.spotify.setShuffle(deviceId, next).subscribe({
-      next: () => this.shuffle.set(next),
-      error: (err) => console.error('[Player] shuffle failed', err),
-    });
+    void firstValueFrom(this.spotify.setShuffle(deviceId, next))
+      .then(() => this.shuffle.set(next))
+      .catch((err: unknown) => console.error('[Player] shuffle failed', err));
   }
 
   cycleRepeatMode(): void {
@@ -128,9 +128,9 @@ export class Player {
     const current = this.repeatMode();
     const nextState: 'track' | 'context' | 'off' =
       current === 0 ? 'track' : current === 1 ? 'context' : 'off';
-    this.spotify.setRepeat(deviceId, nextState).subscribe({
-      error: (err) => console.error('[Player] repeat failed', err),
-    });
+    void firstValueFrom(this.spotify.setRepeat(deviceId, nextState)).catch((err: unknown) =>
+      console.error('[Player] repeat failed', err),
+    );
   }
 
   formatTime(ms: number | null | undefined): string {
@@ -192,9 +192,9 @@ export class Player {
     this.sdkPlayer.addListener('ready', ({ device_id }) => {
       this.deviceId.set(device_id);
       this.isReady.set(true);
-      this.spotify.transferPlayback(device_id, false).subscribe({
-        error: (err) => console.warn('[Player] transferPlayback', err),
-      });
+      void firstValueFrom(this.spotify.transferPlayback(device_id, false)).catch(
+        (err: unknown) => console.warn('[Player] transferPlayback', err),
+      );
     });
 
     this.sdkPlayer.addListener('not_ready', () => {

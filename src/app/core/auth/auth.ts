@@ -197,7 +197,8 @@ export class Auth {
   }
 
   async refreshAccessToken(): Promise<string | null> {
-    if (!this.refreshToken || !this.env.CLIENT_ID) {
+    const refreshToken = this.refreshToken;
+    if (!refreshToken || !this.env.CLIENT_ID) {
       this.logout();
       return null;
     }
@@ -210,7 +211,7 @@ export class Auth {
       try {
         const body = new URLSearchParams({
           grant_type: 'refresh_token',
-          refresh_token: this.refreshToken!,
+          refresh_token: refreshToken,
           client_id: this.env.CLIENT_ID,
         });
         const tokens = await this.postToken(body);
