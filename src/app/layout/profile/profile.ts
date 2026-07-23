@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 
@@ -7,10 +7,8 @@ import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile {
   private readonly auth = inject(Auth);

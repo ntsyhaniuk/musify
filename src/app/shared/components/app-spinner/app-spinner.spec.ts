@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Spinner } from './spinner';
+import { AppSpinner } from './app-spinner';
 
-describe('Spinner', () => {
-  let component: Spinner;
-  let fixture: ComponentFixture<Spinner>;
+describe('AppSpinner', () => {
+  let component: AppSpinner;
+  let fixture: ComponentFixture<AppSpinner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Spinner],
+      imports: [AppSpinner],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Spinner);
+    fixture = TestBed.createComponent(AppSpinner);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

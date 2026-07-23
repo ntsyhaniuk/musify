@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SpotifyListItem } from '@app/shared/models/spotify.models';
@@ -13,7 +13,6 @@ const FALLBACK_COVER = 'assets/no-cover.jpg';
   imports: [RouterLink],
   templateUrl: './items-list.html',
   styleUrl: './items-list.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemsList {
   readonly title = input('');

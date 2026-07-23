@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,10 +10,8 @@ import { SearchState } from '@app/core/search/search-state';
  */
 @Component({
   selector: 'app-search',
-  imports: [],
   templateUrl: './search.html',
   styleUrl: './search.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Search {
   private readonly searchState = inject(SearchState);

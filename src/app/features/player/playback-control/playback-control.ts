@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSliderModule } from '@angular/material/slider';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -14,13 +14,12 @@ import { Player } from '@app/features/player/player';
   imports: [MatSliderModule],
   templateUrl: './playback-control.html',
   styleUrl: './playback-control.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaybackControl {
   protected readonly player = inject(Player);
   private readonly router = inject(Router);
 
-  @ViewChild('trackInfo') trackInfo?: ElementRef<HTMLElement>;
+  private readonly trackInfo = viewChild<ElementRef<HTMLElement>>('trackInfo');
 
   private readonly seek$ = new Subject<number>();
   private readonly volume$ = new Subject<number>();
@@ -44,12 +43,12 @@ export class PlaybackControl {
   }
 
   protected isNameAnimated(name: string | undefined): boolean {
-    const width = this.trackInfo?.nativeElement.offsetWidth ?? 0;
+    const width = this.trackInfo()?.nativeElement.offsetWidth ?? 0;
     return !!name && name.length >= width / 8;
   }
 
   protected isArtistAnimated(artists: { name: string }[] | undefined): boolean {
-    const width = this.trackInfo?.nativeElement.offsetWidth ?? 0;
+    const width = this.trackInfo()?.nativeElement.offsetWidth ?? 0;
     const len = artists?.map((a) => a.name).join('').length ?? 0;
     return len >= width / 8;
   }

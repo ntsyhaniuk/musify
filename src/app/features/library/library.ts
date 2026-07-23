@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  computed,
-  effect,
-  inject,
-} from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
@@ -22,7 +16,6 @@ const EMPTY_LIST: SpotifyFullList = { items: [] as SpotifyListItem[], total: 0 }
   imports: [ItemsList],
   templateUrl: './library.html',
   styleUrl: './library.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Library {
   private readonly route = inject(ActivatedRoute);

@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 
 import { Auth } from '@app/core/auth/auth';
-import { Spinner } from '@app/core/spinner/spinner';
+import { LoadingSpinner } from '@app/core/spinner/loading-spinner';
 import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import { authInterceptor } from './auth-interceptor';
 
@@ -23,7 +23,7 @@ describe('authInterceptor', () => {
 
   let http: HttpTestingController;
   let auth: { getValidAccessToken: ReturnType<typeof vi.fn>; refreshAccessToken: ReturnType<typeof vi.fn>; authorize: ReturnType<typeof vi.fn> };
-  let spinner: Spinner;
+  let spinner: LoadingSpinner;
 
   beforeEach(() => {
     auth = {
@@ -42,7 +42,7 @@ describe('authInterceptor', () => {
     });
 
     http = TestBed.inject(HttpTestingController);
-    spinner = TestBed.inject(Spinner);
+    spinner = TestBed.inject(LoadingSpinner);
   });
 
   afterEach(() => {

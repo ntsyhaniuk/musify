@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { SpotifyTrackSummary } from '@app/shared/models/spotify.models';
 import { formatTrackDuration } from '@app/shared/utils/format-duration';
@@ -7,7 +7,6 @@ import { formatTrackDuration } from '@app/shared/utils/format-duration';
   selector: 'app-track-row',
   templateUrl: './track-row.html',
   styleUrl: './track-row.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackRow {
   readonly track = input.required<SpotifyTrackSummary>();

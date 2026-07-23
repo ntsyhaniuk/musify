@@ -1,11 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  computed,
-  inject,
-  signal,
-  effect,
-} from '@angular/core';
+import { Component, computed, inject, signal, effect } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
@@ -32,7 +25,6 @@ type DetailTab = 'primary' | 'recommendations';
   imports: [TrackRow, RouterLink],
   templateUrl: './detail.html',
   styleUrl: './detail.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Detail {
   private readonly route = inject(ActivatedRoute);

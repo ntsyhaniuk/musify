@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, effect, computed } from '@angular/core';
+import { Component, inject, effect, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
 
@@ -20,7 +20,6 @@ import { SearchState } from '@app/core/search/search-state';
   imports: [ItemsList],
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
   private readonly spotify = inject(SpotifyApi);

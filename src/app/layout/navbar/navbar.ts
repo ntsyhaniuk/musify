@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Search } from '@app/features/search/search';
@@ -10,7 +10,6 @@ import { Profile } from '@app/layout/profile/profile';
   imports: [Search, Profile],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
   private readonly searchState = inject(SearchState);

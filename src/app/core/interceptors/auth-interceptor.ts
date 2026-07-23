@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { catchError, finalize, from, switchMap, throwError } from 'rxjs';
 
 import { Auth } from '@app/core/auth/auth';
-import { Spinner } from '@app/core/spinner/spinner';
+import { LoadingSpinner } from '@app/core/spinner/loading-spinner';
 import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 
 /**
@@ -12,7 +12,7 @@ import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const env = inject(APP_ENVIRONMENT);
   const auth = inject(Auth);
-  const spinner = inject(Spinner);
+  const spinner = inject(LoadingSpinner);
 
   const isSpotify = req.url.startsWith(env.BASE_SPOTIFY_URL);
   if (!isSpotify) {
