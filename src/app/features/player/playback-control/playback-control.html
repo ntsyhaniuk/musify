@@ -1,0 +1,42 @@
+<div class="controls-container">
+  <div class="left-part">
+    <div class="track-info">
+      <div class="track-name"><span>No track playing</span></div>
+      <div class="track-artist"><p><span>—</span></p></div>
+    </div>
+  </div>
+  <div class="middle-part">
+    <div class="top">
+      <button type="button" class="transparent_button" aria-label="Shuffle" disabled>
+        <i class="icon ion-ios-shuffle small" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="transparent_button" aria-label="Previous" disabled>
+        <i class="icon ion-ios-skip-backward small" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="transparent_button active" aria-label="Play" disabled>
+        <i class="icon ion-ios-play" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="transparent_button" aria-label="Next" disabled>
+        <i class="icon ion-ios-skip-forward small" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="transparent_button" aria-label="Repeat" disabled>
+        <i class="icon ion-ios-repeat small" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="bottom">
+      <span>0:00</span>
+      <mat-slider class="time-slider" min="0" max="100" discrete="false">
+        <input matSliderThumb [value]="player.position()" disabled />
+      </mat-slider>
+      <span>0:00</span>
+    </div>
+  </div>
+  <div class="right-part">
+    <button type="button" class="transparent_button" aria-label="Volume" disabled>
+      <i class="icon ion-md-volume-low small" aria-hidden="true"></i>
+    </button>
+    <mat-slider class="time-slider" min="0" max="100">
+      <input matSliderThumb [value]="player.volume()" disabled />
+    </mat-slider>
+  </div>
+</div>

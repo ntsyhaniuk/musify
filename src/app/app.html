@@ -1,0 +1,11 @@
+<div class="app-container">
+  @if (background.backgroundUrl(); as bg) {
+    <div class="background" [style.background-image]="'url(' + bg + ')'"></div>
+  }
+  <app-navbar />
+  <router-outlet />
+  <app-playback-control />
+  @if (spinner.isLoading()) {
+    <app-spinner />
+  }
+</div>

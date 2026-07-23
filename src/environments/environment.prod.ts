@@ -1,4 +1,3 @@
-
 export const environment = {
   production: true,
   CLIENT_ID: '',
@@ -7,5 +6,6 @@ export const environment = {
   STORAGE_KEY: 'auth_token',
   BASE_SPOTIFY_URL: 'https://api.spotify.com/v1',
   BASE_LASTFM_URL: 'https://ws.audioscrobbler.com/2.0',
-  AUTH_URL: 'https://accounts.spotify.com/authorize'
+  AUTH_URL: 'https://accounts.spotify.com/authorize',
+  TOKEN_URL: 'https://accounts.spotify.com/api/token',
 };

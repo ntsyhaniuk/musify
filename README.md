@@ -1,5 +1,22 @@
-![Musify](https://msf.netlify.app/assets/musify_logo.png)
+# Musify
 
-# Musify  https://msf.netlify.app/
+Spotify web player SPA (Angular 22 rewrite in progress).
 
-You need Spotify PREMIUM to try this!
+## Run locally
+
+```bash
+npm install
+npm start
+```
+
+App serves at `http://127.0.0.1:4300/`.
+
+Set `CLIENT_ID` in `src/environments/environment.ts` (or production replacement) — do not commit secrets.
+
+## Build
+
+```bash
+npm run build
+```
+
+Output: `dist/musify/` (Netlify SPA; `public/_redirects` included).
