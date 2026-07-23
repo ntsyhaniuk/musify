@@ -33,7 +33,7 @@ export interface SearchParams {
   q: string;
   offset?: number;
   limit?: number;
-  types?: Array<'album' | 'artist' | 'playlist' | 'track'>;
+  types?: ('album' | 'artist' | 'playlist' | 'track')[];
 }
 
 export interface PlayBody {

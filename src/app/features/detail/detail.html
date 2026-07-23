@@ -26,12 +26,19 @@
           <p>{{ biography.value() }}</p>
         }
         <div class="navigation">
-          <span [class.active]="activeTab() === 'tracks'" (click)="setTab('tracks')" tabindex="0" role="tab">
+          <span
+            [class.active]="activeTab() === 'tracks'"
+            (click)="setTab('tracks')"
+            (keyup.enter)="setTab('tracks')"
+            tabindex="0"
+            role="tab"
+          >
             Tracks
           </span>
           <span
             [class.active]="activeTab() === 'recommendations'"
             (click)="setTab('recommendations')"
+            (keyup.enter)="setTab('recommendations')"
             tabindex="0"
             role="tab"
           >

@@ -48,7 +48,7 @@ export class PlaybackControl {
     return !!name && name.length >= width / 8;
   }
 
-  protected isArtistAnimated(artists: Array<{ name: string }> | undefined): boolean {
+  protected isArtistAnimated(artists: { name: string }[] | undefined): boolean {
     const width = this.trackInfo?.nativeElement.offsetWidth ?? 0;
     const len = artists?.map((a) => a.name).join('').length ?? 0;
     return len >= width / 8;

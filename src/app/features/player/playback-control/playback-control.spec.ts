@@ -28,7 +28,7 @@ describe('PlaybackControl', () => {
             duration: () => 0,
             volume: () => 50,
             currentTrack: () => null,
-            formatTime: (ms: number) => '0:00',
+            formatTime: () => '0:00',
             toggleShuffle: vi.fn(),
             previousTrack: vi.fn(),
             togglePlay: vi.fn(),

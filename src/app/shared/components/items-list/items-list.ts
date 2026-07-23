@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SpotifyListItem } from '../../models/spotify.models';

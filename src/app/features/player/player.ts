@@ -12,7 +12,7 @@ export interface PlayerTrackView {
   id: string;
   name: string;
   uri: string;
-  artists: Array<{ id?: string; name: string; uri?: string }>;
+  artists: { id?: string; name: string; uri?: string }[];
   image: string | null;
 }
 

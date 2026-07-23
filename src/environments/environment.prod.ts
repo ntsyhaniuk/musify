@@ -1,7 +1,12 @@
+/**
+ * Production defaults (empty secrets).
+ * Netlify build should run `npm run env` so CLIENT_ID / REDIRECT_URI come from env vars.
+ */
 export const environment = {
   production: true,
   CLIENT_ID: '',
   REDIRECT_URI: '',
+  /** Unused in the browser — Last.fm key lives on Netlify (`LASTFM_API_KEY`). */
   LASTFM_API_KEY: '',
   STORAGE_KEY: 'auth_token',
   BASE_SPOTIFY_URL: 'https://api.spotify.com/v1',

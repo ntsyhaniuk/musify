@@ -13,4 +13,12 @@ describe('Spinner', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('toggles loading signal', () => {
+    expect(service.isLoading()).toBe(false);
+    service.show();
+    expect(service.isLoading()).toBe(true);
+    service.hide();
+    expect(service.isLoading()).toBe(false);
+  });
 });
