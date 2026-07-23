@@ -1,4 +1,27 @@
 @use 'variables' as *;
+@use 'mixins' as *;
+
+// ---------------------------------------------------------------------------
+// Visibility: desktop vs mobile presentations
+// ---------------------------------------------------------------------------
+
+.player--mobile {
+  display: none;
+}
+
+@include breakpoint-down(mobile) {
+  .player--desktop {
+    display: none !important;
+  }
+
+  .player--mobile {
+    display: flex;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Desktop classic bar (unchanged layout)
+// ---------------------------------------------------------------------------
 
 .controls-container {
   display: flex;
@@ -16,10 +39,12 @@
 
   .left-part {
     display: flex;
+    min-width: 0;
     color: $color-text;
     width: 20%;
 
     img {
+      flex-shrink: 0;
       width: 64px;
       height: 64px;
       margin: 13px;
@@ -36,6 +61,7 @@
     .track-info {
       display: flex;
       flex-direction: column;
+      min-width: 0;
       width: calc(100% - 90px);
 
       .track-name {
@@ -43,15 +69,18 @@
         white-space: nowrap;
         width: 100%;
         overflow: hidden;
+        text-overflow: ellipsis;
 
         span {
           display: inline-block;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &.cover-link:hover {
             text-decoration: underline;
           }
         }
-
       }
 
       .track-artist {
@@ -64,6 +93,9 @@
 
         p {
           display: inline-block;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           span {
             outline: none;
@@ -96,6 +128,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 0;
     width: 60%;
 
     .top {
@@ -135,9 +168,14 @@
     .bottom {
       display: flex;
       align-items: center;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 8px;
+      box-sizing: border-box;
       margin-top: -15px;
 
       span {
+        flex-shrink: 0;
         font-family: 'Proxima Light', sans-serif;
         font-size: 14px;
         color: $color-text;
@@ -145,7 +183,10 @@
       }
 
       .time-slider {
-        width: 50vw;
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        max-width: 50vw;
       }
     }
   }
@@ -177,5 +218,312 @@
 
   .small {
     font-size: 20px !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mobile full-viewport bottom sheet
+// ---------------------------------------------------------------------------
+
+.player--mobile {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  flex-direction: column;
+  height: 100dvh;
+  height: 100vh;
+  box-sizing: border-box;
+  touch-action: pan-y;
+  transition: transform 280ms ease;
+  color: $color-text;
+  background-color: #111;
+  // Collapsed sheet must not intercept page taps above the mini bar.
+  pointer-events: none;
+
+  &.player--dragging {
+    transition: none;
+  }
+
+  &.player--expanded {
+    z-index: 5;
+  }
+
+  .btn--transparent {
+    i {
+      font-size: 28px;
+    }
+
+    &.is-active i {
+      color: $color-brand;
+    }
+  }
+
+  .small {
+    font-size: 22px !important;
+  }
+
+  .track::before,
+  .all::before {
+    content: none;
+  }
+}
+
+.player__drag-surface {
+  touch-action: none;
+  cursor: grab;
+
+  .player--dragging & {
+    cursor: grabbing;
+  }
+}
+
+.player__mini {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  height: $player-height;
+  padding: 0 12px;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-sizing: border-box;
+  border-top: 1px solid $color-brand;
+  background-color: #000;
+  outline: none;
+  pointer-events: auto;
+
+  &:focus-visible {
+    outline: 2px solid $color-brand;
+    outline-offset: -2px;
+  }
+}
+
+.player--expanded .player__mini {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.player__mini-cover {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.player__mini-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.player__mini-title,
+.player__mini-artist {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player__mini-title {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.player__mini-artist {
+  font-family: 'Proxima Light', sans-serif;
+  font-size: 13px;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+.player__mini-play {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+
+  i {
+    font-size: 32px !important;
+    color: $color-brand;
+  }
+}
+
+.player__expanded {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #111;
+  pointer-events: auto;
+}
+
+.player--mobile:not(.player--expanded) .player__expanded {
+  // Off-screen while collapsed via translateY; skip hit-testing for safety.
+  pointer-events: none;
+}
+
+.player__backdrop {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px) brightness(0.35);
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+.player__expanded-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: center;
+  padding: calc(12px + env(safe-area-inset-top, 0)) 24px
+    calc(24px + env(safe-area-inset-bottom, 0));
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.player__sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  align-self: stretch;
+  flex-shrink: 0;
+  min-height: 44px;
+  margin-bottom: 8px;
+}
+
+.player__drag-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+.player__collapse {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 28px !important;
+  }
+}
+
+.player__cover {
+  display: block;
+  flex-shrink: 1;
+  width: min(72vw, 360px);
+  max-height: min(72vw, 42vh, 360px);
+  aspect-ratio: 1;
+  margin: 12px auto 20px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+.player__meta {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.player__title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.player__artists {
+  margin: 0;
+  font-family: 'Proxima Light', sans-serif;
+  font-size: 15px;
+  opacity: 0.8;
+
+  .cover-link {
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+}
+
+.player__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 12px;
+
+  span {
+    flex-shrink: 0;
+    font-family: 'Proxima Light', sans-serif;
+    font-size: 12px;
+    width: 36px;
+    text-align: center;
+    opacity: 0.85;
+  }
+
+  .time-slider {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.player__transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: auto;
+  padding-bottom: 8px;
+
+  .btn--transparent {
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .player__play {
+    width: 64px;
+    height: 64px;
+
+    i {
+      font-size: 48px !important;
+      color: $color-brand;
+    }
   }
 }
