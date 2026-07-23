@@ -269,30 +269,64 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@include breakpoint-down(mobile) {
   .details-container {
-    padding: 0 20px 100px;
-    margin-top: 180px;
+    padding: 0 16px $page-bottom-padding;
+    margin-top: 160px;
+    min-height: calc(100% - 160px);
 
     .details-info {
+      margin-top: -120px;
+
       .top-info {
         flex-direction: column;
         height: auto;
 
         .detail__aside {
-          max-width: 220px;
-          height: 220px;
+          max-width: min(100%, 220px);
+          width: min(100%, 220px);
+          height: auto;
+          aspect-ratio: 1;
         }
 
         .detail__main {
           padding-left: 0;
           padding-top: 20px;
+
+          h1 {
+            font-size: 28px;
+          }
         }
       }
 
       .bottom-info {
         max-width: 100%;
+
+        .navigation span {
+          margin: 0 12px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
       }
     }
+  }
+
+  .album-row {
+    &__cover {
+      width: 48px;
+      height: 48px;
+    }
+
+    &__play {
+      width: 64px;
+    }
+  }
+
+  .recommendations-container .recommendation {
+    flex: 0 0 $tile-sm;
+    width: $tile-sm;
+    height: $tile-sm;
   }
 }

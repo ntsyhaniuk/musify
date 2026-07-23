@@ -17,12 +17,13 @@ $tile-lg: 320px;
 $tile-md: 200px;
 $tile-sm: 100px;
 
-// Breakpoints — grid column-count steps for the items-list tile grid.
+// Breakpoints — grid column-count steps + shared mobile shell cutoff.
 $breakpoints: (
   xl: 1617px,
   lg: 1302px,
   md: 978px,
   sm: 817px,
+  mobile: 768px,
   xs: 617px,
   xxs: 415px,
 );

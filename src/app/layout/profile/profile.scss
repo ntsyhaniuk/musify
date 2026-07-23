@@ -1,4 +1,5 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .user-container {
   display: flex;
@@ -15,5 +16,16 @@
   span {
     color: $color-text;
     margin-left: 15px;
+  }
+
+  @include breakpoint-down(mobile) {
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    span {
+      display: none;
+    }
   }
 }

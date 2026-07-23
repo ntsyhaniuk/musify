@@ -23,6 +23,10 @@
         font-size: 24px;
       }
     }
+
+    @include breakpoint-down(mobile) {
+      padding: 24px 16px 0;
+    }
   }
 
   .nothing-found__message {
@@ -86,10 +90,13 @@
       }
     }
     @include breakpoint-down(xxs) {
-      grid-template-columns: repeat(3, $tile-sm);
+      grid-template-columns: repeat(auto-fill, minmax($tile-sm, 1fr));
+      gap: 8px;
+      padding: 0 8px;
+      justify-content: stretch;
 
       .items-list__see-all {
-        grid-column: 1/4;
+        grid-column: 1 / -1;
       }
     }
 
@@ -132,13 +139,26 @@
         width: $tile-md;
       }
       @include breakpoint-down(xxs) {
-        height: $tile-sm;
-        width: $tile-sm;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
       }
 
       &:hover h3 {
         backdrop-filter: brightness(0.1);
         visibility: visible;
+      }
+    }
+
+    // Touch devices: titles must be readable without hover.
+    @media (hover: none) {
+      .details h3 {
+        visibility: visible;
+        align-items: flex-end;
+        padding: 8px 4px;
+        backdrop-filter: brightness(0.35);
+        font-size: 11px;
+        line-height: 1.2;
       }
     }
   }

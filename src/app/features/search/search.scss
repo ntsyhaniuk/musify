@@ -1,11 +1,16 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .search-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
   font-size: 20px;
 
   i {
+    flex-shrink: 0;
     color: $color-text;
     font-size: 20px;
     margin-top: 2px;
@@ -13,6 +18,10 @@
   }
 
   .search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    max-width: 280px;
     font: inherit;
     appearance: none;
     border: none;
@@ -26,6 +35,14 @@
 
     &::-webkit-search-cancel-button {
       -webkit-appearance: none;
+    }
+  }
+
+  @include breakpoint-down(mobile) {
+    font-size: 16px;
+
+    .search-input {
+      max-width: none;
     }
   }
 }
