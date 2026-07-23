@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,7 +15,7 @@ import { SearchState } from './search-state';
   styleUrl: './search.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Search implements OnInit {
+export class Search {
   private readonly searchState = inject(SearchState);
   private readonly router = inject(Router);
 
@@ -23,6 +23,10 @@ export class Search implements OnInit {
   protected readonly draft = signal('');
 
   constructor() {
+    effect(() => {
+      this.draft.set(this.searchState.query());
+    });
+
     this.input$
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe((value) => {
@@ -31,10 +35,6 @@ export class Search implements OnInit {
           void this.router.navigateByUrl('/');
         }
       });
-  }
-
-  ngOnInit(): void {
-    this.draft.set(this.searchState.query());
   }
 
   protected onInput(value: string): void {
