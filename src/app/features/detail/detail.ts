@@ -11,6 +11,7 @@ import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
 
 import { SpotifyApi } from '../../data-access/spotify/spotify-api';
+import { LastfmApi } from '../../data-access/lastfm/lastfm-api';
 import { Background } from '../../core/background/background';
 import { Player } from '../player/player';
 import { TrackRow } from '../../shared/components/track-row/track-row';
@@ -36,12 +37,11 @@ type DetailTab = 'tracks' | 'recommendations';
 export class Detail {
   private readonly route = inject(ActivatedRoute);
   private readonly spotify = inject(SpotifyApi);
+  private readonly lastfm = inject(LastfmApi);
   private readonly background = inject(Background);
   private readonly player = inject(Player);
 
   protected readonly activeTab = signal<DetailTab>('tracks');
-  /** Filled by lastfm-proxy todo. */
-  protected readonly biography = signal('');
 
   private readonly params = toSignal(
     this.route.paramMap.pipe(
@@ -61,6 +61,38 @@ export class Detail {
       }
       return this.spotify.getEntity(params.type, params.id);
     },
+  });
+
+  protected readonly biography = rxResource({
+    params: () => {
+      const entity = this.entity.value();
+      const type = this.params().type;
+      if (!entity || (type !== 'artist' && type !== 'album')) {
+        return null;
+      }
+      if (type === 'artist') {
+        return { kind: 'artist' as const, artist: entity.name };
+      }
+      const album = entity as SpotifyAlbum;
+      return {
+        kind: 'album' as const,
+        artist: album.artists?.[0]?.name ?? '',
+        album: album.name,
+      };
+    },
+    stream: ({ params }) => {
+      if (!params) {
+        return of('');
+      }
+      if (params.kind === 'artist') {
+        return this.lastfm.getArtistBio(params.artist);
+      }
+      if (!params.artist) {
+        return of('');
+      }
+      return this.lastfm.getAlbumBio(params.artist, params.album);
+    },
+    defaultValue: '',
   });
 
   protected readonly tracks = rxResource({

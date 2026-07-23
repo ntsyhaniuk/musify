@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 
 import { Detail } from './detail';
 import { SpotifyApi } from '../../data-access/spotify/spotify-api';
+import { LastfmApi } from '../../data-access/lastfm/lastfm-api';
 import { Player } from '../player/player';
 
 describe('Detail', () => {
@@ -25,6 +26,13 @@ describe('Detail', () => {
             getPlaylist: () => of(undefined),
             getPlaylistItems: () => of({ items: [] }),
             getArtistAlbums: () => of({ items: [] }),
+          },
+        },
+        {
+          provide: LastfmApi,
+          useValue: {
+            getArtistBio: () => of(''),
+            getAlbumBio: () => of(''),
           },
         },
         {
