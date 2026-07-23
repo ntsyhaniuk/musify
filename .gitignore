@@ -51,3 +51,6 @@ Thumbs.db
 # Local Cursor / agent install state (reinstall skills via skills-lock.json)
 .cursor/
 .agents/
+
+# Local Netlify folder
+.netlify

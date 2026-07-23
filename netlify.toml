@@ -2,6 +2,9 @@
   command = "npm run env && npm run build"
   publish = "dist/musify/browser"
 
+[build.environment]
+  NODE_VERSION = "22"
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
