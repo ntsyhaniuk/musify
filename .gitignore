@@ -47,3 +47,7 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local Cursor / agent install state (reinstall skills via skills-lock.json)
+.cursor/
+.agents/
