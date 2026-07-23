@@ -60,4 +60,11 @@ export class PlaybackControl {
       void this.router.navigate(['/details', 'artist', id]);
     }
   }
+
+  protected goToAlbum(): void {
+    const albumId = this.player.currentTrack()?.albumId;
+    if (albumId) {
+      void this.router.navigate(['/details', 'album', albumId]);
+    }
+  }
 }

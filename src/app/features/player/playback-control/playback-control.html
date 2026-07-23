@@ -2,11 +2,26 @@
   <div class="controls-container">
     <div class="left-part">
       @if (player.currentTrack()?.image; as image) {
-        <img [src]="image" alt="cover image" />
+        <img
+          [src]="image"
+          alt="Album cover"
+          class="cover-link"
+          role="link"
+          tabindex="0"
+          (click)="goToAlbum()"
+          (keyup.enter)="goToAlbum()"
+        />
       }
       <div class="track-info" #trackInfo>
         <div class="track-name">
-          <span [class.animated]="isNameAnimated(player.currentTrack()?.name)">
+          <span
+            class="cover-link"
+            role="link"
+            tabindex="0"
+            [class.animated]="isNameAnimated(player.currentTrack()?.name)"
+            (click)="goToAlbum()"
+            (keyup.enter)="goToAlbum()"
+          >
             {{ player.currentTrack()?.name }}
           </span>
         </div>

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 import { PlaybackControl } from './playback-control';
 import { Player } from '../player';
@@ -48,5 +48,17 @@ describe('PlaybackControl', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('navigates to album when albumId is present', () => {
+    const router = TestBed.inject(Router);
+    const navigate = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    const player = TestBed.inject(Player) as unknown as {
+      currentTrack: () => { albumId: string } | null;
+    };
+    player.currentTrack = () => ({ albumId: 'album123' });
+
+    (component as unknown as { goToAlbum: () => void }).goToAlbum();
+    expect(navigate).toHaveBeenCalledWith(['/details', 'album', 'album123']);
   });
 });

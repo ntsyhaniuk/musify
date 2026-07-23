@@ -25,6 +25,14 @@
       margin: 13px;
     }
 
+    .cover-link {
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
     .track-info {
       display: flex;
       flex-direction: column;
@@ -38,6 +46,10 @@
 
         span {
           display: inline-block;
+
+          &.cover-link:hover {
+            text-decoration: underline;
+          }
         }
 
       }
