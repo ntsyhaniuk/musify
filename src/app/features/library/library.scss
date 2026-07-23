@@ -1,0 +1,12 @@
+@use 'variables' as *;
+
+.library-page {
+  padding-bottom: 120px;
+}
+
+.library-status {
+  padding: 35px;
+  color: $whiteText;
+  font-family: 'Proxima Light', sans-serif;
+  opacity: 0.9;
+}

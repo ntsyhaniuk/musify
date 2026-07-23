@@ -150,6 +150,7 @@ export interface SpotifyPaging<T> {
   offset: number;
   previous: string | null;
   total: number;
+  cursors?: { after?: string; before?: string };
 }
 
 export interface SpotifyFollowedArtistsResponse {

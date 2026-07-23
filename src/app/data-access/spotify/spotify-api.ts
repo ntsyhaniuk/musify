@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, catchError, forkJoin, map, of } from 'rxjs';
+import { EMPTY, Observable, catchError, expand, forkJoin, map, of, reduce } from 'rxjs';
 
 import { APP_ENVIRONMENT } from '../../core/tokens/environment.token';
 import {
@@ -10,6 +10,7 @@ import {
   SpotifyEntityType,
   SpotifyFollowedArtistsResponse,
   SpotifyHomeSection,
+  SpotifyListItem,
   SpotifyPaging,
   SpotifyPlayHistoryItem,
   SpotifyPlaylist,
@@ -28,6 +29,13 @@ import {
 
 const SEARCH_LIMIT = 10;
 const HOME_LIMIT = 15;
+const PAGE_LIMIT = 50;
+
+/** Fully aggregated library list (all pages). */
+export interface SpotifyFullList {
+  items: SpotifyListItem[];
+  total: number;
+}
 
 export interface SearchParams {
   q: string;
@@ -115,11 +123,38 @@ export class SpotifyApi {
     );
   }
 
-  getFollowedArtists(limit = HOME_LIMIT): Observable<SpotifyFollowedArtistsResponse> {
-    const params = new HttpParams().set('type', 'artist').set('limit', String(limit));
+  getFollowedArtists(
+    limit = HOME_LIMIT,
+    after?: string,
+  ): Observable<SpotifyFollowedArtistsResponse> {
+    let params = new HttpParams().set('type', 'artist').set('limit', String(limit));
+    if (after) {
+      params = params.set('after', after);
+    }
     return this.http.get<SpotifyFollowedArtistsResponse>(`${this.baseUrl}/me/following`, {
       params,
     });
+  }
+
+  /** Cursor-paginated full followed-artists list. */
+  getAllFollowedArtists(): Observable<SpotifyFullList> {
+    return this.getFollowedArtists(PAGE_LIMIT).pipe(
+      expand((res) => {
+        const after = res.artists.cursors?.after;
+        if (!res.artists.next || !after) {
+          return EMPTY;
+        }
+        return this.getFollowedArtists(PAGE_LIMIT, after);
+      }),
+      reduce(
+        (acc, res) => {
+          acc.items.push(...res.artists.items.map(toListItemFromArtist));
+          acc.total = res.artists.total;
+          return acc;
+        },
+        { items: [] as SpotifyListItem[], total: 0 },
+      ),
+    );
   }
 
   getMyPlaylists(limit = HOME_LIMIT, offset = 0): Observable<SpotifyPaging<SpotifyPlaylist>> {
@@ -127,6 +162,26 @@ export class SpotifyApi {
     return this.http.get<SpotifyPaging<SpotifyPlaylist>>(`${this.baseUrl}/me/playlists`, {
       params,
     });
+  }
+
+  /** Offset-paginated full playlists list. */
+  getAllMyPlaylists(): Observable<SpotifyFullList> {
+    return this.getMyPlaylists(PAGE_LIMIT, 0).pipe(
+      expand((page) => {
+        if (!page.next || !page.items.length) {
+          return EMPTY;
+        }
+        return this.getMyPlaylists(PAGE_LIMIT, page.offset + page.limit);
+      }),
+      reduce(
+        (acc, page) => {
+          acc.items.push(...page.items.map(toListItemFromPlaylist));
+          acc.total = page.total;
+          return acc;
+        },
+        { items: [] as SpotifyListItem[], total: 0 },
+      ),
+    );
   }
 
   getRecentlyPlayed(limit = HOME_LIMIT): Observable<SpotifyPagingLike<SpotifyPlayHistoryItem>> {
@@ -144,6 +199,26 @@ export class SpotifyApi {
     });
   }
 
+  /** Offset-paginated full saved-albums list. */
+  getAllSavedAlbums(): Observable<SpotifyFullList> {
+    return this.getSavedAlbums(PAGE_LIMIT, 0).pipe(
+      expand((page) => {
+        if (!page.next || !page.items.length) {
+          return EMPTY;
+        }
+        return this.getSavedAlbums(PAGE_LIMIT, page.offset + page.limit);
+      }),
+      reduce(
+        (acc, page) => {
+          acc.items.push(...page.items.map((s) => toListItemFromAlbum(s.album)));
+          acc.total = page.total;
+          return acc;
+        },
+        { items: [] as SpotifyListItem[], total: 0 },
+      ),
+    );
+  }
+
   /** Replaces browse/new-releases via search tag. */
   getFreshAlbums(limit = SEARCH_LIMIT, offset = 0): Observable<SpotifySearchResponse> {
     return this.search({
@@ -152,6 +227,30 @@ export class SpotifyApi {
       limit,
       offset,
     });
+  }
+
+  /** Offset-paginated fresh albums (`tag:new`, max 10 per page). */
+  getAllFreshAlbums(): Observable<SpotifyFullList> {
+    return this.getFreshAlbums(SEARCH_LIMIT, 0).pipe(
+      expand((res) => {
+        const page = res.albums;
+        if (!page?.next || !(page.items?.length)) {
+          return EMPTY;
+        }
+        return this.getFreshAlbums(SEARCH_LIMIT, page.offset + page.limit);
+      }),
+      reduce(
+        (acc, res) => {
+          const albums = (res.albums?.items ?? []).filter(
+            (item): item is NonNullable<typeof item> => item != null,
+          );
+          acc.items.push(...albums.map(toListItemFromAlbum));
+          acc.total = res.albums?.total ?? acc.total;
+          return acc;
+        },
+        { items: [] as SpotifyListItem[], total: 0 },
+      ),
+    );
   }
 
   search(params: SearchParams): Observable<SpotifySearchResponse> {

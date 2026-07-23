@@ -15,7 +15,12 @@
     <p class="home-status">No library items to show yet.</p>
   } @else {
     @for (section of visibleSections(); track section.key) {
-      <app-items-list [title]="section.title" [items]="section.items" [total]="section.total" />
+      <app-items-list
+        [title]="section.title"
+        [items]="section.items"
+        [total]="section.total"
+        [sectionKey]="isSearching() ? undefined : section.key"
+      />
     }
   }
 </div>

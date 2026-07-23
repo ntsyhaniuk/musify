@@ -9,6 +9,11 @@
     <h2 class="nothing-found__message">Nothing found</h2>
   } @else {
     <section class="items-list">
+      @if (showSeeAll()) {
+        <div class="see-all_row">
+          <span [routerLink]="['/library', sectionKey()]">See All</span>
+        </div>
+      }
       @for (item of items(); track item.id) {
         <a
           class="details"

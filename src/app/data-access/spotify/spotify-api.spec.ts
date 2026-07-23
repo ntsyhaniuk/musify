@@ -125,6 +125,192 @@ describe('SpotifyApi', () => {
     expect(sections[0].items[0].name).toBe('Artist');
   });
 
+  it('aggregates followed artists across cursor pages', async () => {
+    const pending = firstValueFrom(api.getAllFollowedArtists());
+
+    const first = http.expectOne(
+      (r) => r.url.includes('/me/following') && !r.params.get('after'),
+    );
+    expect(first.request.params.get('limit')).toBe('50');
+    first.flush({
+      artists: {
+        items: [
+          { id: 'a1', name: 'One', uri: 'spotify:artist:a1', type: 'artist', images: [] },
+        ],
+        total: 2,
+        limit: 50,
+        offset: 0,
+        next: 'https://api.spotify.com/v1/me/following?after=c1',
+        previous: null,
+        cursors: { after: 'c1' },
+      },
+    });
+
+    const second = http.expectOne(
+      (r) => r.url.includes('/me/following') && r.params.get('after') === 'c1',
+    );
+    second.flush({
+      artists: {
+        items: [
+          { id: 'a2', name: 'Two', uri: 'spotify:artist:a2', type: 'artist', images: [] },
+        ],
+        total: 2,
+        limit: 50,
+        offset: 0,
+        next: null,
+        previous: null,
+        cursors: {},
+      },
+    });
+
+    const result = await pending;
+    expect(result.total).toBe(2);
+    expect(result.items.map((i) => i.id)).toEqual(['a1', 'a2']);
+  });
+
+  it('aggregates playlists across offset pages', async () => {
+    const pending = firstValueFrom(api.getAllMyPlaylists());
+
+    const first = http.expectOne(
+      (r) => r.url.includes('/me/playlists') && r.params.get('offset') === '0',
+    );
+    expect(first.request.params.get('limit')).toBe('50');
+    first.flush({
+      items: [{ id: 'p1', name: 'A', uri: 'spotify:playlist:p1', type: 'playlist', images: [] }],
+      total: 2,
+      limit: 50,
+      offset: 0,
+      next: 'next',
+      previous: null,
+    });
+
+    const second = http.expectOne(
+      (r) => r.url.includes('/me/playlists') && r.params.get('offset') === '50',
+    );
+    second.flush({
+      items: [{ id: 'p2', name: 'B', uri: 'spotify:playlist:p2', type: 'playlist', images: [] }],
+      total: 2,
+      limit: 50,
+      offset: 50,
+      next: null,
+      previous: null,
+    });
+
+    const result = await pending;
+    expect(result.total).toBe(2);
+    expect(result.items.map((i) => i.id)).toEqual(['p1', 'p2']);
+  });
+
+  it('aggregates saved albums across offset pages', async () => {
+    const pending = firstValueFrom(api.getAllSavedAlbums());
+
+    http
+      .expectOne((r) => r.url.includes('/me/albums') && r.params.get('offset') === '0')
+      .flush({
+        items: [
+          {
+            added_at: '2026-01-01',
+            album: {
+              id: 'sa1',
+              name: 'Saved 1',
+              uri: 'spotify:album:sa1',
+              type: 'album',
+              images: [],
+              artists: [],
+            },
+          },
+        ],
+        total: 2,
+        limit: 50,
+        offset: 0,
+        next: 'next',
+        previous: null,
+      });
+
+    http
+      .expectOne((r) => r.url.includes('/me/albums') && r.params.get('offset') === '50')
+      .flush({
+        items: [
+          {
+            added_at: '2026-01-02',
+            album: {
+              id: 'sa2',
+              name: 'Saved 2',
+              uri: 'spotify:album:sa2',
+              type: 'album',
+              images: [],
+              artists: [],
+            },
+          },
+        ],
+        total: 2,
+        limit: 50,
+        offset: 50,
+        next: null,
+        previous: null,
+      });
+
+    const result = await pending;
+    expect(result.items.map((i) => i.id)).toEqual(['sa1', 'sa2']);
+    expect(result.total).toBe(2);
+  });
+
+  it('aggregates fresh albums across search pages and filters nulls', async () => {
+    const pending = firstValueFrom(api.getAllFreshAlbums());
+
+    const first = http.expectOne(
+      (r) =>
+        r.url.includes('/search') &&
+        r.params.get('q') === 'tag:new' &&
+        r.params.get('offset') === '0',
+    );
+    expect(first.request.params.get('limit')).toBe('10');
+    first.flush({
+      albums: {
+        items: [
+          { id: 'f1', name: 'Fresh 1', uri: 'spotify:album:f1', type: 'album', images: [], artists: [] },
+          null,
+        ],
+        total: 11,
+        limit: 10,
+        offset: 0,
+        next: 'next',
+        previous: null,
+      },
+    });
+
+    http
+      .expectOne(
+        (r) =>
+          r.url.includes('/search') &&
+          r.params.get('q') === 'tag:new' &&
+          r.params.get('offset') === '10',
+      )
+      .flush({
+        albums: {
+          items: [
+            {
+              id: 'f2',
+              name: 'Fresh 2',
+              uri: 'spotify:album:f2',
+              type: 'album',
+              images: [],
+              artists: [],
+            },
+          ],
+          total: 11,
+          limit: 10,
+          offset: 10,
+          next: null,
+          previous: null,
+        },
+      });
+
+    const result = await pending;
+    expect(result.items.map((i) => i.id)).toEqual(['f1', 'f2']);
+    expect(result.total).toBe(11);
+  });
+
   it('caps search limit at 10 and sends market from_token', async () => {
     const pending = firstValueFrom(api.search({ q: 'radiohead', limit: 50 }));
     const req = http.expectOne((r) => r.url.includes('/search'));
