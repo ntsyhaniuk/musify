@@ -16,6 +16,7 @@
     h1 {
       margin-bottom: 35px;
       align-self: center;
+      mix-blend-mode: difference;
       @media screen and (max-width: 415px) {
         font-size: 24px;
       }
