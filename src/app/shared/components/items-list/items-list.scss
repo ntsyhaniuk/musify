@@ -91,6 +91,7 @@
     }
 
     .details {
+      display: block;
       width: 320px;
       height: 320px;
       background-size: cover;
@@ -100,6 +101,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: 0;
         text-align: center;
         color: $whiteText;
         width: 100%;
