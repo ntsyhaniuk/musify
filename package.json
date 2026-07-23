@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "env": "node scripts/write-env.mjs",
-    "start": "ng serve --host=127.0.0.1 --port=4300",
+    "start": "node scripts/dev.mjs",
+    "start:ng": "ng serve --host=127.0.0.1 --port=4300",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

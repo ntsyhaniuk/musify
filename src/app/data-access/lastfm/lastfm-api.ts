@@ -17,8 +17,8 @@ export interface LastfmAlbumInfoResponse {
 }
 
 /**
- * Last.fm bio client — always goes through `/api/lastfm` (Netlify function)
- * so the API key never ships in the browser bundle.
+ * Last.fm bio client — always goes through `/api/lastfm`
+ * (local `npm start` proxy or Netlify function) so the API key never ships in the browser bundle.
  */
 @Injectable({
   providedIn: 'root',
@@ -31,7 +31,10 @@ export class LastfmApi {
     const params = new HttpParams().set('method', 'artist.getInfo').set('artist', artist);
     return this.http.get<LastfmArtistInfoResponse>(this.proxyUrl, { params }).pipe(
       map((res) => scrubBio(res.artist?.bio?.content || res.artist?.bio?.summary || '')),
-      catchError(() => of('')),
+      catchError((err: unknown) => {
+        console.warn('[lastfm] artist bio failed', err);
+        return of('');
+      }),
     );
   }
 
@@ -42,7 +45,10 @@ export class LastfmApi {
       .set('album', album);
     return this.http.get<LastfmAlbumInfoResponse>(this.proxyUrl, { params }).pipe(
       map((res) => scrubBio(res.album?.wiki?.content || res.album?.wiki?.summary || '')),
-      catchError(() => of('')),
+      catchError((err: unknown) => {
+        console.warn('[lastfm] album bio failed', err);
+        return of('');
+      }),
     );
   }
 }

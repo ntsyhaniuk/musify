@@ -40,15 +40,16 @@ App: [http://127.0.0.1:4300/](http://127.0.0.1:4300/)
 |----------|--------|---------|
 | `CLIENT_ID` | `.env` → Angular `environment` | Spotify app client id (public, but do not commit real values casually) |
 | `REDIRECT_URI` | `.env` → Angular `environment` | Must match Dashboard + Spotify authorize request |
-| `LASTFM_API_KEY` | Netlify / `.env` for `netlify dev` | Server-only; used by `netlify/functions/lastfm.ts` |
+| `LASTFM_API_KEY` | `.env` only (local proxy + Netlify) | Server-only; never written into Angular `environment*.ts` |
 
-Never commit `.env` or real keys. `environment*.ts` in the repo ship with empty secrets.
+Never commit `.env` or real keys. `environment*.ts` in the repo ship with empty secrets. After `npm run env`, restore with `git checkout -- src/environments/` before committing.
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm start` | Dev server on `127.0.0.1:4300` |
+| `npm start` | Local Last.fm proxy + dev server on `127.0.0.1:4300` |
+| `npm run start:ng` | `ng serve` only (bios need the proxy or Netlify) |
 | `npm run env` | Generate `environment.ts` / `environment.prod.ts` from `.env` |
 | `npm run build` | Production build → `dist/musify/browser` |
 | `npm test` | Vitest unit tests |
@@ -56,13 +57,9 @@ Never commit `.env` or real keys. `environment*.ts` in the repo ship with empty 
 
 ## Last.fm bios locally
 
-Bios call `/api/lastfm`. With plain `ng serve` that proxy is absent (bios stay empty). Use:
+Bios call `/api/lastfm`. With `npm start`, a small Node proxy (`scripts/lastfm-dev-proxy.mjs`) injects `LASTFM_API_KEY` from `.env` (proxied via `proxy.conf.json`). Production uses the Netlify function.
 
-```bash
-npx netlify dev
-```
-
-…or deploy to Netlify with `LASTFM_API_KEY` set.
+Alternatively: `npx netlify dev` or deploy with `LASTFM_API_KEY` set.
 
 ## Deploy (Netlify)
 

@@ -2,6 +2,10 @@
 /**
  * Writes Angular environment files from process.env / .env without committing secrets.
  * Usage: npm run env
+ *
+ * LASTFM_API_KEY must NEVER be written into environment*.ts — bios go through
+ * `/api/lastfm` (local proxy or Netlify). Keep real keys only in gitignored `.env`.
+ * Scrub: do not stage `.env`; restore `src/environments/` before commits if needed.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -38,7 +42,7 @@ loadDotEnv();
 
 const CLIENT_ID = process.env.CLIENT_ID ?? '';
 const REDIRECT_URI = process.env.REDIRECT_URI ?? 'http://127.0.0.1:4300/';
-// Kept empty in the browser bundle on purpose — Last.fm key stays on Netlify.
+// Intentionally empty in the browser bundle — Last.fm key stays on the proxy/Netlify.
 const LASTFM_API_KEY = '';
 
 function render(production) {
@@ -61,6 +65,6 @@ writeFileSync(resolve('src/environments/environment.prod.ts'), render(true));
 
 console.log(
   CLIENT_ID
-    ? '[env] Wrote environment files with CLIENT_ID set.'
+    ? '[env] Wrote environment files with CLIENT_ID set (LASTFM_API_KEY left empty for browser).'
     : '[env] Wrote environment files with empty CLIENT_ID (set CLIENT_ID in .env).',
 );
