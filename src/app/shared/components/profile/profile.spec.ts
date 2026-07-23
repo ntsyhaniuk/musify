@@ -3,8 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import { Profile } from './profile';
-import { Auth } from '../../../core/auth/auth';
-import { SpotifyApi } from '../../../data-access/spotify/spotify-api';
+import { Auth } from '@app/core/auth/auth';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
 
 describe('Profile', () => {
   let component: Profile;

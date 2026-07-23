@@ -2,8 +2,8 @@ import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/c
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 
-import { Auth } from '../../../core/auth/auth';
-import { SpotifyApi } from '../../../data-access/spotify/spotify-api';
+import { Auth } from '@app/core/auth/auth';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
 
 @Component({
   selector: 'app-profile',

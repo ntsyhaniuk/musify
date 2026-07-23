@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { librarySectionGuard } from './features/library/library-section';
+import { librarySectionGuard } from '@app/features/library/library-section';
 
 export const routes: Routes = [
   {

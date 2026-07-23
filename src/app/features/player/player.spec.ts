@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 
-import { Auth } from '../../core/auth/auth';
-import { APP_ENVIRONMENT } from '../../core/tokens/environment.token';
+import { Auth } from '@app/core/auth/auth';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import { Player } from './player';
 
 describe('Player', () => {

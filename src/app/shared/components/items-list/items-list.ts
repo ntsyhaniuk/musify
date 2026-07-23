@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { SpotifyListItem } from '../../models/spotify.models';
+import { SpotifyListItem } from '@app/shared/models/spotify.models';
 
 const FALLBACK_COVER = 'assets/no-cover.jpg';
 

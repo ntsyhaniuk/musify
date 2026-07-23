@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Player } from '../../../features/player/player';
-import { SpotifyTrackSummary } from '../../models/spotify.models';
+import { Player } from '@app/features/player/player';
+import { SpotifyTrackSummary } from '@app/shared/models/spotify.models';
 
 @Component({
   selector: 'app-track-row',

@@ -3,12 +3,12 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 
-import { APP_ENVIRONMENT } from '../../core/tokens/environment.token';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import {
   playlistItemTrack,
   playlistItemsPaging,
   SpotifyPlaylist,
-} from '../../shared/models/spotify.models';
+} from '@app/shared/models/spotify.models';
 import { SpotifyApi } from './spotify-api';
 
 describe('SpotifyApi', () => {

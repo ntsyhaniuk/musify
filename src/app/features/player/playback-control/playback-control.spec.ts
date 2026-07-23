@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
 
 import { PlaybackControl } from './playback-control';
-import { Player } from '../player';
+import { Player } from '@app/features/player/player';
 
 describe('PlaybackControl', () => {
   let component: PlaybackControl;

@@ -4,9 +4,9 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { Detail } from './detail';
-import { SpotifyApi } from '../../data-access/spotify/spotify-api';
-import { LastfmApi } from '../../data-access/lastfm/lastfm-api';
-import { Player } from '../player/player';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
+import { LastfmApi } from '@app/data-access/lastfm/lastfm-api';
+import { Player } from '@app/features/player/player';
 
 describe('Detail', () => {
   let component: Detail;

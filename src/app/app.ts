@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { Auth } from './core/auth/auth';
-import { Background } from './core/background/background';
-import { Spinner } from './core/spinner/spinner';
-import { Navbar } from './shared/components/navbar/navbar';
-import { Spinner as SpinnerComponent } from './shared/components/spinner/spinner';
-import { PlaybackControl } from './features/player/playback-control/playback-control';
-import { Player } from './features/player/player';
+import { Auth } from '@app/core/auth/auth';
+import { Background } from '@app/core/background/background';
+import { Spinner } from '@app/core/spinner/spinner';
+import { Navbar } from '@app/shared/components/navbar/navbar';
+import { Spinner as SpinnerComponent } from '@app/shared/components/spinner/spinner';
+import { PlaybackControl } from '@app/features/player/playback-control/playback-control';
+import { Player } from '@app/features/player/player';
 
 @Component({
   selector: 'app-root',

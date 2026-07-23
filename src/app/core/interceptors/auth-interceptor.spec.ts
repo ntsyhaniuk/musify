@@ -3,9 +3,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 
-import { Auth } from '../auth/auth';
-import { Spinner } from '../spinner/spinner';
-import { APP_ENVIRONMENT } from '../tokens/environment.token';
+import { Auth } from '@app/core/auth/auth';
+import { Spinner } from '@app/core/spinner/spinner';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import { authInterceptor } from './auth-interceptor';
 
 describe('authInterceptor', () => {

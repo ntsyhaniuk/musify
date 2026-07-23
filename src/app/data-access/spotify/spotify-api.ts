@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { EMPTY, Observable, catchError, expand, forkJoin, map, of, reduce } from 'rxjs';
 
-import { APP_ENVIRONMENT } from '../../core/tokens/environment.token';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import {
   SpotifyAlbum,
   SpotifyArtist,
@@ -25,7 +25,7 @@ import {
   toListItemFromPlaylist,
   toTrackSummary,
   SpotifyTrackSummary,
-} from '../../shared/models/spotify.models';
+} from '@app/shared/models/spotify.models';
 
 const SEARCH_LIMIT = 10;
 const HOME_LIMIT = 15;

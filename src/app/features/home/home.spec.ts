@@ -4,8 +4,8 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { Home } from './home';
-import { Auth } from '../../core/auth/auth';
-import { SpotifyApi } from '../../data-access/spotify/spotify-api';
+import { Auth } from '@app/core/auth/auth';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
 
 describe('Home', () => {
   let component: Home;

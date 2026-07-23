@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { APP_ENVIRONMENT } from '../tokens/environment.token';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import { Auth, SPOTIFY_SCOPES } from './auth';
 import { createCodeChallenge, generateCodeVerifier } from './pkce';
 

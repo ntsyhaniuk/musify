@@ -4,8 +4,8 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { Background } from '../../core/background/background';
-import { SpotifyApi } from '../../data-access/spotify/spotify-api';
+import { Background } from '@app/core/background/background';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
 import { Library } from './library';
 import { librarySectionGuard } from './library-section';
 

@@ -2,18 +2,18 @@ import { Component, ChangeDetectionStrategy, inject, effect, computed } from '@a
 import { rxResource } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
 
-import { SpotifyApi } from '../../data-access/spotify/spotify-api';
-import { Background } from '../../core/background/background';
-import { Auth } from '../../core/auth/auth';
-import { ItemsList } from '../../shared/components/items-list/items-list';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
+import { Background } from '@app/core/background/background';
+import { Auth } from '@app/core/auth/auth';
+import { ItemsList } from '@app/shared/components/items-list/items-list';
 import {
   SpotifyHomeSection,
   SpotifySearchResponse,
   toListItemFromAlbum,
   toListItemFromArtist,
   toListItemFromPlaylist,
-} from '../../shared/models/spotify.models';
-import { SearchState } from '../search/search-state';
+} from '@app/shared/models/spotify.models';
+import { SearchState } from '@app/features/search/search-state';
 
 @Component({
   selector: 'app-home',

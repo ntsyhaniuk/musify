@@ -10,11 +10,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
 
-import { SpotifyApi } from '../../data-access/spotify/spotify-api';
-import { LastfmApi } from '../../data-access/lastfm/lastfm-api';
-import { Background } from '../../core/background/background';
-import { Player } from '../player/player';
-import { TrackRow } from '../../shared/components/track-row/track-row';
+import { SpotifyApi } from '@app/data-access/spotify/spotify-api';
+import { LastfmApi } from '@app/data-access/lastfm/lastfm-api';
+import { Background } from '@app/core/background/background';
+import { Player } from '@app/features/player/player';
+import { TrackRow } from '@app/shared/components/track-row/track-row';
 import {
   SpotifyAlbum,
   SpotifyArtist,
@@ -22,7 +22,7 @@ import {
   SpotifyListItem,
   playlistItemsPaging,
   toListItemFromArtist,
-} from '../../shared/models/spotify.models';
+} from '@app/shared/models/spotify.models';
 
 type DetailTab = 'primary' | 'recommendations';
 

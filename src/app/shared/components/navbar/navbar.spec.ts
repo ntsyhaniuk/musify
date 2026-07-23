@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
 import { Navbar } from './navbar';
-import { Auth } from '../../../core/auth/auth';
+import { Auth } from '@app/core/auth/auth';
 
 describe('Navbar', () => {
   let component: Navbar;

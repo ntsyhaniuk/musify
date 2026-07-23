@@ -3,8 +3,8 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
 import { App } from './app';
-import { Auth } from './core/auth/auth';
-import { Player } from './features/player/player';
+import { Auth } from '@app/core/auth/auth';
+import { Player } from '@app/features/player/player';
 
 describe('App', () => {
   beforeEach(async () => {

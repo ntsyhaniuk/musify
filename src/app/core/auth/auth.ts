@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { APP_ENVIRONMENT } from '../tokens/environment.token';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 import { createCodeChallenge, generateCodeVerifier, generateRandomState } from './pkce';
 
 export interface StoredTokens {

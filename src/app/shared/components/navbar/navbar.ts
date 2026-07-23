@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Search } from '../../../features/search/search';
-import { SearchState } from '../../../features/search/search-state';
-import { Profile } from '../profile/profile';
+import { Search } from '@app/features/search/search';
+import { SearchState } from '@app/features/search/search-state';
+import { Profile } from '@app/shared/components/profile/profile';
 
 @Component({
   selector: 'app-navbar',

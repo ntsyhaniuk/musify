@@ -2,8 +2,8 @@
 
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { Auth } from '../../core/auth/auth';
-import { PlayBody, SpotifyApi } from '../../data-access/spotify/spotify-api';
+import { Auth } from '@app/core/auth/auth';
+import { PlayBody, SpotifyApi } from '@app/data-access/spotify/spotify-api';
 
 const SDK_SCRIPT_SRC = 'https://sdk.scdn.co/spotify-player.js';
 const POLL_MS = 500;

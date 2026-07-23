@@ -2,9 +2,9 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, finalize, from, switchMap, throwError } from 'rxjs';
 
-import { Auth } from '../auth/auth';
-import { Spinner } from '../spinner/spinner';
-import { APP_ENVIRONMENT } from '../tokens/environment.token';
+import { Auth } from '@app/core/auth/auth';
+import { Spinner } from '@app/core/spinner/spinner';
+import { APP_ENVIRONMENT } from '@app/core/tokens/environment.token';
 
 /**
  * Attaches Bearer token to Spotify API calls, shows spinner, and refreshes on 401.

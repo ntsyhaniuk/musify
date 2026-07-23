@@ -9,10 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
 
-import { Background } from '../../core/background/background';
-import { SpotifyApi, SpotifyFullList } from '../../data-access/spotify/spotify-api';
-import { ItemsList } from '../../shared/components/items-list/items-list';
-import { SpotifyListItem } from '../../shared/models/spotify.models';
+import { Background } from '@app/core/background/background';
+import { SpotifyApi, SpotifyFullList } from '@app/data-access/spotify/spotify-api';
+import { ItemsList } from '@app/shared/components/items-list/items-list';
+import { SpotifyListItem } from '@app/shared/models/spotify.models';
 import { LIBRARY_SECTION_TITLES } from './library-section';
 
 const EMPTY_LIST: SpotifyFullList = { items: [] as SpotifyListItem[], total: 0 };

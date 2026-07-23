@@ -4,7 +4,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { Player } from '../player';
+import { Player } from '@app/features/player/player';
 
 /**
  * Bottom playback bar — Material used for mat-slider only.
