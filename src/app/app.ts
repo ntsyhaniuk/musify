@@ -20,6 +20,6 @@ export class App implements OnInit {
   protected readonly spinner = inject(Spinner);
 
   ngOnInit(): void {
-    this.auth.authorize();
+    void this.auth.init();
   }
 }
