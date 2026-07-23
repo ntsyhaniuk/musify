@@ -251,6 +251,14 @@ export class Detail {
     }
   }
 
+  protected isAlbumCurrent(album: SpotifyAlbum): boolean {
+    return !!album.uri && this.player.contextUri() === album.uri;
+  }
+
+  protected isAlbumPlaying(album: SpotifyAlbum): boolean {
+    return this.isAlbumCurrent(album) && this.player.isPlaying();
+  }
+
   protected playAlbum(event: Event, album: SpotifyAlbum): void {
     event.preventDefault();
     event.stopPropagation();

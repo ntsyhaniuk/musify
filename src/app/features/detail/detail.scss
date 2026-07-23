@@ -144,8 +144,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 0;
+  padding: 10px 12px;
+  margin: 0 -12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  transition: background 150ms ease-in;
+
+  &--active {
+    background: rgba(0, 217, 73, 0.12);
+
+    .album-row__name {
+      color: $lightGreen;
+    }
+  }
 
   &__link {
     display: flex;
@@ -177,6 +188,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: color 150ms ease-in;
   }
 
   &__date {
@@ -189,7 +201,7 @@
     flex-shrink: 0;
     width: 72px;
     height: 32px;
-    border: none;
+    border: 1px solid transparent;
     border-radius: 16px;
     background: $lightGreen;
     color: $whiteText;
@@ -197,10 +209,20 @@
     font-size: 11px;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: transform 150ms ease-in;
+    transition:
+      transform 150ms ease-in,
+      background 150ms ease-in,
+      color 150ms ease-in,
+      border-color 150ms ease-in;
 
     &:hover {
       transform: scale(1.03);
+    }
+
+    &--paused {
+      background: transparent;
+      border-color: $lightGreen;
+      color: $lightGreen;
     }
   }
 }

@@ -57,7 +57,7 @@
             } @else {
               <ul class="albums-list">
                 @for (album of albums.value(); track album.id) {
-                  <li class="album-row">
+                  <li class="album-row" [class.album-row--active]="isAlbumCurrent(album)">
                     <a class="album-row__link" [routerLink]="['/details', 'album', album.id]">
                       <img
                         class="album-row__cover"
@@ -76,10 +76,11 @@
                     <button
                       type="button"
                       class="album-row__play"
-                      aria-label="Play album"
+                      [class.album-row__play--paused]="isAlbumCurrent(album) && !isAlbumPlaying(album)"
+                      [attr.aria-label]="isAlbumPlaying(album) ? 'Pause album' : 'Play album'"
                       (click)="playAlbum($event, album)"
                     >
-                      play
+                      {{ isAlbumPlaying(album) ? 'pause' : 'play' }}
                     </button>
                   </li>
                 }
