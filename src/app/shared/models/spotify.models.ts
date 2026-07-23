@@ -76,6 +76,7 @@ export interface SpotifyAlbum {
   images: SpotifyImage[];
   artists: SpotifyArtistRef[];
   release_date?: string;
+  release_date_precision?: 'year' | 'month' | 'day';
   total_tracks?: number;
   /** Nested tracks on album detail (still `tracks`, not renamed). */
   tracks?: SpotifyPaging<SpotifyTrack>;

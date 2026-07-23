@@ -283,24 +283,8 @@ export class SpotifyApi {
       );
     }
 
-    // Artist: use albums as related content; no top-tracks in Dev Mode.
-    return this.getArtistAlbums(id, SEARCH_LIMIT).pipe(
-      map((page) =>
-        page.items.map((album, index) =>
-          toTrackSummary(
-            {
-              id: album.id,
-              name: album.name,
-              uri: album.uri,
-              duration_ms: 0,
-              artists: album.artists ?? [],
-              album,
-            },
-            { contextUri: album.uri, trackOrder: index, image: album.images?.[0]?.url },
-          ),
-        ),
-      ),
-    );
+    // Artist top-tracks removed in Dev Mode — albums are shown via getArtistAlbums.
+    return of([] as SpotifyTrackSummary[]);
   }
 
   /** URI-based library contains (replaces type-specific contains endpoints). */

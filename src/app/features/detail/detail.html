@@ -27,29 +27,65 @@
         }
         <div class="navigation">
           <span
-            [class.active]="activeTab() === 'tracks'"
-            (click)="setTab('tracks')"
-            (keyup.enter)="setTab('tracks')"
+            [class.active]="activeTab() === 'primary'"
+            (click)="setTab('primary')"
+            (keyup.enter)="setTab('primary')"
             tabindex="0"
             role="tab"
           >
-            Tracks
+            {{ primaryTabLabel() }}
           </span>
-          <span
-            [class.active]="activeTab() === 'recommendations'"
-            (click)="setTab('recommendations')"
-            (keyup.enter)="setTab('recommendations')"
-            tabindex="0"
-            role="tab"
-          >
-            Recommendations
-          </span>
+          @if (showRecommendationsTab()) {
+            <span
+              [class.active]="activeTab() === 'recommendations'"
+              (click)="setTab('recommendations')"
+              (keyup.enter)="setTab('recommendations')"
+              tabindex="0"
+              role="tab"
+            >
+              Recommendations
+            </span>
+          }
         </div>
       </div>
 
       <div class="content-wrapper">
-        @if (activeTab() === 'tracks') {
-          @if (!tracks.value().length) {
+        @if (activeTab() === 'primary') {
+          @if (isArtist()) {
+            @if (!albums.value().length) {
+              <p class="detail-status">No albums available for this artist.</p>
+            } @else {
+              <ul class="albums-list">
+                @for (album of albums.value(); track album.id) {
+                  <li class="album-row">
+                    <a class="album-row__link" [routerLink]="['/details', 'album', album.id]">
+                      <img
+                        class="album-row__cover"
+                        [src]="coverUrl(album)"
+                        [alt]="album.name"
+                        width="64"
+                        height="64"
+                      />
+                      <span class="album-row__meta">
+                        <span class="album-row__name">{{ album.name }}</span>
+                        @if (formatReleaseDate(album); as releaseDate) {
+                          <span class="album-row__date">{{ releaseDate }}</span>
+                        }
+                      </span>
+                    </a>
+                    <button
+                      type="button"
+                      class="album-row__play"
+                      aria-label="Play album"
+                      (click)="playAlbum($event, album)"
+                    >
+                      play
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          } @else if (!tracks.value().length) {
             <p class="detail-status">No tracks available for this item.</p>
           } @else {
             @for (track of tracks.value(); track track.id + '-' + track.trackOrder) {

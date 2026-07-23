@@ -132,6 +132,79 @@
   }
 }
 
+.albums-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 720px;
+}
+
+.album-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+    text-decoration: none;
+    color: $whiteText;
+  }
+
+  &__cover {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    box-shadow: 0 0 12px -4px #000;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__date {
+    font-family: 'Proxima Light', sans-serif;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  &__play {
+    flex-shrink: 0;
+    width: 72px;
+    height: 32px;
+    border: none;
+    border-radius: 16px;
+    background: $lightGreen;
+    color: $whiteText;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 150ms ease-in;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}
+
 .recommendations-container {
   display: flex;
   flex-direction: column;

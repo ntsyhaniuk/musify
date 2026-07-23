@@ -21,11 +21,10 @@ import {
   SpotifyEntityType,
   SpotifyListItem,
   playlistItemsPaging,
-  toListItemFromAlbum,
   toListItemFromArtist,
 } from '../../shared/models/spotify.models';
 
-type DetailTab = 'tracks' | 'recommendations';
+type DetailTab = 'primary' | 'recommendations';
 
 @Component({
   selector: 'app-detail',
@@ -41,7 +40,7 @@ export class Detail {
   private readonly background = inject(Background);
   private readonly player = inject(Player);
 
-  protected readonly activeTab = signal<DetailTab>('tracks');
+  protected readonly activeTab = signal<DetailTab>('primary');
 
   private readonly params = toSignal(
     this.route.paramMap.pipe(
@@ -52,6 +51,8 @@ export class Detail {
     ),
     { initialValue: { type: 'album' as SpotifyEntityType, id: '' } },
   );
+
+  protected readonly isArtist = computed(() => this.params().type === 'artist');
 
   protected readonly entity = rxResource({
     params: () => this.params(),
@@ -99,7 +100,10 @@ export class Detail {
     params: () => {
       const entity = this.entity.value();
       const params = this.params();
-      return entity ? { type: params.type, id: params.id, uri: entity.uri } : null;
+      if (!entity || params.type === 'artist') {
+        return null;
+      }
+      return { type: params.type, id: params.id, uri: entity.uri };
     },
     stream: ({ params }) => {
       if (!params) {
@@ -143,20 +147,34 @@ export class Detail {
     defaultValue: [],
   });
 
+  protected readonly albums = rxResource({
+    params: () => {
+      const entity = this.entity.value();
+      const params = this.params();
+      return entity && params.type === 'artist' ? { id: params.id } : null;
+    },
+    stream: ({ params }) => {
+      if (!params) {
+        return of([] as SpotifyAlbum[]);
+      }
+      return this.spotify.getArtistAlbums(params.id).pipe(map((page) => page.items));
+    },
+    defaultValue: [] as SpotifyAlbum[],
+  });
+
   protected readonly recommendations = rxResource({
     params: () => {
       const entity = this.entity.value();
       const type = this.params().type;
-      return entity ? { entity, type } : null;
+      // Artist albums already have a dedicated list — skip duplicate recommendations.
+      if (!entity || type === 'artist') {
+        return null;
+      }
+      return { entity, type };
     },
     stream: ({ params }) => {
       if (!params) {
         return of([] as SpotifyListItem[]);
-      }
-      if (params.type === 'artist') {
-        return this.spotify
-          .getArtistAlbums(params.entity.id, 10)
-          .pipe(map((page) => page.items.map(toListItemFromAlbum)));
       }
       if (params.type === 'album') {
         const album = params.entity as SpotifyAlbum;
@@ -195,11 +213,12 @@ export class Detail {
     return playingHere ? 'pause' : 'play';
   });
 
+  protected readonly primaryTabLabel = computed(() => (this.isArtist() ? 'Albums' : 'Tracks'));
+
+  protected readonly showRecommendationsTab = computed(() => !this.isArtist());
+
   protected readonly recommendationsTitle = computed(() => {
     const type = this.params().type;
-    if (type === 'artist') {
-      return 'Albums';
-    }
     if (type === 'album') {
       return 'Artists';
     }
@@ -211,6 +230,12 @@ export class Detail {
       const images = this.entity.value()?.images;
       const url = images?.[0]?.url ?? null;
       this.background.setBackground(url);
+    });
+
+    effect(() => {
+      // Reset to primary when navigating between entity types.
+      this.params();
+      this.activeTab.set('primary');
     });
   }
 
@@ -226,11 +251,56 @@ export class Detail {
     }
   }
 
+  protected playAlbum(event: Event, album: SpotifyAlbum): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!album.uri) {
+      return;
+    }
+    if (this.player.contextUri() === album.uri) {
+      this.player.togglePlay();
+    } else {
+      this.player.playTrack({ context_uri: album.uri });
+    }
+  }
+
   protected setTab(tab: DetailTab): void {
     this.activeTab.set(tab);
   }
 
-  protected coverUrl(item: SpotifyListItem): string {
+  protected coverUrl(item: SpotifyListItem | SpotifyAlbum): string {
     return item.images?.[0]?.url || 'assets/no-cover.jpg';
+  }
+
+  protected formatReleaseDate(album: SpotifyAlbum): string {
+    const date = album.release_date;
+    if (!date) {
+      return '';
+    }
+    const precision =
+      album.release_date_precision ??
+      (date.length === 4 ? 'year' : date.length === 7 ? 'month' : 'day');
+    if (precision === 'year') {
+      return date;
+    }
+    if (precision === 'month') {
+      const [year, month] = date.split('-').map(Number);
+      if (!year || !month) {
+        return date;
+      }
+      return new Date(year, month - 1).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+      });
+    }
+    const parsed = new Date(date);
+    if (Number.isNaN(parsed.getTime())) {
+      return date;
+    }
+    return parsed.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   }
 }
