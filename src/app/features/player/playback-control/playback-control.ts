@@ -272,7 +272,9 @@ export class PlaybackControl {
 
   private collapsedY(): number {
     const height =
-      typeof window !== 'undefined' ? window.innerHeight : MINI_HEIGHT_PX;
+      typeof window !== 'undefined'
+        ? (window.visualViewport?.height ?? window.innerHeight)
+        : MINI_HEIGHT_PX;
     return Math.max(0, height - MINI_HEIGHT_PX);
   }
 

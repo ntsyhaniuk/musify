@@ -230,8 +230,12 @@
   inset: 0;
   z-index: 3;
   flex-direction: column;
-  height: 100dvh;
+  // Prefer dynamic/small viewport units so iOS Safari chrome doesn't push
+  // transport controls below the visible fold (100vh alone is too tall).
   height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   box-sizing: border-box;
   touch-action: pan-y;
   transition: transform 280ms ease;
@@ -365,9 +369,11 @@
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: #111;
   pointer-events: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .player--mobile:not(.player--expanded) .player__expanded {
