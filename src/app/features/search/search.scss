@@ -13,6 +13,8 @@
   }
 
   .search-input {
+    font: inherit;
+    appearance: none;
     border: none;
     background: transparent;
     outline: none;

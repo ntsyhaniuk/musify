@@ -59,6 +59,13 @@ body {
   color: $whiteText;
 }
 
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
 .transparent_button {
   display: flex;
   justify-content: center;
