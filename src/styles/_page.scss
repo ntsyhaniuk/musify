@@ -1,0 +1,20 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+/** Home/library page wrapper — leaves room for the fixed bottom playback bar. */
+.page-shell {
+  @include page-bottom-padding;
+}
+
+/** Shared loading/error/empty status text block. */
+.page-status {
+  padding: 35px;
+  color: $color-text;
+  font-family: 'Proxima Light', sans-serif;
+  opacity: 0.9;
+
+  &--wide {
+    padding: 35px 100px;
+    opacity: 1;
+  }
+}

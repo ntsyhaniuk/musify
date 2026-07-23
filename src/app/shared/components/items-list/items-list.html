@@ -1,0 +1,29 @@
+<div class="category-wrapper">
+  @if (title()) {
+    <div class="title-row">
+      <h1>{{ title() }}</h1>
+    </div>
+  }
+
+  @if (isEmpty()) {
+    <h2 class="nothing-found__message">Nothing found</h2>
+  } @else {
+    <section class="items-list">
+      @if (showSeeAll()) {
+        <div class="items-list__see-all">
+          <span [routerLink]="['/library', sectionKey()]">See All</span>
+        </div>
+      }
+      @for (item of items(); track item.id) {
+        <a
+          class="details"
+          [routerLink]="detailLink(item)"
+          [style.background-image]="'url(' + coverUrl(item) + ')'"
+          [title]="item.name"
+        >
+          <h3>{{ item.name }}</h3>
+        </a>
+      }
+    </section>
+  }
+</div>

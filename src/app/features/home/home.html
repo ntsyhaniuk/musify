@@ -1,0 +1,26 @@
+<div class="page-shell">
+  @if (sections.isLoading()) {
+    <p class="page-status">{{ isSearching() ? 'Searching…' : 'Loading your library…' }}</p>
+  } @else if (sections.error()) {
+    <p class="page-status">Could not load Spotify data. Check your connection and try again.</p>
+  } @else if (!isAuthenticated()) {
+    <p class="page-status">Sign in with Spotify to see your library hub.</p>
+  } @else if (isSearchEmpty()) {
+    <div class="search-empty" role="status">
+      <p class="search-empty__emoji" aria-hidden="true">🕵️‍♂️🎧</p>
+      <h2 class="search-empty__title">No luck with “{{ searchQuery() }}”</h2>
+      <p class="search-empty__hint">That track went on tour without us. Try another vibe.</p>
+    </div>
+  } @else if (!sections.value().length) {
+    <p class="page-status">No library items to show yet.</p>
+  } @else {
+    @for (section of visibleSections(); track section.key) {
+      <app-items-list
+        [title]="section.title"
+        [items]="section.items"
+        [total]="section.total"
+        [sectionKey]="isSearching() ? undefined : section.key"
+      />
+    }
+  }
+</div>

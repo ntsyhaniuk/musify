@@ -1,0 +1,24 @@
+<label class="search-container" for="search">
+  <i class="icon ion-ios-search" aria-hidden="true"></i>
+  <input
+    id="search"
+    class="search-input"
+    type="search"
+    name="search"
+    placeholder="Search music..."
+    aria-label="Search"
+    autocomplete="off"
+    [value]="draft()"
+    (input)="onInput($any($event.target).value)"
+  />
+  <i
+    class="icon ion-ios-close"
+    [style.visibility]="draft() ? 'visible' : 'hidden'"
+    style="cursor: pointer"
+    role="button"
+    tabindex="0"
+    aria-label="Clear search"
+    (click)="clear()"
+    (keyup.enter)="clear()"
+  ></i>
+</label>

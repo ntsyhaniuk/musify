@@ -1,0 +1,78 @@
+@use 'variables' as *;
+
+.track-container {
+  font-family: 'Proxima Light', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  p {
+    margin: 0;
+    color: $color-text;
+  }
+
+  .track {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    max-height: 52px;
+
+    .play-button {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      color: $color-text;
+
+      .icon {
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      &:hover .icon {
+        color: $color-brand;
+      }
+    }
+
+    .track-info {
+      display: flex;
+      flex-basis: 100%;
+
+      .artists {
+        font-family: 'Proxima', sans-serif;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50%;
+        margin: 0 50px;
+
+        span {
+          white-space: nowrap;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50%;
+        margin: 0 20px;
+
+        span {
+          text-align: center;
+          transition: all 200ms ease-in;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  .is-active {
+    color: $color-brand;
+  }
+}

@@ -1,0 +1,123 @@
+@if (entity.isLoading()) {
+  <p class="page-status page-status--wide">Loading…</p>
+} @else if (entity.error() || !entity.value()) {
+  <p class="page-status page-status--wide">Could not load this item.</p>
+} @else {
+  <div class="details-container">
+    <div class="details-info">
+      <div class="top-info">
+        <img class="detail__aside" [src]="mainImage()" [alt]="entityName()" />
+        <div class="detail__main">
+          <h1>{{ entityName() }}</h1>
+          <div class="buttons">
+            <button type="button" (click)="playPause()">{{ playLabel() }}</button>
+          </div>
+          @if (popularity() !== undefined && popularity() !== null) {
+            <div class="metadata">
+              <p>popularity:</p>
+              <progress [max]="100" [value]="popularity() || 0"></progress>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="bottom-info">
+        @if (biography.value()) {
+          <p>{{ biography.value() }}</p>
+        }
+        <div class="navigation">
+          <span
+            [class.is-active]="activeTab() === 'primary'"
+            (click)="setTab('primary')"
+            (keyup.enter)="setTab('primary')"
+            tabindex="0"
+            role="tab"
+          >
+            {{ primaryTabLabel() }}
+          </span>
+          @if (showRecommendationsTab()) {
+            <span
+              [class.is-active]="activeTab() === 'recommendations'"
+              (click)="setTab('recommendations')"
+              (keyup.enter)="setTab('recommendations')"
+              tabindex="0"
+              role="tab"
+            >
+              Recommendations
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="content-wrapper">
+        @if (activeTab() === 'primary') {
+          @if (isArtist()) {
+            @if (!albums.value().length) {
+              <p class="page-status page-status--wide">No albums available for this artist.</p>
+            } @else {
+              <ul class="albums-list">
+                @for (album of albums.value(); track album.id) {
+                  <li class="album-row" [class.album-row--active]="isAlbumCurrent(album)">
+                    <a class="album-row__link" [routerLink]="['/details', 'album', album.id]">
+                      <img
+                        class="album-row__cover"
+                        [src]="coverUrl(album)"
+                        [alt]="album.name"
+                        width="64"
+                        height="64"
+                      />
+                      <span class="album-row__meta">
+                        <span class="album-row__name">{{ album.name }}</span>
+                        @if (formatReleaseDate(album); as releaseDate) {
+                          <span class="album-row__date">{{ releaseDate }}</span>
+                        }
+                      </span>
+                    </a>
+                    <button
+                      type="button"
+                      class="album-row__play"
+                      [class.album-row__play--paused]="isAlbumCurrent(album) && !isAlbumPlaying(album)"
+                      [attr.aria-label]="isAlbumPlaying(album) ? 'Pause album' : 'Play album'"
+                      (click)="playAlbum($event, album)"
+                    >
+                      {{ isAlbumPlaying(album) ? 'pause' : 'play' }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          } @else if (!tracks.value().length) {
+            <p class="page-status page-status--wide">No tracks available for this item.</p>
+          } @else {
+            @for (track of tracks.value(); track track.id + '-' + track.trackOrder) {
+              <app-track-row
+                [track]="track"
+                [isCurrent]="isTrackCurrent(track)"
+                [isPlaying]="isTrackPlaying(track)"
+                (playPause)="onTrackPlayPause(track)"
+                (artistNavigate)="onTrackArtistNavigate($event)"
+              />
+            }
+          }
+        } @else {
+          <div class="recommendations-container">
+            <h3>Recommended {{ recommendationsTitle() }}</h3>
+            <div class="recommendations-list">
+              @for (item of recommendations.value(); track item.id) {
+                <a
+                  class="recommendation"
+                  [routerLink]="['/details', item.type, item.id]"
+                  [style.background-image]="'url(' + coverUrl(item) + ')'"
+                >
+                  <p>{{ item.name }}</p>
+                </a>
+              } @empty {
+                <p class="page-status page-status--wide">No recommendations available.</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

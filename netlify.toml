@@ -1,0 +1,21 @@
+[build]
+  command = "npm run env && npm run build"
+  publish = "dist/musify/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/lastfm"
+  to = "/.netlify/functions/lastfm"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

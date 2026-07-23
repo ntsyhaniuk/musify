@@ -1,0 +1,6 @@
+<div class="user-container">
+  @if (imageUrl(); as src) {
+    <img [src]="src" alt="profile picture" />
+  }
+  <span>{{ displayName() }}</span>
+</div>

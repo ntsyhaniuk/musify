@@ -1,0 +1,13 @@
+<div class="page-shell">
+  @if (list.isLoading()) {
+    <p class="page-status">Loading library…</p>
+  } @else if (list.error()) {
+    <p class="page-status">Could not load this library section. Try again later.</p>
+  } @else if (title()) {
+    <app-items-list
+      [title]="title()"
+      [items]="list.value().items"
+      [total]="list.value().total"
+    />
+  }
+</div>

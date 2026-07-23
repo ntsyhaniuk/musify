@@ -1,0 +1,138 @@
+@if (player.isVisible()) {
+  <div class="controls-container">
+    <div class="left-part">
+      @if (player.currentTrack()?.image; as image) {
+        <img
+          [src]="image"
+          alt="Album cover"
+          class="cover-link"
+          role="link"
+          tabindex="0"
+          (click)="goToAlbum()"
+          (keyup.enter)="goToAlbum()"
+        />
+      }
+      <div class="track-info" #trackInfo>
+        <div class="track-name">
+          <span
+            class="cover-link"
+            role="link"
+            tabindex="0"
+            [class.animated]="isNameAnimated(player.currentTrack()?.name)"
+            (click)="goToAlbum()"
+            (keyup.enter)="goToAlbum()"
+          >
+            {{ player.currentTrack()?.name }}
+          </span>
+        </div>
+        <div class="track-artist">
+          <p [class.animated]="isArtistAnimated(player.currentTrack()?.artists)">
+            @for (artist of player.currentTrack()?.artists; track artist.name) {
+              <span (click)="goToArtist(artist)" (keyup.enter)="goToArtist(artist)" tabindex="0" role="link">
+                {{ artist.name }}
+              </span>
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="middle-part">
+      <div class="top">
+        <button
+          type="button"
+          class="btn--transparent"
+          [class.is-active]="player.shuffle()"
+          aria-label="Shuffle"
+          (click)="player.toggleShuffle()"
+        >
+          <i class="icon ion-ios-shuffle small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn--transparent"
+          [class.is-active]="player.hasPrevious()"
+          [disabled]="!player.hasPrevious()"
+          aria-label="Previous"
+          (click)="player.previousTrack()"
+        >
+          <i class="icon ion-ios-skip-backward small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn--transparent is-active"
+          [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
+          (click)="player.togglePlay()"
+        >
+          <i
+            class="icon"
+            [class.ion-ios-play]="!player.isPlaying()"
+            [class.ion-ios-pause]="player.isPlaying()"
+            aria-hidden="true"
+          ></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn--transparent"
+          [class.is-active]="player.hasNext()"
+          [disabled]="!player.hasNext()"
+          aria-label="Next"
+          (click)="player.nextTrack()"
+        >
+          <i class="icon ion-ios-skip-forward small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn--transparent"
+          [class.is-active]="player.repeatMode() > 0"
+          [class.track]="player.repeatMode() === 1"
+          [class.all]="player.repeatMode() === 2"
+          aria-label="Repeat"
+          (click)="player.cycleRepeatMode()"
+        >
+          <i class="icon ion-ios-repeat small" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="bottom">
+        <span>{{ player.formatTime(player.position()) }}</span>
+        <mat-slider
+          class="time-slider"
+          [min]="0"
+          [max]="player.duration() || 1"
+          [discrete]="false"
+        >
+          <input
+            matSliderThumb
+            [value]="player.position()"
+            (valueChange)="onSeek($event)"
+          />
+        </mat-slider>
+        <span>{{ player.formatTime(player.duration()) }}</span>
+      </div>
+    </div>
+
+    <div class="right-part">
+      <button type="button" class="btn--transparent" aria-label="Volume">
+        <i
+          class="icon small"
+          [class.ion-ios-volume-off]="player.volume() === 0"
+          [class.ion-ios-volume-low]="player.volume() > 0 && player.volume() <= 50"
+          [class.ion-ios-volume-high]="player.volume() > 50"
+          aria-hidden="true"
+        ></i>
+      </button>
+      <mat-slider class="time-slider" [min]="0" [max]="100" [discrete]="false">
+        <input
+          matSliderThumb
+          [value]="player.volume()"
+          (valueChange)="onVolume($event)"
+        />
+      </mat-slider>
+    </div>
+  </div>
+}
