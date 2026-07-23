@@ -14,9 +14,16 @@
     text-transform: capitalize;
 
     h1 {
+      display: inline-block;
+      max-width: 100%;
       margin-bottom: 35px;
+      padding: 0.12em 0.4em;
       align-self: center;
-      mix-blend-mode: difference;
+      border-radius: 4px;
+      color: $whiteText;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: brightness(0.55);
+      text-shadow: 0 0 10px #000;
       @media screen and (max-width: 415px) {
         font-size: 24px;
       }
