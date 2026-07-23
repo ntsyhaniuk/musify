@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, effect, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
 
@@ -29,6 +29,7 @@ export class Home {
   private readonly auth = inject(Auth);
 
   protected readonly isAuthenticated = this.auth.isAuthenticated;
+  protected readonly searchQuery = this.searchState.query;
 
   protected readonly sections = rxResource({
     params: () => ({
@@ -45,6 +46,23 @@ export class Home {
       return this.spotify.searchPaginated(params.query, 2).pipe(map(searchToSections));
     },
     defaultValue: [] as SpotifyHomeSection[],
+  });
+
+  protected readonly isSearching = computed(() => !!this.searchQuery().trim());
+
+  protected readonly visibleSections = computed(() => {
+    const lists = this.sections.value() ?? [];
+    if (!this.isSearching()) {
+      return lists;
+    }
+    return lists.filter((section) => section.items.length > 0);
+  });
+
+  protected readonly isSearchEmpty = computed(() => {
+    if (!this.isSearching() || this.sections.isLoading() || this.sections.error()) {
+      return false;
+    }
+    return this.visibleSections().length === 0;
   });
 
   constructor() {
