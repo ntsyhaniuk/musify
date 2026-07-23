@@ -360,6 +360,18 @@ export class SpotifyApi {
       .set('position_ms', String(Math.round(positionMs)));
     return this.http.put<void>(`${this.baseUrl}/me/player/seek`, {}, { params });
   }
+
+  setShuffle(deviceId: string, state: boolean): Observable<void> {
+    const params = new HttpParams()
+      .set('device_id', deviceId)
+      .set('state', String(state));
+    return this.http.put<void>(`${this.baseUrl}/me/player/shuffle`, {}, { params });
+  }
+
+  setRepeat(deviceId: string, state: 'track' | 'context' | 'off'): Observable<void> {
+    const params = new HttpParams().set('device_id', deviceId).set('state', state);
+    return this.http.put<void>(`${this.baseUrl}/me/player/repeat`, {}, { params });
+  }
 }
 
 /** Recently-played and playlist-items share paging-ish shapes. */

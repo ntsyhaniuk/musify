@@ -3,12 +3,34 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
 import { App } from './app';
+import { Auth } from './core/auth/auth';
+import { Player } from './features/player/player';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([]), provideHttpClient()],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        {
+          provide: Auth,
+          useValue: {
+            init: vi.fn().mockResolvedValue(undefined),
+            isAuthenticated: vi.fn().mockReturnValue(false),
+            authorize: vi.fn(),
+          },
+        },
+        {
+          provide: Player,
+          useValue: {
+            init: vi.fn().mockResolvedValue(undefined),
+            isVisible: () => false,
+            isPlaying: () => false,
+            currentTrack: () => null,
+          },
+        },
+      ],
     }).compileComponents();
   });
 

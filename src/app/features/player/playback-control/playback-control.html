@@ -1,42 +1,123 @@
-<div class="controls-container">
-  <div class="left-part">
-    <div class="track-info">
-      <div class="track-name"><span>No track playing</span></div>
-      <div class="track-artist"><p><span>—</span></p></div>
+@if (player.isVisible()) {
+  <div class="controls-container">
+    <div class="left-part">
+      @if (player.currentTrack()?.image; as image) {
+        <img [src]="image" alt="cover image" />
+      }
+      <div class="track-info" #trackInfo>
+        <div class="track-name">
+          <span [class.animated]="isNameAnimated(player.currentTrack()?.name)">
+            {{ player.currentTrack()?.name }}
+          </span>
+        </div>
+        <div class="track-artist">
+          <p [class.animated]="isArtistAnimated(player.currentTrack()?.artists)">
+            @for (artist of player.currentTrack()?.artists; track artist.name) {
+              <span (click)="goToArtist(artist)" (keyup.enter)="goToArtist(artist)" tabindex="0" role="link">
+                {{ artist.name }}
+              </span>
+            }
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="middle-part">
-    <div class="top">
-      <button type="button" class="transparent_button" aria-label="Shuffle" disabled>
-        <i class="icon ion-ios-shuffle small" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="transparent_button" aria-label="Previous" disabled>
-        <i class="icon ion-ios-skip-backward small" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="transparent_button active" aria-label="Play" disabled>
-        <i class="icon ion-ios-play" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="transparent_button" aria-label="Next" disabled>
-        <i class="icon ion-ios-skip-forward small" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="transparent_button" aria-label="Repeat" disabled>
-        <i class="icon ion-ios-repeat small" aria-hidden="true"></i>
-      </button>
+
+    <div class="middle-part">
+      <div class="top">
+        <button
+          type="button"
+          class="transparent_button"
+          [class.active]="player.shuffle()"
+          aria-label="Shuffle"
+          (click)="player.toggleShuffle()"
+        >
+          <i class="icon ion-ios-shuffle small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="transparent_button"
+          [class.active]="player.hasPrevious()"
+          [disabled]="!player.hasPrevious()"
+          aria-label="Previous"
+          (click)="player.previousTrack()"
+        >
+          <i class="icon ion-ios-skip-backward small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="transparent_button active"
+          [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
+          (click)="player.togglePlay()"
+        >
+          <i
+            class="icon"
+            [class.ion-ios-play]="!player.isPlaying()"
+            [class.ion-ios-pause]="player.isPlaying()"
+            aria-hidden="true"
+          ></i>
+        </button>
+
+        <button
+          type="button"
+          class="transparent_button"
+          [class.active]="player.hasNext()"
+          [disabled]="!player.hasNext()"
+          aria-label="Next"
+          (click)="player.nextTrack()"
+        >
+          <i class="icon ion-ios-skip-forward small" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="transparent_button"
+          [class.active]="player.repeatMode() > 0"
+          [class.track]="player.repeatMode() === 1"
+          [class.all]="player.repeatMode() === 2"
+          aria-label="Repeat"
+          (click)="player.cycleRepeatMode()"
+        >
+          <i class="icon ion-ios-repeat small" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="bottom">
+        <span>{{ player.formatTime(player.position()) }}</span>
+        <mat-slider
+          class="time-slider"
+          [min]="0"
+          [max]="player.duration() || 1"
+          [discrete]="false"
+        >
+          <input
+            matSliderThumb
+            [value]="player.position()"
+            (valueChange)="onSeek($event)"
+          />
+        </mat-slider>
+        <span>{{ player.formatTime(player.duration()) }}</span>
+      </div>
     </div>
-    <div class="bottom">
-      <span>0:00</span>
-      <mat-slider class="time-slider" min="0" max="100" discrete="false">
-        <input matSliderThumb [value]="player.position()" disabled />
+
+    <div class="right-part">
+      <button type="button" class="transparent_button" aria-label="Volume">
+        <i
+          class="icon small"
+          [class.ion-ios-volume-off]="player.volume() === 0"
+          [class.ion-ios-volume-low]="player.volume() > 0 && player.volume() <= 50"
+          [class.ion-ios-volume-high]="player.volume() > 50"
+          aria-hidden="true"
+        ></i>
+      </button>
+      <mat-slider class="time-slider" [min]="0" [max]="100" [discrete]="false">
+        <input
+          matSliderThumb
+          [value]="player.volume()"
+          (valueChange)="onVolume($event)"
+        />
       </mat-slider>
-      <span>0:00</span>
     </div>
   </div>
-  <div class="right-part">
-    <button type="button" class="transparent_button" aria-label="Volume" disabled>
-      <i class="icon ion-md-volume-low small" aria-hidden="true"></i>
-    </button>
-    <mat-slider class="time-slider" min="0" max="100">
-      <input matSliderThumb [value]="player.volume()" disabled />
-    </mat-slider>
-  </div>
-</div>
+}

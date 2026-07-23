@@ -7,6 +7,7 @@ import { Spinner } from './core/spinner/spinner';
 import { Navbar } from './shared/components/navbar/navbar';
 import { Spinner as SpinnerComponent } from './shared/components/spinner/spinner';
 import { PlaybackControl } from './features/player/playback-control/playback-control';
+import { Player } from './features/player/player';
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,15 @@ import { PlaybackControl } from './features/player/playback-control/playback-con
 })
 export class App implements OnInit {
   private readonly auth = inject(Auth);
+  private readonly player = inject(Player);
   protected readonly background = inject(Background);
   protected readonly spinner = inject(Spinner);
 
   ngOnInit(): void {
-    void this.auth.init();
+    void this.auth.init().then(() => {
+      if (this.auth.isAuthenticated()) {
+        void this.player.init();
+      }
+    });
   }
 }
