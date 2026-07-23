@@ -1,0 +1,15 @@
+@use 'variables' as *;
+
+.home-placeholder {
+  padding: 35px;
+  color: $whiteText;
+
+  h2 {
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-family: 'Proxima Light', sans-serif;
+    opacity: 0.85;
+  }
+}

@@ -1,27 +1,62 @@
 @use '@angular/material' as mat;
+@use './styles/theme-colors' as musify-theme;
+@use './styles/variables' as *;
 
-// Scaffold default Material theme; Musify green + Proxima Nova applied in port-design.
+// Musify Material 3 theme (green primary from #00d949) — mat-slider and any Material usage.
 html {
   height: 100%;
+  color-scheme: dark;
+
   @include mat.theme(
     (
       color: (
-        primary: mat.$green-palette,
-        tertiary: mat.$green-palette,
+        theme-type: dark,
+        primary: musify-theme.$primary-palette,
+        tertiary: musify-theme.$tertiary-palette,
       ),
-      typography: Roboto,
+      typography: (
+        plain-family: Proxima,
+        brand-family: Proxima,
+      ),
       density: 0,
     )
   );
 }
 
+body,
+html,
+h1 {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+
+  @media screen and (max-width: 415px) {
+    overflow-x: hidden !important;
+  }
+}
+
+h1 {
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: Proxima;
+  src: url('/assets/fonts/ProximaNova-Bold.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Light';
+  src: url('/assets/fonts/ProximaNova-Light.woff') format('woff');
+  font-display: swap;
+}
+
 body {
-  color-scheme: dark;
-  background-color: #000;
-  color: #fff;
   margin: 0;
   height: 100%;
-  font-family: system-ui, sans-serif;
+  font-family: Proxima, 'Helvetica Neue', sans-serif;
+  background-color: #000;
+  color: $whiteText;
 }
 
 .transparent_button {
@@ -36,5 +71,39 @@ body {
 }
 
 .active {
-  color: #00d949;
+  color: $lightGreen;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: $lightGreen;
+}
+
+/* Minimal layout helpers formerly covered by Bootstrap (only what the shell needs). */
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
 }
