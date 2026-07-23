@@ -90,7 +90,13 @@
             <p class="detail-status">No tracks available for this item.</p>
           } @else {
             @for (track of tracks.value(); track track.id + '-' + track.trackOrder) {
-              <app-track-row [track]="track" />
+              <app-track-row
+                [track]="track"
+                [isCurrent]="isTrackCurrent(track)"
+                [isPlaying]="isTrackPlaying(track)"
+                (playPause)="onTrackPlayPause(track)"
+                (artistNavigate)="onTrackArtistNavigate($event)"
+              />
             }
           }
         } @else {

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { Search } from './search';
-import { SearchState } from './search-state';
+import { SearchState } from '@app/core/search/search-state';
 
 describe('Search', () => {
   let component: Search;

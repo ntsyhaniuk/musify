@@ -13,7 +13,7 @@ import {
   toListItemFromArtist,
   toListItemFromPlaylist,
 } from '@app/shared/models/spotify.models';
-import { SearchState } from '@app/features/search/search-state';
+import { SearchState } from '@app/core/search/search-state';
 
 @Component({
   selector: 'app-home',

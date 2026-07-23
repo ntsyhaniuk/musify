@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subject, debounceTime, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { SearchState } from './search-state';
+import { SearchState } from '@app/core/search/search-state';
 
 /**
  * Debounced Spotify search input in the navbar.

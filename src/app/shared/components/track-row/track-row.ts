@@ -1,73 +1,31 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 
-import { Player } from '@app/features/player/player';
 import { SpotifyTrackSummary } from '@app/shared/models/spotify.models';
+import { formatTrackDuration } from '@app/shared/utils/format-duration';
 
 @Component({
   selector: 'app-track-row',
-  imports: [],
   templateUrl: './track-row.html',
   styleUrl: './track-row.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackRow {
   readonly track = input.required<SpotifyTrackSummary>();
+  readonly isCurrent = input(false);
+  readonly isPlaying = input(false);
 
-  private readonly player = inject(Player);
-  private readonly router = inject(Router);
+  readonly playPause = output<void>();
+  readonly artistNavigate = output<string>();
 
-  protected readonly isCurrent = computed(() => {
-    const current = this.player.currentTrack();
-    if (!current) {
-      return false;
-    }
-    const uri = this.track().uri;
-    return current.uri === uri || current.linkedFromUri === uri;
-  });
+  protected readonly formatDuration = formatTrackDuration;
 
-  protected readonly isPlaying = computed(
-    () => this.isCurrent() && this.player.isPlaying(),
-  );
-
-  protected playPause(): void {
-    const track = this.track();
-    if (this.isCurrent()) {
-      this.player.togglePlay();
-      return;
-    }
-
-    if (track.contextUri) {
-      const offset =
-        track.trackOrder !== undefined
-          ? { position: track.trackOrder }
-          : { uri: track.uri };
-      this.player.playTrack({
-        context_uri: track.contextUri,
-        offset,
-      });
-      return;
-    }
-
-    this.player.playTrack({ uris: [track.uri] });
+  protected onPlayPause(): void {
+    this.playPause.emit();
   }
 
-  protected formatDuration(ms: number): string {
-    if (!ms) {
-      return '';
-    }
-    return this.player.formatTime(ms);
-  }
-
-  protected goToArtist(id: string | undefined): void {
+  protected onArtistNavigate(id: string | undefined): void {
     if (id) {
-      void this.router.navigate(['/details', 'artist', id]);
+      this.artistNavigate.emit(id);
     }
   }
 }

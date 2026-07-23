@@ -6,7 +6,7 @@ import {
   signal,
   effect,
 } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
 
@@ -20,6 +20,7 @@ import {
   SpotifyArtist,
   SpotifyEntityType,
   SpotifyListItem,
+  SpotifyTrackSummary,
   playlistItemsPaging,
   toListItemFromArtist,
 } from '@app/shared/models/spotify.models';
@@ -35,6 +36,7 @@ type DetailTab = 'primary' | 'recommendations';
 })
 export class Detail {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly spotify = inject(SpotifyApi);
   private readonly lastfm = inject(LastfmApi);
   private readonly background = inject(Background);
@@ -249,6 +251,36 @@ export class Detail {
     } else {
       this.player.playTrack({ context_uri: uri });
     }
+  }
+
+  protected isTrackCurrent(track: SpotifyTrackSummary): boolean {
+    const current = this.player.currentTrack();
+    if (!current) {
+      return false;
+    }
+    return current.uri === track.uri || current.linkedFromUri === track.uri;
+  }
+
+  protected isTrackPlaying(track: SpotifyTrackSummary): boolean {
+    return this.isTrackCurrent(track) && this.player.isPlaying();
+  }
+
+  protected onTrackPlayPause(track: SpotifyTrackSummary): void {
+    if (this.isTrackCurrent(track)) {
+      this.player.togglePlay();
+      return;
+    }
+    if (track.contextUri) {
+      const offset =
+        track.trackOrder !== undefined ? { position: track.trackOrder } : { uri: track.uri };
+      this.player.playTrack({ context_uri: track.contextUri, offset });
+      return;
+    }
+    this.player.playTrack({ uris: [track.uri] });
+  }
+
+  protected onTrackArtistNavigate(id: string): void {
+    void this.router.navigate(['/details', 'artist', id]);
   }
 
   protected isAlbumCurrent(album: SpotifyAlbum): boolean {

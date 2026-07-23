@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { Auth } from '@app/core/auth/auth';
 import { Background } from '@app/core/background/background';
 import { Spinner } from '@app/core/spinner/spinner';
-import { Navbar } from '@app/shared/components/navbar/navbar';
+import { Navbar } from '@app/layout/navbar/navbar';
 import { Spinner as SpinnerComponent } from '@app/shared/components/spinner/spinner';
 import { PlaybackControl } from '@app/features/player/playback-control/playback-control';
 import { Player } from '@app/features/player/player';
