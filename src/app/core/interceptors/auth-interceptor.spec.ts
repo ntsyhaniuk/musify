@@ -57,8 +57,30 @@ describe('authInterceptor', () => {
 
     const req = http.expectOne('https://api.spotify.com/v1/me');
     expect(req.request.headers.get('Authorization')).toBe('Bearer token-1');
+    expect(spinner.isLoading()).toBe(true);
     req.flush({ id: 'user' });
     await pending;
+    expect(spinner.isLoading()).toBe(false);
+  });
+
+  it('keeps spinner visible until concurrent Spotify requests finish', async () => {
+    const client = TestBed.inject(HttpClient);
+
+    const firstPending = firstValueFrom(client.get('https://api.spotify.com/v1/me'));
+    const secondPending = firstValueFrom(client.get('https://api.spotify.com/v1/me/playlists'));
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const first = http.expectOne('https://api.spotify.com/v1/me');
+    const second = http.expectOne('https://api.spotify.com/v1/me/playlists');
+    expect(spinner.isLoading()).toBe(true);
+
+    first.flush({ id: 'user' });
+    await firstPending;
+    expect(spinner.isLoading()).toBe(true);
+
+    second.flush({ items: [] });
+    await secondPending;
     expect(spinner.isLoading()).toBe(false);
   });
 

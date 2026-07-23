@@ -4,13 +4,18 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class Spinner {
+  private activeRequests = 0;
   readonly isLoading = signal(false);
 
   show(): void {
+    this.activeRequests += 1;
     this.isLoading.set(true);
   }
 
   hide(): void {
-    this.isLoading.set(false);
+    this.activeRequests = Math.max(0, this.activeRequests - 1);
+    if (this.activeRequests === 0) {
+      this.isLoading.set(false);
+    }
   }
 }

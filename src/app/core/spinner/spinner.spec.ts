@@ -21,4 +21,23 @@ describe('Spinner', () => {
     service.hide();
     expect(service.isLoading()).toBe(false);
   });
+
+  it('keeps loading until all nested show/hide pairs complete', () => {
+    service.show();
+    service.show();
+    expect(service.isLoading()).toBe(true);
+    service.hide();
+    expect(service.isLoading()).toBe(true);
+    service.hide();
+    expect(service.isLoading()).toBe(false);
+  });
+
+  it('does not go negative when hide is called without show', () => {
+    service.hide();
+    expect(service.isLoading()).toBe(false);
+    service.show();
+    expect(service.isLoading()).toBe(true);
+    service.hide();
+    expect(service.isLoading()).toBe(false);
+  });
 });

@@ -28,6 +28,8 @@ export class Home {
   private readonly background = inject(Background);
   private readonly auth = inject(Auth);
 
+  protected readonly isAuthenticated = this.auth.isAuthenticated;
+
   protected readonly sections = rxResource({
     params: () => ({
       query: this.searchState.query(),
