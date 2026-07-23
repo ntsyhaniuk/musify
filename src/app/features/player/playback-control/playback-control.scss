@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use 'variables' as *;
 
 .controls-container {
   display: flex;
@@ -8,15 +8,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 90px;
-  border-top: 1px solid $lightGreen;
+  height: $player-height;
+  border-top: 1px solid $color-brand;
   transition: all ease-in-out 200ms;
   background-color: #000;
   z-index: 3;
 
   .left-part {
     display: flex;
-    color: $whiteText;
+    color: $color-text;
     width: 20%;
 
     img {
@@ -56,7 +56,7 @@
 
       .track-artist {
         display: flex;
-        font-family: "Proxima Light", serif;
+        font-family: 'Proxima Light', sans-serif;
         width: 100%;
         white-space: nowrap;
         overflow: hidden;
@@ -138,9 +138,9 @@
       margin-top: -15px;
 
       span {
-        font-family: "Proxima Light", serif;
+        font-family: 'Proxima Light', sans-serif;
         font-size: 14px;
-        color: $whiteText;
+        color: $color-text;
         width: 35px;
       }
 
@@ -165,9 +165,13 @@
     }
   }
 
-  .transparent_button {
+  .btn--transparent {
     i {
       font-size: 40px;
+    }
+
+    &.is-active i {
+      color: $color-brand;
     }
   }
 

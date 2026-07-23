@@ -1,15 +1,7 @@
 @use 'variables' as *;
 
-.categories-page {
-  padding-bottom: 120px;
-}
-
-.home-status {
-  padding: 35px;
-  color: $whiteText;
-  font-family: 'Proxima Light', sans-serif;
-  opacity: 0.9;
-}
+// `.page-shell` bottom padding and `.page-status` text come from the shared
+// `src/styles/_page.scss` partial (loaded globally via `styles.scss`).
 
 .search-empty {
   display: flex;
@@ -19,7 +11,7 @@
   text-align: center;
   min-height: 42vh;
   padding: 48px 24px;
-  color: $whiteText;
+  color: $color-text;
 
   &__emoji {
     margin: 0 0 12px;

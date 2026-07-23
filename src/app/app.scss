@@ -1,6 +1,8 @@
+@use 'variables' as *;
+
 .app-container {
   height: 100vh;
-  padding-top: 100px;
+  padding-top: $navbar-height;
 
   .background {
     position: absolute;

@@ -1,16 +1,16 @@
 <div class="track-container">
   <div class="track">
-    <button type="button" class="transparent_button play-button" (click)="onPlayPause()" aria-label="Play or pause">
+    <button type="button" class="btn--transparent play-button" (click)="onPlayPause()" aria-label="Play or pause">
       <i
         class="icon"
         [class.ion-ios-play]="!isPlaying()"
         [class.ion-ios-pause]="isPlaying()"
-        [class.active]="isCurrent()"
+        [class.is-active]="isCurrent()"
         aria-hidden="true"
       ></i>
     </button>
     <div class="track-info">
-      <div class="artists" [class.active]="isCurrent()">
+      <div class="artists" [class.is-active]="isCurrent()">
         @for (artist of track().artists; track artist.id || artist.name) {
           <span (click)="onArtistNavigate(artist.id)" (keyup.enter)="onArtistNavigate(artist.id)" tabindex="0" role="link">
             {{ artist.name }}
@@ -18,9 +18,9 @@
         }
       </div>
       <div class="name">
-        <span [class.active]="isCurrent()">{{ track().name }}</span>
+        <span [class.is-active]="isCurrent()">{{ track().name }}</span>
       </div>
     </div>
-    <p [class.active]="isCurrent()">{{ formatDuration(track().durationMs) }}</p>
+    <p [class.is-active]="isCurrent()">{{ formatDuration(track().durationMs) }}</p>
   </div>
 </div>

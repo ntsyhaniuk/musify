@@ -1,2 +1,37 @@
-$lightGreen: #00d949;
-$whiteText: #ffffff;
+@use 'sass:map';
+
+// Colors
+$color-brand: #00d949;
+$color-text: #ffffff;
+$color-bg: #000000;
+$overlay-scrim: rgba(0, 0, 0, 0.5);
+$overlay-dark: rgba(0, 0, 0, 0.9);
+
+// Layout
+$navbar-height: 100px;
+$player-height: 90px;
+$page-bottom-padding: 120px;
+
+// Tile sizes (home/library grid + recommendations)
+$tile-lg: 320px;
+$tile-md: 200px;
+$tile-sm: 100px;
+
+// Breakpoints — grid column-count steps for the items-list tile grid.
+$breakpoints: (
+  xl: 1617px,
+  lg: 1302px,
+  md: 978px,
+  sm: 817px,
+  xs: 617px,
+  xxs: 415px,
+);
+
+// Shadows / radii used around detail covers and pill buttons.
+$shadow-cover: 0 0 20px -5px $color-bg;
+$shadow-cover-sm: 0 0 12px -4px $color-bg;
+$radius-pill: 17px;
+
+@function breakpoint($name) {
+  @return map.get($breakpoints, $name);
+}

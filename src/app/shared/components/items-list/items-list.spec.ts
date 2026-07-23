@@ -39,7 +39,7 @@ describe('ItemsList', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const seeAll = fixture.debugElement.query(By.css('.see-all_row span'));
+    const seeAll = fixture.debugElement.query(By.css('.items-list__see-all span'));
     expect(seeAll).toBeTruthy();
     expect(seeAll.nativeElement.textContent.trim()).toBe('See All');
   });
@@ -58,6 +58,6 @@ describe('ItemsList', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.debugElement.query(By.css('.see-all_row'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.items-list__see-all'))).toBeNull();
   });
 });

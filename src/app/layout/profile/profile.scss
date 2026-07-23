@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use 'variables' as *;
 
 .user-container {
   display: flex;
@@ -13,7 +13,7 @@
   }
 
   span {
-    color: $whiteText;
+    color: $color-text;
     margin-left: 15px;
   }
 }

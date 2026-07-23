@@ -41,8 +41,8 @@
       <div class="top">
         <button
           type="button"
-          class="transparent_button"
-          [class.active]="player.shuffle()"
+          class="btn--transparent"
+          [class.is-active]="player.shuffle()"
           aria-label="Shuffle"
           (click)="player.toggleShuffle()"
         >
@@ -51,8 +51,8 @@
 
         <button
           type="button"
-          class="transparent_button"
-          [class.active]="player.hasPrevious()"
+          class="btn--transparent"
+          [class.is-active]="player.hasPrevious()"
           [disabled]="!player.hasPrevious()"
           aria-label="Previous"
           (click)="player.previousTrack()"
@@ -62,7 +62,7 @@
 
         <button
           type="button"
-          class="transparent_button active"
+          class="btn--transparent is-active"
           [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
           (click)="player.togglePlay()"
         >
@@ -76,8 +76,8 @@
 
         <button
           type="button"
-          class="transparent_button"
-          [class.active]="player.hasNext()"
+          class="btn--transparent"
+          [class.is-active]="player.hasNext()"
           [disabled]="!player.hasNext()"
           aria-label="Next"
           (click)="player.nextTrack()"
@@ -87,8 +87,8 @@
 
         <button
           type="button"
-          class="transparent_button"
-          [class.active]="player.repeatMode() > 0"
+          class="btn--transparent"
+          [class.is-active]="player.repeatMode() > 0"
           [class.track]="player.repeatMode() === 1"
           [class.all]="player.repeatMode() === 2"
           aria-label="Repeat"
@@ -117,7 +117,7 @@
     </div>
 
     <div class="right-part">
-      <button type="button" class="transparent_button" aria-label="Volume">
+      <button type="button" class="btn--transparent" aria-label="Volume">
         <i
           class="icon small"
           [class.ion-ios-volume-off]="player.volume() === 0"

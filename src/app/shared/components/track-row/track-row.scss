@@ -1,14 +1,14 @@
 @use 'variables' as *;
 
 .track-container {
-  font-family: 'Proxima Light', serif;
+  font-family: 'Proxima Light', sans-serif;
   margin: 0;
   padding: 0;
   width: 100%;
 
   p {
     margin: 0;
-    color: $whiteText;
+    color: $color-text;
   }
 
   .track {
@@ -24,7 +24,7 @@
       width: 36px;
       height: 36px;
       cursor: pointer;
-      color: #fff;
+      color: $color-text;
 
       .icon {
         font-size: 28px;
@@ -32,7 +32,7 @@
       }
 
       &:hover .icon {
-        color: $lightGreen;
+        color: $color-brand;
       }
     }
 
@@ -41,7 +41,7 @@
       flex-basis: 100%;
 
       .artists {
-        font-family: 'Proxima', serif;
+        font-family: 'Proxima', sans-serif;
         overflow: hidden;
         text-overflow: ellipsis;
         width: 50%;
@@ -72,7 +72,7 @@
     }
   }
 
-  .active {
-    color: $lightGreen;
+  .is-active {
+    color: $color-brand;
   }
 }

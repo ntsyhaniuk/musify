@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
 @use './styles/theme-colors' as musify-theme;
 @use './styles/variables' as *;
+@use './styles/mixins' as *;
+@use './styles/page';
 
 // Musify Material 3 theme (green primary from #00d949) — mat-slider and any Material usage.
 html {
@@ -30,7 +32,7 @@ h1 {
   padding: 0;
   overflow-x: hidden;
 
-  @media screen and (max-width: 415px) {
+  @include breakpoint-down(xxs) {
     overflow-x: hidden !important;
   }
 }
@@ -52,11 +54,10 @@ h1 {
 }
 
 body {
-  margin: 0;
   height: 100%;
   font-family: Proxima, 'Helvetica Neue', sans-serif;
-  background-color: #000;
-  color: $whiteText;
+  background-color: $color-bg;
+  color: $color-text;
 }
 
 input,
@@ -66,7 +67,8 @@ textarea {
   font: inherit;
 }
 
-.transparent_button {
+/** Icon-only circular button with no chrome (play controls, close icons). */
+.btn--transparent {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,11 +76,7 @@ textarea {
   border: none;
   border-radius: 50%;
   outline: none !important;
-  color: #fff;
-}
-
-.active {
-  color: $lightGreen;
+  color: $color-text;
 }
 
 ::-webkit-scrollbar-track {
@@ -95,22 +93,5 @@ textarea {
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: $lightGreen;
-}
-
-/* Minimal layout helpers formerly covered by Bootstrap (only what the shell needs). */
-.d-flex {
-  display: flex;
-}
-
-.align-items-center {
-  align-items: center;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-
-.justify-content-between {
-  justify-content: space-between;
+  background-color: $color-brand;
 }

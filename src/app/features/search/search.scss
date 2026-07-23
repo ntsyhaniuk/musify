@@ -1,4 +1,4 @@
-@use "variables" as *;
+@use 'variables' as *;
 
 .search-container {
   display: flex;
@@ -6,7 +6,7 @@
   font-size: 20px;
 
   i {
-    color: $whiteText;
+    color: $color-text;
     font-size: 20px;
     margin-top: 2px;
     margin-right: 5px;
@@ -18,10 +18,10 @@
     border: none;
     background: transparent;
     outline: none;
-    color: $whiteText;
+    color: $color-text;
 
     &::placeholder {
-      color: $whiteText;
+      color: $color-text;
     }
 
     &::-webkit-search-cancel-button {

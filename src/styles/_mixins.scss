@@ -1,0 +1,18 @@
+@use 'variables' as vars;
+
+/** Reserves space for the fixed bottom playback bar (home/library page shells). */
+@mixin page-bottom-padding {
+  padding-bottom: vars.$page-bottom-padding;
+}
+
+/** Drop-shadow used under album/artist covers and detail hero art. */
+@mixin cover-shadow($blur: 20px, $spread: -5px) {
+  box-shadow: 0 0 $blur $spread vars.$color-bg;
+}
+
+/** Tile grid column-count step, keyed by the shared `$breakpoints` map. */
+@mixin breakpoint-down($name) {
+  @media screen and (max-width: vars.breakpoint($name)) {
+    @content;
+  }
+}

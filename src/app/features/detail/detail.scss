@@ -1,10 +1,5 @@
 @use 'variables' as *;
-
-.detail-status {
-  padding: 35px 100px;
-  color: $whiteText;
-  font-family: 'Proxima Light', sans-serif;
-}
+@use 'mixins' as *;
 
 .details-container {
   display: flex;
@@ -12,7 +7,7 @@
   margin-top: 250px;
   padding: 0 100px 100px;
   min-height: calc(100% - 250px);
-  background: rgba(0, 0, 0, 0.9);
+  background: $overlay-dark;
 
   .details-info {
     display: flex;
@@ -20,21 +15,21 @@
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    color: $whiteText;
+    color: $color-text;
     margin-top: -160px;
 
     .top-info {
       display: flex;
       height: 320px;
 
-      .left-side {
+      .detail__aside {
         max-width: 320px;
         height: 320px;
         object-fit: cover;
-        box-shadow: 0 0 20px -5px #000;
+        @include cover-shadow;
       }
 
-      .right-side {
+      .detail__main {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
@@ -51,10 +46,10 @@
             height: 40px;
             border: none;
             outline: none;
-            border-radius: 17px;
-            color: $whiteText;
+            border-radius: $radius-pill;
+            color: $color-text;
             transition: all 200ms ease-in;
-            background: $lightGreen;
+            background: $color-brand;
             text-transform: uppercase;
 
             &:hover {
@@ -70,7 +65,7 @@
           justify-content: center;
 
           p {
-            font-family: 'Proxima Light', serif;
+            font-family: 'Proxima Light', sans-serif;
             font-size: 10px;
             text-transform: uppercase;
           }
@@ -87,7 +82,7 @@
 
             &::-webkit-progress-value {
               border-radius: 10px;
-              background: $lightGreen;
+              background: $color-brand;
             }
           }
         }
@@ -99,7 +94,7 @@
       max-width: 60vw;
 
       p {
-        font-family: 'Proxima Light', serif;
+        font-family: 'Proxima Light', sans-serif;
         font-size: 16px;
         max-height: 200px;
         overflow-y: scroll;
@@ -116,8 +111,8 @@
             margin-left: 0;
           }
 
-          &.active {
-            color: $lightGreen;
+          &.is-active {
+            color: $color-brand;
           }
         }
       }
@@ -151,10 +146,10 @@
   transition: background 150ms ease-in;
 
   &--active {
-    background: rgba(0, 217, 73, 0.12);
+    background: rgba($color-brand, 0.12);
 
     .album-row__name {
-      color: $lightGreen;
+      color: $color-brand;
     }
   }
 
@@ -165,7 +160,7 @@
     flex: 1;
     min-width: 0;
     text-decoration: none;
-    color: $whiteText;
+    color: $color-text;
   }
 
   &__cover {
@@ -173,7 +168,7 @@
     width: 64px;
     height: 64px;
     object-fit: cover;
-    box-shadow: 0 0 12px -4px #000;
+    @include cover-shadow(12px, -4px);
   }
 
   &__meta {
@@ -203,8 +198,8 @@
     height: 32px;
     border: 1px solid transparent;
     border-radius: 16px;
-    background: $lightGreen;
-    color: $whiteText;
+    background: $color-brand;
+    color: $color-text;
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
@@ -221,8 +216,8 @@
 
     &--paused {
       background: transparent;
-      border-color: $lightGreen;
-      color: $lightGreen;
+      border-color: $color-brand;
+      color: $color-brand;
     }
   }
 }
@@ -231,7 +226,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: $whiteText;
+  color: $color-text;
   width: 100%;
 
   .recommendations-list {
@@ -248,16 +243,16 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    flex: 0 0 200px;
-    width: 200px;
-    height: 200px;
+    flex: 0 0 $tile-md;
+    width: $tile-md;
+    height: $tile-md;
     background-size: cover;
     background-position: center;
     cursor: pointer;
     outline: none;
     text-decoration: none;
-    color: $whiteText;
-    box-shadow: 0 0 20px -5px #000;
+    color: $color-text;
+    @include cover-shadow;
     transform: translate3d(0, 0, 0);
     transition: 0.25s all;
 
@@ -284,12 +279,12 @@
         flex-direction: column;
         height: auto;
 
-        .left-side {
+        .detail__aside {
           max-width: 220px;
           height: 220px;
         }
 
-        .right-side {
+        .detail__main {
           padding-left: 0;
           padding-top: 20px;
         }

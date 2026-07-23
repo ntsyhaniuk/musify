@@ -1,13 +1,13 @@
 @if (entity.isLoading()) {
-  <p class="detail-status">Loading…</p>
+  <p class="page-status page-status--wide">Loading…</p>
 } @else if (entity.error() || !entity.value()) {
-  <p class="detail-status">Could not load this item.</p>
+  <p class="page-status page-status--wide">Could not load this item.</p>
 } @else {
   <div class="details-container">
     <div class="details-info">
       <div class="top-info">
-        <img class="left-side" [src]="mainImage()" [alt]="entityName()" />
-        <div class="right-side">
+        <img class="detail__aside" [src]="mainImage()" [alt]="entityName()" />
+        <div class="detail__main">
           <h1>{{ entityName() }}</h1>
           <div class="buttons">
             <button type="button" (click)="playPause()">{{ playLabel() }}</button>
@@ -27,7 +27,7 @@
         }
         <div class="navigation">
           <span
-            [class.active]="activeTab() === 'primary'"
+            [class.is-active]="activeTab() === 'primary'"
             (click)="setTab('primary')"
             (keyup.enter)="setTab('primary')"
             tabindex="0"
@@ -37,7 +37,7 @@
           </span>
           @if (showRecommendationsTab()) {
             <span
-              [class.active]="activeTab() === 'recommendations'"
+              [class.is-active]="activeTab() === 'recommendations'"
               (click)="setTab('recommendations')"
               (keyup.enter)="setTab('recommendations')"
               tabindex="0"
@@ -53,7 +53,7 @@
         @if (activeTab() === 'primary') {
           @if (isArtist()) {
             @if (!albums.value().length) {
-              <p class="detail-status">No albums available for this artist.</p>
+              <p class="page-status page-status--wide">No albums available for this artist.</p>
             } @else {
               <ul class="albums-list">
                 @for (album of albums.value(); track album.id) {
@@ -87,7 +87,7 @@
               </ul>
             }
           } @else if (!tracks.value().length) {
-            <p class="detail-status">No tracks available for this item.</p>
+            <p class="page-status page-status--wide">No tracks available for this item.</p>
           } @else {
             @for (track of tracks.value(); track track.id + '-' + track.trackOrder) {
               <app-track-row
@@ -112,7 +112,7 @@
                   <p>{{ item.name }}</p>
                 </a>
               } @empty {
-                <p class="detail-status">No recommendations available.</p>
+                <p class="page-status page-status--wide">No recommendations available.</p>
               }
             </div>
           </div>

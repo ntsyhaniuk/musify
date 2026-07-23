@@ -1,10 +1,10 @@
-<div class="categories-page">
+<div class="page-shell">
   @if (sections.isLoading()) {
-    <p class="home-status">{{ isSearching() ? 'Searching…' : 'Loading your library…' }}</p>
+    <p class="page-status">{{ isSearching() ? 'Searching…' : 'Loading your library…' }}</p>
   } @else if (sections.error()) {
-    <p class="home-status">Could not load Spotify data. Check your connection and try again.</p>
+    <p class="page-status">Could not load Spotify data. Check your connection and try again.</p>
   } @else if (!isAuthenticated()) {
-    <p class="home-status">Sign in with Spotify to see your library hub.</p>
+    <p class="page-status">Sign in with Spotify to see your library hub.</p>
   } @else if (isSearchEmpty()) {
     <div class="search-empty" role="status">
       <p class="search-empty__emoji" aria-hidden="true">🕵️‍♂️🎧</p>
@@ -12,7 +12,7 @@
       <p class="search-empty__hint">That track went on tour without us. Try another vibe.</p>
     </div>
   } @else if (!sections.value().length) {
-    <p class="home-status">No library items to show yet.</p>
+    <p class="page-status">No library items to show yet.</p>
   } @else {
     @for (section of visibleSections(); track section.key) {
       <app-items-list
