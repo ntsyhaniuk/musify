@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { Search } from '../../../features/search/search';
@@ -9,5 +9,6 @@ import { Profile } from '../profile/profile';
   imports: [RouterLink, Search, Profile],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {}

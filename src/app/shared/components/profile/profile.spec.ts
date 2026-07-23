@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 import { Profile } from './profile';
+import { Auth } from '../../../core/auth/auth';
+import { SpotifyApi } from '../../../data-access/spotify/spotify-api';
 
 describe('Profile', () => {
   let component: Profile;
@@ -9,6 +13,11 @@ describe('Profile', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Profile],
+      providers: [
+        provideHttpClient(),
+        { provide: Auth, useValue: { isAuthenticated: () => false } },
+        { provide: SpotifyApi, useValue: { getCurrentUser: () => of(undefined) } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Profile);

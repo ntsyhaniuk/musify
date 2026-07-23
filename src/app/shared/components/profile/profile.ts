@@ -1,6 +1,10 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { of } from 'rxjs';
 
-/** User profile chip — Phase 2 after auth. */
+import { Auth } from '../../../core/auth/auth';
+import { SpotifyApi } from '../../../data-access/spotify/spotify-api';
+
 @Component({
   selector: 'app-profile',
   imports: [],
@@ -8,4 +12,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './profile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Profile {}
+export class Profile {
+  private readonly auth = inject(Auth);
+  private readonly spotify = inject(SpotifyApi);
+
+  protected readonly user = rxResource({
+    params: () => this.auth.isAuthenticated(),
+    stream: ({ params: authed }) => (authed ? this.spotify.getCurrentUser() : of(undefined)),
+  });
+
+  protected readonly displayName = computed(() => this.user.value()?.display_name ?? 'Not signed in');
+  protected readonly imageUrl = computed(() => this.user.value()?.images?.[0]?.url ?? null);
+}

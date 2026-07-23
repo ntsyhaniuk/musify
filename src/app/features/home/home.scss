@@ -1,15 +1,12 @@
 @use 'variables' as *;
 
-.home-placeholder {
+.categories-page {
+  padding-bottom: 120px;
+}
+
+.home-status {
   padding: 35px;
   color: $whiteText;
-
-  h2 {
-    margin: 0 0 12px;
-  }
-
-  p {
-    font-family: 'Proxima Light', sans-serif;
-    opacity: 0.85;
-  }
+  font-family: 'Proxima Light', sans-serif;
+  opacity: 0.9;
 }

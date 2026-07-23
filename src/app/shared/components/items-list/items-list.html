@@ -4,5 +4,21 @@
       <h1>{{ title() }}</h1>
     </div>
   }
-  <p class="nothing-found__message">No items yet.</p>
+
+  @if (isEmpty()) {
+    <h2 class="nothing-found__message">Nothing found</h2>
+  } @else {
+    <section class="items-list">
+      @for (item of items(); track item.id) {
+        <a
+          class="details"
+          [routerLink]="detailLink(item)"
+          [style.background-image]="'url(' + coverUrl(item) + ')'"
+          [title]="item.name"
+        >
+          <h3>{{ item.name }}</h3>
+        </a>
+      }
+    </section>
+  }
 </div>
