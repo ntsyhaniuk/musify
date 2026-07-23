@@ -16,5 +16,9 @@
   &--wide {
     padding: 35px 100px;
     opacity: 1;
+
+    @include breakpoint-down(mobile) {
+      padding: 24px 16px;
+    }
   }
 }

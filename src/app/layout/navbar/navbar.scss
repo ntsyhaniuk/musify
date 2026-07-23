@@ -5,6 +5,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   position: fixed;
   top: 0;
   right: 0;
@@ -16,28 +17,52 @@
   background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
 
   > * {
-    flex-grow: 1;
-    flex-basis: 0;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .logo {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
     text-decoration: none;
     color: $color-text;
 
+    img {
+      flex-shrink: 0;
+    }
+
     h1 {
       margin-left: 5px;
+    }
+  }
+
+  app-search {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  app-profile {
+    flex: 0 0 auto;
+  }
+}
+
+@include breakpoint-down(mobile) {
+  .navigation {
+    padding: 12px 16px;
+    gap: 8px;
+
+    .logo h1 {
+      display: none;
     }
   }
 }
 
 @include breakpoint-down(xxs) {
   .navigation {
-    justify-content: center !important;
-
-    h1 {
-      font-size: 28px;
+    .logo img {
+      width: 40px;
+      height: 40px;
     }
   }
 }
