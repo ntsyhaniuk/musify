@@ -19,6 +19,23 @@
     padding: 13px 0;
     max-height: 52px;
 
+    .play-button {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      color: #fff;
+
+      .icon {
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      &:hover .icon {
+        color: $lightGreen;
+      }
+    }
+
     .track-info {
       display: flex;
       flex-basis: 100%;

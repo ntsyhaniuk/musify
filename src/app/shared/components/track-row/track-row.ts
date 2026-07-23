@@ -25,7 +25,11 @@ export class TrackRow {
 
   protected readonly isCurrent = computed(() => {
     const current = this.player.currentTrack();
-    return !!current && current.uri === this.track().uri;
+    if (!current) {
+      return false;
+    }
+    const uri = this.track().uri;
+    return current.uri === uri || current.linkedFromUri === uri;
   });
 
   protected readonly isPlaying = computed(
@@ -38,14 +42,20 @@ export class TrackRow {
       this.player.togglePlay();
       return;
     }
+
     if (track.contextUri) {
+      const offset =
+        track.trackOrder !== undefined
+          ? { position: track.trackOrder }
+          : { uri: track.uri };
       this.player.playTrack({
         context_uri: track.contextUri,
-        offset: { uri: track.uri },
+        offset,
       });
-    } else {
-      this.player.playTrack({ uris: [track.uri] });
+      return;
     }
+
+    this.player.playTrack({ uris: [track.uri] });
   }
 
   protected formatDuration(ms: number): string {

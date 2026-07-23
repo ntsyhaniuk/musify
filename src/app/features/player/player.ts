@@ -12,6 +12,9 @@ export interface PlayerTrackView {
   id: string;
   name: string;
   uri: string;
+  /** Present when Spotify remapped the playing track (linked_from). */
+  linkedFromUri?: string | null;
+  albumId?: string | null;
   artists: { id?: string; name: string; uri?: string }[];
   image: string | null;
 }
@@ -255,10 +258,16 @@ export class Player {
     }
 
     const images = track.album?.images ?? [];
+    const albumUri = track.album?.uri;
+    const linkedFrom = (
+      track as Spotify.Track & { linked_from?: { uri?: string } | null }
+    ).linked_from;
     this.currentTrack.set({
       id: track.id ?? '',
       name: track.name,
       uri: track.uri,
+      linkedFromUri: linkedFrom?.uri ?? null,
+      albumId: albumUri?.split(':').pop() ?? null,
       artists: (track.artists ?? []).map((a) => ({
         name: a.name,
         uri: a.uri,
