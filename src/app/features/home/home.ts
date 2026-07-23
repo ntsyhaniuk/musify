@@ -59,24 +59,34 @@ export class Home {
 }
 
 function searchToSections(res: SpotifySearchResponse): SpotifyHomeSection[] {
+  const artists = (res.artists?.items ?? []).filter(
+    (item): item is NonNullable<typeof item> => !!item?.id,
+  );
+  const albums = (res.albums?.items ?? []).filter(
+    (item): item is NonNullable<typeof item> => !!item?.id,
+  );
+  const playlists = (res.playlists?.items ?? []).filter(
+    (item): item is NonNullable<typeof item> => !!item?.id,
+  );
+
   return [
     {
       key: 'artists',
       title: 'Artists',
-      items: (res.artists?.items ?? []).map(toListItemFromArtist),
-      total: res.artists?.total ?? 0,
+      items: artists.map(toListItemFromArtist),
+      total: res.artists?.total ?? artists.length,
     },
     {
       key: 'albums',
       title: 'Albums',
-      items: (res.albums?.items ?? []).map(toListItemFromAlbum),
-      total: res.albums?.total ?? 0,
+      items: albums.map(toListItemFromAlbum),
+      total: res.albums?.total ?? albums.length,
     },
     {
       key: 'playlists',
       title: 'Playlists',
-      items: (res.playlists?.items ?? []).map(toListItemFromPlaylist),
-      total: res.playlists?.total ?? 0,
+      items: playlists.map(toListItemFromPlaylist),
+      total: res.playlists?.total ?? playlists.length,
     },
   ];
 }

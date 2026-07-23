@@ -125,11 +125,12 @@ describe('SpotifyApi', () => {
     expect(sections[0].items[0].name).toBe('Artist');
   });
 
-  it('caps search limit at 10', async () => {
+  it('caps search limit at 10 and sends market from_token', async () => {
     const pending = firstValueFrom(api.search({ q: 'radiohead', limit: 50 }));
     const req = http.expectOne((r) => r.url.includes('/search'));
     expect(req.request.params.get('limit')).toBe('10');
     expect(req.request.params.get('q')).toBe('radiohead');
+    expect(req.request.params.get('market')).toBe('from_token');
     req.flush({});
     await pending;
   });
@@ -162,6 +163,59 @@ describe('SpotifyApi', () => {
 
     const result = await pending;
     expect(result.albums?.items.map((a) => a.id)).toEqual(['1', '2']);
+  });
+
+  it('filters null search items when merging pages', async () => {
+    const pending = firstValueFrom(api.searchPaginated('soad', 1));
+
+    const req = http.expectOne((r) => r.url.includes('/search'));
+    expect(req.request.params.get('market')).toBe('from_token');
+    req.flush({
+      artists: {
+        items: [
+          { id: 'a1', name: 'System Of A Down', uri: 'spotify:artist:a1', type: 'artist', images: [] },
+          null,
+        ],
+        total: 2,
+        limit: 10,
+        offset: 0,
+        next: null,
+        previous: null,
+      },
+      playlists: {
+        items: [null, { id: 'p1', name: 'SOAD Mix', uri: 'spotify:playlist:p1', type: 'playlist', images: [] }],
+        total: 2,
+        limit: 10,
+        offset: 0,
+        next: null,
+        previous: null,
+      },
+    });
+
+    const result = await pending;
+    expect(result.artists?.items.map((a) => a.id)).toEqual(['a1']);
+    expect(result.playlists?.items.map((p) => p.id)).toEqual(['p1']);
+  });
+
+  it('keeps first page when a later search page fails', async () => {
+    const pending = firstValueFrom(api.searchPaginated('test', 2));
+
+    const first = http.expectOne((r) => r.url.includes('/search') && r.params.get('offset') === '0');
+    first.flush({
+      artists: {
+        items: [{ id: 'a1', name: 'A', uri: 'spotify:artist:a1', type: 'artist', images: [] }],
+        total: 11,
+        limit: 10,
+        offset: 0,
+        next: 'next',
+        previous: null,
+      },
+    });
+    const second = http.expectOne((r) => r.url.includes('/search') && r.params.get('offset') === '10');
+    second.flush({ error: 'fail' }, { status: 500, statusText: 'Server Error' });
+
+    const result = await pending;
+    expect(result.artists?.items.map((a) => a.id)).toEqual(['a1']);
   });
 
   it('returns empty playlist items on 403', async () => {

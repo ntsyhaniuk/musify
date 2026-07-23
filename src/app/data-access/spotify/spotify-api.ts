@@ -161,7 +161,8 @@ export class SpotifyApi {
       .set('q', params.q)
       .set('type', types)
       .set('limit', String(limit))
-      .set('offset', String(params.offset ?? 0));
+      .set('offset', String(params.offset ?? 0))
+      .set('market', 'from_token');
 
     return this.http.get<SpotifySearchResponse>(`${this.baseUrl}/search`, {
       params: httpParams,
@@ -170,6 +171,7 @@ export class SpotifyApi {
 
   /**
    * Paginate search beyond the max limit of 10 by issuing parallel offset pages.
+   * Soft-fails individual pages so one bad offset does not wipe earlier results.
    */
   searchPaginated(
     q: string,
@@ -177,12 +179,12 @@ export class SpotifyApi {
     types: SearchParams['types'] = ['album', 'playlist', 'artist'],
   ): Observable<SpotifySearchResponse> {
     const requests = Array.from({ length: pages }, (_, page) =>
-      this.search({ q, types, limit: SEARCH_LIMIT, offset: page * SEARCH_LIMIT }),
+      this.search({ q, types, limit: SEARCH_LIMIT, offset: page * SEARCH_LIMIT }).pipe(
+        catchError(() => of({} as SpotifySearchResponse)),
+      ),
     );
 
-    return forkJoin(requests).pipe(
-      map((responses) => mergeSearchPages(responses)),
-    );
+    return forkJoin(requests).pipe(map((responses) => mergeSearchPages(responses)));
   }
 
   getEntity(type: SpotifyEntityType, id: string): Observable<SpotifyEntity> {
@@ -381,12 +383,14 @@ function mergeSearchPages(pages: SpotifySearchResponse[]): SpotifySearchResponse
     key: keyof SpotifySearchResponse,
   ): SpotifyPaging<T> | undefined => {
     const chunks = pages
-      .map((p) => p[key] as SpotifyPaging<T> | undefined)
-      .filter((p): p is SpotifyPaging<T> => !!p);
+      .map((p) => p[key] as SpotifyPaging<T | null> | undefined)
+      .filter((p): p is SpotifyPaging<T | null> => !!p);
     if (!chunks.length) {
       return undefined;
     }
-    const items = chunks.flatMap((c) => c.items);
+    const items = chunks
+      .flatMap((c) => c.items ?? [])
+      .filter((item): item is T => item != null);
     const first = chunks[0];
     const last = chunks[chunks.length - 1];
     return {
